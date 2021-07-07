@@ -1,7 +1,11 @@
 const knex = require('knex');
 
 class Database {
-    static async _createConnection() {
+    static async get() {
+        if (this._connection) {
+            return this._connection;
+        }
+
         this._connection = knex({
             client: 'mysql',
             connection: {
@@ -13,10 +17,6 @@ class Database {
         });
 
         return this._connection;
-    }
-
-    static async get() {
-        return this._connection || this._createConnection();
     }
 
     static async close() {
