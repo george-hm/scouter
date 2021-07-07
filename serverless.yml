@@ -21,7 +21,6 @@ package:
 plugins:
   - serverless-prune-plugin
   - serverless-plugin-optimize
-  - serverless-offline
 
 custom:
   envpath: "${file(./serverless.env.yml):${opt:stage, self:provider.stage}}"
