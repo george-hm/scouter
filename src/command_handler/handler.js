@@ -1,5 +1,6 @@
 const db = require('../database.js');
 const constants = require('../constants.js');
+const InteractionResponse = require('../components/InteractionResponse.js');
 
 module.exports.handler = event => {
     if (!constants.validateRequest(event)) {
@@ -14,19 +15,22 @@ module.exports.handler = event => {
 
     // discord is pinging us, pong
     if (body.type === 1) {
+        const response = new InteractionResponse(InteractionResponse.PONG);
         return constants.createResponse(
             200,
-            {
-                type: 1,
-            },
+            response.toObject(),
         );
     }
 
     const commandData = body.data;
     if (!commandData) {
+        const response = new InteractionResponse(
+            InteractionResponse.RESPOND,
+            'No command found.',
+        );
         return constants.createResponse(
             200,
-            // message saying cant find command
+            response.toObject(),
         );
     }
 
