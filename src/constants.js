@@ -13,7 +13,7 @@ class Constants {
 
     static validateRequest(event) {
         // Your public key can be found on your application in the Developer Portal
-        const PUBLIC_KEY = 'APPLICATION_PUBLIC_KEY';
+        const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
         const signature = event.get('X-Signature-Ed25519');
         const timestamp = event.get('X-Signature-Timestamp');
