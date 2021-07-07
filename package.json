@@ -1,0 +1,17 @@
+{
+  "name": "dragon-bot-z",
+  "version": "0.0.1",
+  "description": "discord dragonball bot",
+  "main": "index.js",
+  "author": "George",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^6.7.2",
+    "jest": "^25.5.4",
+    "serverless": "^1.78.1",
+    "serverless-plugin-optimize": "^4.1.1-rc.1",
+    "serverless-prune-plugin": "^1.4.3"
+  }
+}
