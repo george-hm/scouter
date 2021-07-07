@@ -1,0 +1,77 @@
+# For full config options, check the docs:
+#    docs.serverless.com
+
+service: dragonball
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: prod
+  region: ${self:custom.envpath.region}
+  environment:w
+    DB_HOST: ${self:custom.envpath.DB_XERO_HOST}
+    DB_USER: ${self:custom.envpath.DB_XERO_USER}
+    DB_PASSWORD: ${self:custom.envpath.DB_XERO_PASSWORD}
+    DB_DATABASE: ${self:custom.envpath.DB_XERO_DATABASE}
+
+package:
+  individually: true
+
+plugins:
+  - serverless-prune-plugin
+  - serverless-plugin-optimize
+  - serverless-offline
+
+custom:
+  envpath: "${file(./serverless.env.yml):${opt:stage, self:provider.stage}}"
+
+functions:
+  command_handler:
+    handler: src/serverless/command_handler/handler.handler
+    timeout: 20
+    memorySize: 128
+    environment:
+      REDIRECT_URI: ${self:custom.envpath.REDIRECT_URI}
+    events:
+      - http:
+          path: /
+          method: POST
+          integration: lambda-proxy
+          cors: true
+
+resources:
+  Resources:
+    IamRoleLambdaSNS:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - lambda.amazonaws.com
+            Action:
+            - sts:AssumeRole
+        Path: "/"
+
+    IamPolicyLambdaSNS:
+      Type: AWS::IAM::Policy
+      Properties:
+        PolicyName: "${self:provider.stage}-${self:service}-SNSLambda"
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: arn:aws:logs:*:*:*
+          - Effect: Allow
+            Action:
+            - sns:*
+            Resource:
+            - arn:aws:sns:${self:custom.envpath.region}:*:*
+        Roles:
+        - Ref: IamRoleLambdaSNS
