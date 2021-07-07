@@ -8,11 +8,12 @@ provider:
   runtime: nodejs12.x
   stage: prod
   region: ${self:custom.envpath.region}
-  environment:w
-    DB_HOST: ${self:custom.envpath.DB_XERO_HOST}
-    DB_USER: ${self:custom.envpath.DB_XERO_USER}
-    DB_PASSWORD: ${self:custom.envpath.DB_XERO_PASSWORD}
-    DB_DATABASE: ${self:custom.envpath.DB_XERO_DATABASE}
+  environment:
+    DB_HOST: ${self:custom.envpath.DB_HOST}
+    DB_USER: ${self:custom.envpath.DB_USER}
+    DB_PASSWORD: ${self:custom.envpath.DB_PASSWORD}
+    DB_DATABASE: ${self:custom.envpath.DB_DATABASE}
+    PUBLIC_KEY: ${self:custom.envpath.PUBLIC_KEY}
 
 package:
   individually: true
