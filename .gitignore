@@ -1,3 +1,4 @@
+_optimize/
 .serverless/
 node_modules
 serverless.env.yml
