@@ -27,7 +27,7 @@ custom:
 
 functions:
   command_handler:
-    handler: src/serverless/command_handler/handler.handler
+    handler: src/command_handler/handler.handler
     timeout: 20
     memorySize: 128
     environment:
