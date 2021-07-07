@@ -7,7 +7,7 @@ class Constants {
             bodyToUse = '{}';
         }
 
-        if (typeof bodytoUse === 'object') {
+        if (typeof bodyToUse === 'object') {
             bodyToUse = JSON.stringify(bodyToUse);
         }
 
