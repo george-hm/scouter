@@ -1,7 +1,7 @@
 const knex = require('knex');
 
 class Database {
-    static async get() {
+    static get() {
         if (this._connection) {
             return this._connection;
         }
@@ -19,7 +19,7 @@ class Database {
         return this._connection;
     }
 
-    static async close() {
+    static close() {
         if (!this._connection) {
             return;
         }
