@@ -20,7 +20,7 @@ class Database {
     }
 
     static async close() {
-        if (this._connection) {
+        if (!this._connection) {
             return;
         }
 
