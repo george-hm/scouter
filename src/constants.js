@@ -24,8 +24,8 @@ class Constants {
         // Your public key can be found on your application in the Developer Portal
         const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
-        const signature = event.get('X-Signature-Ed25519');
-        const timestamp = event.get('X-Signature-Timestamp');
+        const signature = event.headers['X-Signature-Ed25519'];
+        const timestamp = event.headers['X-Signature-Timestamp'];
         const body = event.body; // rawBody is expected to be a string, not raw bytes
         if (!body) {
             return false;
