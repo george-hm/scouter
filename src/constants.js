@@ -1,8 +1,14 @@
 const nacl = require('tweetnacl');
 
 class Constants {
-    static createResponse(status, message) {
-
+    static createResponse(status, body) {
+        return {
+            statusCode: status,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+            body: body || '{}',
+        };
     }
 
     static validateRequest(event) {
