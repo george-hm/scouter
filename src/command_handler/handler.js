@@ -2,7 +2,7 @@ const db = require('../database.js');
 const constants = require('../constants.js');
 const InteractionResponse = require('../components/InteractionResponse.js');
 
-module.exports.handler = event => {
+module.exports.handler = async event => {
     if (!constants.validateRequest(event)) {
         return constants.createResponse(401);
     }
