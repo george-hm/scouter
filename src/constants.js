@@ -2,12 +2,21 @@ const nacl = require('tweetnacl');
 
 class Constants {
     static createResponse(status, body) {
+        let bodyToUse = body;
+        if (!bodyToUse) {
+            bodyToUse = '{}';
+        }
+
+        if (typeof bodytoUse === 'object') {
+            bodyToUse = JSON.stringify(bodyToUse);
+        }
+
         return {
             statusCode: status,
             headers: {
                 'Access-Control-Allow-Origin': '*',
             },
-            body: body || '{}',
+            body: bodyToUse,
         };
     }
 
