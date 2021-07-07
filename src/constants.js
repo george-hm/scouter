@@ -26,7 +26,10 @@ class Constants {
 
         const signature = event.get('X-Signature-Ed25519');
         const timestamp = event.get('X-Signature-Timestamp');
-        const body = event.rawBody; // rawBody is expected to be a string, not raw bytes
+        const body = event.body; // rawBody is expected to be a string, not raw bytes
+        if (!body) {
+            return false;
+        }
 
         const isVerified = nacl.sign.detached.verify(
             Buffer.from(timestamp + body),
