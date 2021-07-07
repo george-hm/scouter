@@ -38,4 +38,10 @@ class Response {
     }
 }
 
+Response.PONG = 1; // ACK a Ping
+Response.RESPOND = 4; // respond to an interaction with a message
+Response.RESPOND_LATER_LOADING = 5; // ACK an interaction and edit a response later, the user sees a loading state
+Response.RESPOND_LATER_NO_LOADING = 6; // for components, ACK an interaction and edit the original message later; the user does not see a loading state
+Response.UPDATE_MESSAGE = 7;// for components, edit the message the component was attached to
+
 module.exports = Response;
