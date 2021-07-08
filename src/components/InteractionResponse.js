@@ -14,27 +14,32 @@ class Response {
     }
 
     toObject() {
-        const objData = {
+        const data = {
             content: this._messageContent,
             embeds: this._embeds,
             components: this._components,
         };
 
         // remove all falsey/optional data
-        for (const key in objData) {
-            if (!Object.hasOwnProperty.call(objData, key)) {
+        for (const key in data) {
+            if (!Object.hasOwnProperty.call(data, key)) {
                 continue;
             }
-            const value = objData[key];
+            const value = data[key];
             if (!value) {
-                delete objData[key];
+                delete data[key];
             }
         }
 
-        return {
+        const toReturn = {
             type: this._type,
-            data: objData,
         };
+
+        if (Object.keys(data).length) {
+            toReturn.data = data;
+        }
+
+        return toReturn;
     }
 }
 
