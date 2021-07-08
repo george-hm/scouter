@@ -1,4 +1,4 @@
-// https://discord.com/developers/docs/interactions/message-components
+// https://discord.com/developers/docs/resources/channel#embed-object
 class Embed { }
 
 module.exports = Embed;
