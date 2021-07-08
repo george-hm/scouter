@@ -1,6 +1,8 @@
 const Embed = require('./Embed.js');
 const Component = require('./Component.js');
 
+// https://discord.com/developers/docs/interactions/slash-commands#interaction-response-object-interaction-response-structure
+// this is what our body will be when we reply
 class Response {
     constructor(type, messageContent, embeds, components) {
         this._type = type;
