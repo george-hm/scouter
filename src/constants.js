@@ -1,10 +1,15 @@
 const nacl = require('tweetnacl');
+const InteractionResponse = require('./model/InteractionResponse.js');
 
 class Constants {
     static createResponse(status, body) {
         let bodyToUse = body;
         if (!bodyToUse) {
             bodyToUse = '{}';
+        }
+
+        if (bodyToUse instanceof InteractionResponse) {
+            bodyToUse = JSON.stringify(bodyToUse.toObject());
         }
 
         if (typeof bodyToUse === 'object') {
