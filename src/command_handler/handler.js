@@ -35,6 +35,10 @@ module.exports.handler = async event => {
     }
 
     const commandName = commandData.name;
+    return createResponse(200, new InteractionResponse(
+        InteractionResponse.RESPOND,
+        `You used command: ${commandName}`,
+    ));
     // pass to mapping of command name -> command model
 
     db.close();
