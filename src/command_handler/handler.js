@@ -1,10 +1,10 @@
 const db = require('../database.js');
-const constants = require('../constants.js');
 const InteractionResponse = require('../model/InteractionResponse.js');
+const { createResponse, validateRequest } = require('../constants.js');
 
 module.exports.handler = async event => {
-    if (!constants.validateRequest(event)) {
-        return constants.createResponse(401);
+    if (!validateRequest(event)) {
+        return createResponse(401);
     }
 
     if (!event.body) {
@@ -16,7 +16,7 @@ module.exports.handler = async event => {
     // discord is pinging us, pong
     if (body.type === 1) {
         const response = new InteractionResponse(InteractionResponse.PONG);
-        return constants.createResponse(
+        return createResponse(
             200,
             response.toObject(),
         );
@@ -28,7 +28,7 @@ module.exports.handler = async event => {
             InteractionResponse.RESPOND,
             'No command found.',
         );
-        return constants.createResponse(
+        return createResponse(
             200,
             response.toObject(),
         );
