@@ -2,7 +2,7 @@ const nacl = require('tweetnacl');
 const InteractionResponse = require('./model/InteractionResponse.js');
 
 class Constants {
-    static createResponse(status, body) {
+    static createResponse(body, status) {
         let bodyToUse = body;
         if (!bodyToUse) {
             bodyToUse = '{}';
@@ -17,7 +17,7 @@ class Constants {
         }
 
         return {
-            statusCode: status,
+            statusCode: status || 200,
             headers: {
                 'Access-Control-Allow-Origin': '*',
             },

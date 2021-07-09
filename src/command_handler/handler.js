@@ -12,34 +12,28 @@ module.exports.handler = async event => {
     }
 
     const body = JSON.parse(event.body);
-
     // discord is pinging us, pong
     if (body.type === 1) {
-        const response = new InteractionResponse(InteractionResponse.PONG);
         return createResponse(
-            200,
-            response.toObject(),
+            new InteractionResponse(InteractionResponse.PONG),
         );
     }
 
     const commandData = body.data;
     if (!commandData) {
-        const response = new InteractionResponse(
-            InteractionResponse.RESPOND,
-            'No command found.',
-        );
         return createResponse(
-            200,
-            response.toObject(),
+            new InteractionResponse(
+                InteractionResponse.RESPOND,
+                'No command found.',
+            ),
         );
     }
 
     const commandName = commandData.name;
-    return createResponse(200, new InteractionResponse(
-        InteractionResponse.RESPOND,
-        `You used command: ${commandName}`,
-    ));
-    // pass to mapping of command name -> command model
-
-    db.close();
+    return createResponse(
+        new InteractionResponse(
+            InteractionResponse.RESPOND,
+            `You used command: ${commandName}`,
+        ),
+    );
 };
