@@ -6,6 +6,10 @@
   "author": "George",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "lint": "eslint ./src",
+    "deploy:dev": "serverless deploy -s dev"
+  },
   "dependencies": {
     "axios": "^0.21.1",
     "knex": "^0.95.6",
