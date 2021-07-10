@@ -8,8 +8,13 @@ const mapping = {
 module.exports.getCommand = (commandData, user) => {
     const commandName = commandData.name;
     const mappedCommand = mapping[commandName];
-    if (!mappedCommand || !(mappedCommand instanceof Command)) {
+    if (!mappedCommand || typeof mappedCommand !== 'function') {
         return null;
+    }
+
+    const commandInstance = new mappedCommand(commandData, user);
+    if (!(commandInstance instanceof Command)) {
+        throw new Error('Command is not instanceof command');
     }
     return new mapping[commandName](commandData, user);
 };
