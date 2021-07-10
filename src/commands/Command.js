@@ -1,4 +1,4 @@
-const User = require('./User.js');
+const User = require('../model/User.js');
 
 // https://discord.com/developers/docs/interactions/slash-commands#interaction-object-application-command-interaction-data-structure
 class Command {

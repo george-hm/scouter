@@ -1,4 +1,4 @@
-const Command = require('../model/Command.js');
+const Command = require('./Command.js');
 
 class Test extends Command {
 

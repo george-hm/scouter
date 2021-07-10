@@ -1,5 +1,5 @@
 const allCommands = require('../commands/index.js');
-const Command = require('./Command.js');
+const Command = require('../commands/Command.js');
 const User = require('./User.js');
 
 // https://discord.com/developers/docs/interactions/slash-commands#interaction-object

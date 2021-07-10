@@ -1,4 +1,4 @@
-const Command = require('../model/Command.js');
+const Command = require('./Command.js');
 const Test = require('./Test.js');
 
 const mapping = {
