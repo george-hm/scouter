@@ -33,6 +33,11 @@ class DiscordEvent {
         return `User: ${user.getName()}\nCommand: ${this._commandName || null}`;
     }
 
+    /**
+     * Gets the mapped command, or null if there is no mapped command
+     *
+     * @returns {Command|null}
+     */
     getCommand() {
         if (this._command && !(this._command instanceof Command)) {
             throw new Error('Command is not instance of command');
