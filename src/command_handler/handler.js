@@ -1,6 +1,7 @@
 const db = require('../database.js');
 const InteractionResponse = require('../model/InteractionResponse.js');
 const { createResponse, validateRequest } = require('../constants.js');
+const DiscordEvent = require('../model/DiscordEvent.js');
 
 module.exports.handler = async event => {
     if (!validateRequest(event)) {
@@ -12,15 +13,17 @@ module.exports.handler = async event => {
     }
 
     const body = JSON.parse(event.body);
+    const discordEvent = new DiscordEvent(body);
+    console.log(discordEvent.getLogMessage());
     // discord is pinging us, pong
-    if (body.type === 1) {
+    if (discordEvent.type === DiscordEvent.PING) {
         return createResponse(
             new InteractionResponse(InteractionResponse.PONG),
         );
     }
 
-    const commandData = body.data;
-    if (!commandData) {
+    const command = discordEvent.getCommand();
+    if (!command) {
         return createResponse(
             new InteractionResponse(
                 InteractionResponse.RESPOND,
@@ -28,12 +31,10 @@ module.exports.handler = async event => {
             ),
         );
     }
-
-    const commandName = commandData.name;
     return createResponse(
         new InteractionResponse(
             InteractionResponse.RESPOND,
-            `You used command: ${commandName}`,
+            `You used command: ${command._name}`,
         ),
     );
 };
