@@ -1,3 +1,8 @@
+const allCommands = require('../commands/index.js');
+const Command = require('./Command.js');
+const User = require('./User.js');
+
+// https://discord.com/developers/docs/interactions/slash-commands#interaction-object
 // What discord sends to us, this is the main body
 class DiscordEvent {
     constructor(body) {
@@ -12,10 +17,28 @@ class DiscordEvent {
 
         this._channel = body.channel_id;
         this._guild = body.guild_id;
-        // member model
-        // user model
-
+        this._user = new User(body.user || body.member.user);
         this._token = body.token;
+        if (body.data) {
+            this._commandName = body.data.name;
+            this._command = allCommands.getCommand(
+                body.data,
+                this._user,
+            );
+        }
+    }
+
+    getLogMessage() {
+        const user = this._user;
+        return `User: ${user.getName()}\nCommand: ${this._commandName || null}`;
+    }
+
+    getCommand() {
+        if (this._command && !(this._command instanceof Command)) {
+            throw new Error('Command is not instance of command');
+        }
+
+        return this._command;
     }
 }
 
