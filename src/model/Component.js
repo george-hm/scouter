@@ -73,6 +73,7 @@ class Component {
             custom_id: this._customId,
             url: this._url,
             disabled: this._disabled,
+            components: this._components,
         };
 
         for (const key in obj) {
