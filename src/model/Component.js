@@ -8,7 +8,6 @@ class Component {
         custom_id,
         url,
         disabled,
-        components,
     ) {
         if (!type) {
             throw new Error('Missing type');
@@ -48,7 +47,6 @@ class Component {
             throw new Error(`Style ${this._style} needs a custom id`);
         }
         this._disabled = disabled;
-        this._components = components;
     }
 
     toComponentObject() {
