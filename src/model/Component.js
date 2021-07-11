@@ -39,11 +39,11 @@ class Component {
         this._emoji = emoji;
         this._customId = custom_id;
         this._url = url;
-        if (this._style === Component.BUTTON_LINK && !this._url) {
+        if (this._style === Component.STYLE_LINK && !this._url) {
             throw new Error('Button link needs url');
         }
 
-        if (this._style !== Component.BUTTON_LINK && !this._customId) {
+        if (this._style !== Component.STYLE_LINK && !this._customId) {
             throw new Error(`Style ${this._style} needs a custom id`);
         }
         this._disabled = disabled;
@@ -51,11 +51,11 @@ class Component {
 
     toComponentObject() {
         const obj = {
-            type: this.type,
+            type: this._type,
             style: this._style,
             label: this._label,
             emoji: this._emoji,
-            custom_id: this._custom_id,
+            custom_id: this._customId,
             url: this._url,
             disabled: this._disabled,
         };
@@ -69,6 +69,8 @@ class Component {
                 delete obj[key];
             }
         }
+
+        return obj;
     }
 
     static mapAllComponents(allComponents) {

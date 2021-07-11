@@ -12,6 +12,8 @@ class Response {
         }
         if (components && Array.isArray(components)) {
             this._components = components.filter(currentComponent => currentComponent instanceof Component);
+        } else if (components && components instanceof Component) {
+            this._components = [components];
         }
     }
 
