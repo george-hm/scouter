@@ -61,6 +61,16 @@ class Component {
             url: this._url,
             disabled: this._disabled,
         };
+
+        for (const key in obj) {
+            if (!Object.hasOwnProperty.call(obj, key)) {
+                continue;
+            }
+            const value = obj[key];
+            if (!value) {
+                delete obj[key];
+            }
+        }
     }
 
     static mapAllComponents(allComponents) {
