@@ -50,7 +50,7 @@ class Component {
     }
 
     toComponentObject() {
-        return {
+        const obj = {
             type: this.type,
             style: this._style,
             label: this._label,
