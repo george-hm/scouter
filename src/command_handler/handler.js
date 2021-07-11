@@ -31,10 +31,9 @@ module.exports.handler = async event => {
             ),
         );
     }
+
+    const commandResponse = await command.main();
     return createResponse(
-        new InteractionResponse(
-            InteractionResponse.RESPOND,
-            `You used command: ${command._name}`,
-        ),
+        commandResponse,
     );
 };
