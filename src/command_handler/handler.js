@@ -5,7 +5,7 @@ const DiscordEvent = require('../model/DiscordEvent.js');
 
 module.exports.handler = async event => {
     if (!validateRequest(event)) {
-        return createResponse(401);
+        return createResponse(null, 401);
     }
 
     if (!event.body) {

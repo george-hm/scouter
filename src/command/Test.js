@@ -30,6 +30,8 @@ class Test extends Command {
                 'cant click this lol',
                 null,
                 'custom_test_disabled',
+                null,
+                true,
             ),
         ]);
         const response = new InteractionResponse(
