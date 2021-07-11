@@ -8,6 +8,7 @@ class Component {
         custom_id,
         url,
         disabled,
+        components,
     ) {
         if (!type) {
             throw new Error('Missing type');
@@ -47,6 +48,20 @@ class Component {
             throw new Error(`Style ${this._style} needs a custom id`);
         }
         this._disabled = disabled;
+        if (components && Array.isArray(components)) {
+            this._components = components.map(comp => comp.toComponentObject());
+        }
+    }
+
+    setComponents(components) {
+        this._components = this._components || [];
+        for (let i = 0; i < components.length; i++) {
+            const comp = components[i];
+            if (!(comp instanceof Component)) {
+                throw new Error('Component is not instance of component');
+            }
+            this._components.push(comp.toComponentObject());
+        }
     }
 
     toComponentObject() {
