@@ -27,11 +27,11 @@ class Component {
 
         this._style = style;
         if (
-            this._style !== Component.BUTTON_PRIMARY &&
-            this._style !== Component.BUTTON_SECONDARY &&
-            this._style !== Component.BUTTON_SUCCESS &&
-            this._style !== Component.BUTTON_DANGER &&
-            this._style !== Component.BUTTON_LINK
+            this._style !== Component.STYLE_PRIMARY &&
+            this._style !== Component.STYLE_SECONDARY &&
+            this._style !== Component.STYLE_SUCCESS &&
+            this._style !== Component.STYLE_DANGER &&
+            this._style !== Component.STYLE_LINK
         ) {
             throw new Error('Invalid button style');
         }
@@ -82,10 +82,10 @@ class Component {
 Component.TYPE_CONTAINER = 1;
 Component.TYPE_BUTTON = 2;
 Component.TYPE_SELECT_MENU = 3;
-Component.BUTTON_PRIMARY = 1; // blurple requires custom_id
-Component.BUTTON_SECONDARY = 2; // grey requires custom_id
-Component.BUTTON_SUCCESS = 3; // green requires custom_id
-Component.BUTTON_DANGER = 4; // red requires custom_id
-Component.BUTTON_LINK = 5; // grey navigates to a URL requires url
+Component.STYLE_PRIMARY = 1; // blurple requires custom_id
+Component.STYLE_SECONDARY = 2; // grey requires custom_id
+Component.STYLE_SUCCESS = 3; // green requires custom_id
+Component.STYLE_DANGER = 4; // red requires custom_id
+Component.STYLE_LINK = 5; // grey navigates to a URL requires url
 
 module.exports = Component;
