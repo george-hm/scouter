@@ -18,6 +18,10 @@ class User {
     getName() {
         return `${this._username}#${this._discriminator}`;
     }
+
+    getUserId() {
+        return this._id;
+    }
 }
 
 module.exports = User;
