@@ -22,6 +22,10 @@ class User {
     getUserId() {
         return this._id;
     }
+
+    getMention() {
+        return `<@${this._id}>`;
+    }
 }
 
 module.exports = User;
