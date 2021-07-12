@@ -20,7 +20,7 @@ class DiscordEvent {
         this._user = new User(body.user || body.member.user);
         this._token = body.token;
         if (body.data) {
-            this._commandName = body.data.name;
+            this._commandName = Command.getCommandName(body.data);
             this._command = allCommands.getCommand(
                 body.data,
                 this._user,
