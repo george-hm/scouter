@@ -14,7 +14,7 @@ class Test extends Command {
                 Component.STYLE_DANGER,
                 'Danger button',
                 null,
-                'custom_test_id',
+                this.createCustomId('TestOptionOne'),
             ),
             new Component(
                 Component.TYPE_BUTTON,
