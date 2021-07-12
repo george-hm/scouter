@@ -3,19 +3,17 @@ class Embed {
     constructor(
         title,
         description,
-        colour,
+        color,
         image,
         thumbnail,
-        provider,
         fields,
     ) {
-        this._title = title;
+        this._color = color;
         this._description = description;
-        this._color = colour;
+        this._fields = fields;
         this._image = image;
         this._thumbnail = thumbnail;
-        this._provider = provider;
-        this._fields = fields;
+        this._title = title;
     }
 
     static createField(title, message) {
@@ -34,11 +32,15 @@ class Embed {
 
     toEmbedObject() {
         const obj = {
+            color: this._color,
+            description: this._description,
+            fields: this._fields,
+            footer: this._generateFooter(),
+            image: this._image,
+            thumbnail: this._thumbnail,
+            timestamp: new Date(),
             title: this._title,
             type: 'rich',
-            description: this._description,
-            footer: this._generateFooter(),
-            timestamp: new Date(),
         };
 
         for (const key in obj) {
