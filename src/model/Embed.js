@@ -4,15 +4,21 @@ class Embed {
         title,
         description,
         color,
-        image,
-        thumbnail,
+        imageURL,
+        thumbnailURL,
         fields,
     ) {
         this._color = color;
         this._description = description;
         this._fields = fields;
-        this._image = image;
-        this._thumbnail = thumbnail;
+        if (imageURL) {
+            this._image = {
+                url: imageURL,
+            };
+        }
+        if (thumbnailURL) {
+            this._thumbnail = thumbnailURL;
+        }
         this._title = title;
     }
 
