@@ -1,10 +1,18 @@
 const Command = require('./Command.js');
 const InteractionResponse = require('../model/InteractionResponse.js');
 const Component = require('../model/Component.js');
+const Embed = require('../model/Embed.js');
 
 class Test extends Command {
     async main() {
         const message = 'Test message';
+        const embed = new Embed(
+            'Embed title',
+            'bit o desc',
+            '#00FF00',
+            'https://www.arranwhisky.com/assets/000/000/258/seal-1235138_1920_original.jpg?1498647292',
+            'https://i.imgur.com/EbtEnxz.png',
+        );
         const component = new Component(
             Component.TYPE_CONTAINER,
         );
@@ -37,7 +45,7 @@ class Test extends Command {
         const response = new InteractionResponse(
             InteractionResponse.RESPOND,
             message,
-            null,
+            [embed],
             component,
         );
 
