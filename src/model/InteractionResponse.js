@@ -9,6 +9,7 @@ class Response {
         this._messageContent = messageContent || '';
         if (embeds && Array.isArray(embeds)) {
             this._embeds = embeds.filter(currentEmbed => currentEmbed instanceof Embed);
+            this._embeds = embeds.map(embed => embed.toEmbedObject());
         }
         if (components && Array.isArray(components)) {
             this._components = components.filter(currentComponent => currentComponent instanceof Component);
