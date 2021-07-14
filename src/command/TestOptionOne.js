@@ -6,7 +6,7 @@ class TestOptionOne extends Command {
         if (!this.validateCustomIdBelongsToUser()) {
             const response = new InteractionResponse(
                 InteractionResponse.RESPOND,
-                `${this.getUser().getMention()} sorry nope`,
+                `${this.getUser().getMention()} ${Math.random()}`,
             );
             return response;
         }
@@ -16,6 +16,8 @@ class TestOptionOne extends Command {
             InteractionResponse.RESPOND,
             message,
             null,
+            null,
+            true,
         );
 
         return response;
