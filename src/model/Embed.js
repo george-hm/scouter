@@ -50,7 +50,7 @@ class Embed {
         };
 
         for (const key in obj) {
-            if (Object.hasOwnProperty.call(obj, key)) {
+            if (!Object.hasOwnProperty.call(obj, key)) {
                 continue;
             }
             const value = obj[key];
