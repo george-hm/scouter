@@ -17,7 +17,9 @@ class Embed {
             };
         }
         if (thumbnailURL) {
-            this._thumbnail = thumbnailURL;
+            this._thumbnail = {
+                url: thumbnailURL,
+            };
         }
         this._title = title;
     }
@@ -32,7 +34,7 @@ class Embed {
     _generateFooter() {
         return {
             text: 'Scouter by Imp#8373',
-            icon_url: 'https://upload.wikimedia.org/wikipedia/commons/9/94/Dragonball_%284-Star%29.svg',
+            icon_url: 'https://static.wikia.nocookie.net/dbz-dokkanbattle/images/c/ca/Dragon_Ball_4.png/revision/latest/scale-to-width-down/855?cb=20180708134114',
         };
     }
 
