@@ -1,7 +1,7 @@
 const db = require('../database.js');
-const InteractionResponse = require('../model/InteractionResponse.js');
+const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const { createResponse, validateRequest } = require('../constants.js');
-const DiscordEvent = require('../model/DiscordEvent.js');
+const DiscordEvent = require('../model/discord/DiscordEvent.js');
 
 module.exports.handler = async event => {
     if (!validateRequest(event)) {

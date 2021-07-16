@@ -1,5 +1,5 @@
 const nacl = require('tweetnacl');
-const InteractionResponse = require('./model/InteractionResponse.js');
+const InteractionResponse = require('./model/discord/InteractionResponse.js');
 
 class Constants {
     static createResponse(body, status) {

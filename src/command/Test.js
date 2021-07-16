@@ -1,7 +1,7 @@
 const Command = require('./Command.js');
-const InteractionResponse = require('../model/InteractionResponse.js');
-const Component = require('../model/Component.js');
-const Embed = require('../model/Embed.js');
+const InteractionResponse = require('../model/discord/InteractionResponse.js');
+const Component = require('../model/discord/Component.js');
+const Embed = require('../model/discord/Embed.js');
 
 class Test extends Command {
     async main() {

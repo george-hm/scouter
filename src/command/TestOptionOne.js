@@ -1,5 +1,5 @@
 const Command = require('./Command.js');
-const InteractionResponse = require('../model/InteractionResponse.js');
+const InteractionResponse = require('../model/discord/InteractionResponse.js');
 
 class TestOptionOne extends Command {
     async main() {
