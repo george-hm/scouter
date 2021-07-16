@@ -3,7 +3,7 @@ const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const { createResponse, validateRequest } = require('../constants.js');
 const DiscordEvent = require('../model/discord/DiscordEvent.js');
 
-module.exports.handler = async event => {
+async function handler(event) {
     if (!validateRequest(event)) {
         return createResponse(null, 401);
     }
@@ -36,4 +36,16 @@ module.exports.handler = async event => {
     return createResponse(
         commandResponse,
     );
+}
+
+module.exports.handler = async event => {
+    let response;
+    try {
+        response = await handler(event);
+    } catch (err) {
+        console.log(err);
+    }
+
+    await db.close();
+    return response;
 };
