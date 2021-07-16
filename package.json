@@ -13,7 +13,9 @@
   "dependencies": {
     "axios": "^0.21.1",
     "knex": "^0.95.6",
+    "knex-serverless-mysql": "^1.1.0",
     "serverless": "^1.78.1",
+    "serverless-mysql": "^1.5.4",
     "serverless-plugin-optimize": "^4.2.1-rc.1",
     "serverless-prune-plugin": "^1.4.3",
     "tweetnacl": "^1.0.3"
