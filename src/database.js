@@ -12,7 +12,7 @@ class Database {
      */
     static get() {
         if (this._connection) {
-            return this._connection;
+            return this._knex;
         }
 
         this._connection = serverlessMYSQL({
