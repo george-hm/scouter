@@ -62,11 +62,54 @@ class Character {
 
         return character;
     }
+
+    static getRandomRarity() {
+        const mappings = {
+            [this.RARITY_N]: 100,
+            [this.RARITY_R]: 50,
+            [this.RARITY_SR]: 30,
+            [this.RARITY_SSR]: 15,
+            [this.RARITY_UR]: 3,
+        };
+        const roll = Math.random() * 100;
+        let rarityChosen = null;
+        for (const rarity in mappings) {
+            if (!Object.hasOwnProperty.call(mappings, rarity)) {
+                continue;
+            }
+            const rarityCutoff = mappings[rarity];
+            if (roll <= rarityCutoff) {
+                rarityChosen = rarity;
+            }
+        }
+
+        return parseInt(rarityChosen);
+    }
+
+    static convertRarityToString(rarity) {
+        if (rarity === this.RARITY_N) {
+            return 'N';
+        }
+        if (rarity === this.RARITY_R) {
+            return 'R';
+        }
+        if (rarity === this.RARITY_SR) {
+            return 'SR';
+        }
+        if (rarity === this.RARITY_SSR) {
+            return 'SSR';
+        }
+        if (rarity === this.RARITY_UR) {
+            return 'UR';
+        }
+
+        throw new Error('Invalid rarity');
+    }
 }
 Character.RARITY_N = 0;
-Character.RARITY_R = 0;
-Character.RARITY_SR = 0;
-Character.RARITY_SSR = 0;
-Character.RARITY_UR = 0;
+Character.RARITY_R = 1;
+Character.RARITY_SR = 2;
+Character.RARITY_SSR = 3;
+Character.RARITY_UR = 4;
 
 module.exports = Character;
