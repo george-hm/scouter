@@ -10,6 +10,9 @@ class Summon extends Command {
             return new InteractionResponse(
                 InteractionResponse.RESPOND,
                 'Sorry, come back later.',
+                null,
+                null,
+                true,
             );
         }
         const component = new Component(
