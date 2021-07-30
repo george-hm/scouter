@@ -6,26 +6,14 @@ const BOT_TOKEN = 'REPLACE_ME';
 
 const commands = [
     {
+        id: 'commandone',
         name: 'testing',
         description: 'This is a test why are you reading this',
-        options: [
-            {
-                name: 'option-one',
-                description: 'test option one',
-                type: 3,
-                required: false,
-                choices: [
-                    {
-                        name: 'option-choice-one',
-                        value: 'option_choice_one',
-                    },
-                    {
-                        name: 'option-choice-two',
-                        value: 'option_choice_two',
-                    },
-                ],
-            },
-        ],
+    },
+    {
+        id: 'itssummontime',
+        name: 'summon',
+        description: 'Summon a character',
     },
 ];
 
@@ -47,6 +35,7 @@ async function main() {
             console.log(err.response.data.errors);
         }
     }
+    console.log('Registered all commands');
 }
 
 main();
