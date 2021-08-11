@@ -1,3 +1,16 @@
+const database = require('../../database.js');
+const constants = require('../../constants.js');
+
+const tablePlayer = 'player';
+const keyId = 'id';
+const keyCurrency = 'currency';
+const keyInventory = 'inventory';
+const keyLastHourlyCheckIn = 'lastHourlyCheckIn';
+const keyHourlyStreak = 'hourlyStreak';
+const keyLastDailyCheckin = 'lastDailyCheckin';
+const keyDailyStreak = 'dailyStreak';
+const keyCreated = 'created';
+
 // https://discord.com/developers/docs/resources/user#user-object
 class User {
     constructor(user) {
@@ -25,6 +38,60 @@ class User {
 
     getMention() {
         return `<@${this._id}>`;
+    }
+
+    async _createPlayer() {
+        const db = database.get();
+
+        const timeNow = constants.getTime();
+        await db.insert({
+            [keyId]: this.getUserId(),
+            [keyCurrency]: 0,
+            [keyInventory]: '{}',
+            [keyLastHourlyCheckIn]: 0,
+            [keyHourlyStreak]: 0,
+            [keyLastDailyCheckin]: 0,
+            [keyDailyStreak]: 0,
+            [keyCreated]: timeNow,
+        })
+            .into(tablePlayer);
+    }
+
+    async loadPlayerInfo() {
+        if (this._playerLoaded) {
+            return this;
+        }
+
+        const db = database.get();
+        const result = await db(tablePlayer)
+            .select(keyCurrency)
+            .select(keyInventory)
+            .select(keyLastHourlyCheckIn)
+            .select(keyLastDailyCheckin)
+            .where({
+                [keyId]: this.getUserId(),
+            })
+            .limit(1);
+
+        if (!result || !result.length) {
+            await this._createPlayer();
+            return await this.loadPlayerInfo();
+        }
+
+        const loadedPlayer = result[0];
+        for (const key in loadedPlayer) {
+            if (!Object.hasOwnProperty.call(loadedPlayer, key)) {
+                continue;
+            }
+            let value = loadedPlayer[key];
+            if (key === keyInventory) {
+                value = JSON.parse(value);
+            }
+
+            this[key] = value;
+        }
+        this._playerLoaded = true;
+        return this;
     }
 }
 
