@@ -7,7 +7,7 @@ const keyCurrency = 'currency';
 const keyInventory = 'inventory';
 const keyLastHourlyCheckIn = 'lastHourlyCheckIn';
 const keyHourlyStreak = 'hourlyStreak';
-const keyLastDailyCheckin = 'lastDailyCheckin';
+const keyLastDailyCheckIn = 'lastDailyCheckIn';
 const keyDailyStreak = 'dailyStreak';
 const keyCreated = 'created';
 
@@ -92,6 +92,10 @@ class User {
         }
         this._playerLoaded = true;
         return this;
+    }
+
+    get lastDailyCheckIn() {
+        return this[keyLastDailyCheckIn] || null;
     }
 }
 
