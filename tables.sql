@@ -30,7 +30,7 @@ CREATE TABLE `player` (
   `inventory` json NOT NULL,
   `lastHourlyCheckIn` bigint NOT NULL,
   `hourlyStreak` int NOT NULL,
-  `lastDailyCheckin` bigint NOT NULL,
+  `lastDailyCheckIn` bigint NOT NULL,
   `dailyStreak` int NOT NULL,
   `created` bigint NOT NULL,
   PRIMARY KEY (`id`)
