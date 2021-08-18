@@ -50,7 +50,7 @@ class User {
             [keyInventory]: '{}',
             [keyLastHourlyCheckIn]: 0,
             [keyHourlyStreak]: 0,
-            [keyLastDailyCheckin]: 0,
+            [keyLastDailyCheckIn]: 0,
             [keyDailyStreak]: 0,
             [keyCreated]: timeNow,
         })
@@ -67,7 +67,7 @@ class User {
             .select(keyCurrency)
             .select(keyInventory)
             .select(keyLastHourlyCheckIn)
-            .select(keyLastDailyCheckin)
+            .select(keyLastDailyCheckIn)
             .where({
                 [keyId]: this.getUserId(),
             })
