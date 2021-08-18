@@ -15,6 +15,11 @@ const commands = [
         name: 'summon',
         description: 'Summon a character',
     },
+    {
+        id: 'hourly',
+        name: 'hourly',
+        description: 'Perform your hourly check-in',
+    },
 ];
 
 async function main() {
