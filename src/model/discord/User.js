@@ -95,6 +95,30 @@ class User {
         this._playerLoaded = true;
         return this;
     }
+
+    async save() {
+        const db = database.get();
+
+        await db.insert({
+            [keyId]: this.getUserId(),
+            [keyCurrency]: this[keyCurrency],
+            [keyInventory]: JSON.stringify(this[keyInventory] || {}),
+            [keyLastHourlyCheckIn]: this[keyLastHourlyCheckIn],
+            [keyHourlyStreak]: this[keyHourlyStreak],
+            [keyLastDailyCheckIn]: this[keyLastDailyCheckIn],
+            [keyDailyStreak]: this[keyDailyStreak],
+        })
+            .into(tablePlayer)
+            .onConflict()
+            .merge([
+                keyCurrency,
+                keyInventory,
+                keyLastHourlyCheckIn,
+                keyHourlyStreak,
+                keyLastDailyCheckIn,
+                keyDailyStreak,
+            ]);
+    }
 }
 
 module.exports = User;
