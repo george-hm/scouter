@@ -119,6 +119,42 @@ class User {
                 keyDailyStreak,
             ]);
     }
+
+    grantHourlyReward() {
+        const reward = 5;
+        const streakModifier = 20;
+        return this._grantReward(reward, streakModifier);
+    }
+
+    /**
+     * Increases player streak
+     * Add reward to currency
+     * Returns reward value
+     *
+     * @returns
+     * @memberof User
+     */
+    _grantReward(rewardValue, streakModifier) {
+        // reward + (streak modifier * streak)
+        const streak = this[keyHourlyStreak];
+
+        const reward = rewardValue + Math.ceil(
+            (
+                (rewardValue / 100) * streakModifier
+            ) * streak,
+        );
+
+        console.log(reward);
+        this[keyHourlyStreak]++;
+        console.log(this[keyCurrency]);
+        this[keyCurrency] += reward;
+        console.log(this[keyCurrency]);
+
+        return reward;
+    }
 }
+
+User.HourlyReward = 5;
+User.DailyReward = 20;
 
 module.exports = User;
