@@ -93,14 +93,6 @@ class User {
         this._playerLoaded = true;
         return this;
     }
-
-    get lastDailyCheckIn() {
-        return this[keyLastDailyCheckIn] || null;
-    }
-
-    set lastDailyCheckIn(value) {
-        this[keyLastDailyCheckIn] = value;
-    }
 }
 
 module.exports = User;
