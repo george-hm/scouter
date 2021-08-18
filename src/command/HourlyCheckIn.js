@@ -7,9 +7,9 @@ class HourlyCheckIn extends Command {
     async main() {
         const user = this.getUser();
         await user.loadPlayerInfo();
-
-        if (!time.eligableForHourly()) {
-            const timeUntilHourly = time.timeUntilHourly(user.lastDailyCheckIn);
+        const lastHourlyCheckIn = user.lastHourlyCheckIn;
+        if (!time.eligableForHourly(lastHourlyCheckIn)) {
+            const timeUntilHourly = time.timeUntilHourly(lastHourlyCheckIn);
             return new InteractionResponse(
                 InteractionResponse.RESPOND,
                 `Sorry, come back in ${timeUntilHourly} for your hourly check-in`,
