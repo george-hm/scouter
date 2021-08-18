@@ -18,7 +18,7 @@ class CheckIn {
 
     static _timeUntil(lastCheckIn, timeChunk) {
         const timeNow = constants.getTime();
-        return (lastCheckIn + timeChunk) - timeNow;
+        return this._formatTime((lastCheckIn + timeChunk) - timeNow);
     }
 
     static _withinTime(timeToCheck, timeChunk) {
