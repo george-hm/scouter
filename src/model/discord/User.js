@@ -68,6 +68,8 @@ class User {
             .select(keyInventory)
             .select(keyLastHourlyCheckIn)
             .select(keyLastDailyCheckIn)
+            .select(keyHourlyStreak)
+            .select(keyDailyStreak)
             .where({
                 [keyId]: this.getUserId(),
             })
