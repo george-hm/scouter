@@ -23,6 +23,10 @@ class CheckIn {
 
     static _withinTime(timeToCheck, timeChunk) {
         const time = constants.getTime();
+        if (timeToCheck === 0) {
+            return true;
+        }
+
         if (time - timeToCheck > timeChunk) {
             return true;
         }
