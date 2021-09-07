@@ -125,9 +125,25 @@ class User {
     }
 
     grantHourlyReward() {
-        const reward = 5;
+        const streakModifier = 40;
+        const rewardValue = this._grantReward(
+            User.HourlyReward,
+            streakModifier,
+            this[keyHourlyStreak],
+        );
+        this[keyHourlyStreak]++;
+        return rewardValue;
+    }
+
+    grantDailyReward() {
         const streakModifier = 20;
-        return this._grantReward(reward, streakModifier);
+        const rewardValue = this._grantReward(
+            User.DailyReward,
+            streakModifier,
+            this[keyDailyStreak],
+        );
+        this[keyDailyStreak]++;
+        return rewardValue;
     }
 
     /**
@@ -138,21 +154,15 @@ class User {
      * @returns
      * @memberof User
      */
-    _grantReward(rewardValue, streakModifier) {
-        // reward + (streak modifier * streak)
-        const streak = this[keyHourlyStreak];
-
+    _grantReward(rewardValue, streakModifier, currentStreak) {
+        // reward + (streak modifier * currentStreak)
         const reward = rewardValue + Math.ceil(
             (
                 (rewardValue / 100) * streakModifier
-            ) * streak,
+            ) * currentStreak,
         );
 
-        console.log(reward);
-        this[keyHourlyStreak]++;
-        console.log(this[keyCurrency]);
         this[keyCurrency] += reward;
-        console.log(this[keyCurrency]);
 
         return reward;
     }
