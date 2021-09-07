@@ -11,6 +11,7 @@
     "deploy:dev": "serverless deploy -s dev"
   },
   "dependencies": {
+    "@discordjs/builders": "^0.6.0",
     "axios": "^0.21.1",
     "knex": "^0.95.6",
     "knex-serverless-mysql": "^1.1.0",
