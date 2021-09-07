@@ -27,12 +27,12 @@ custom:
   envpath: "${file(./serverless.env.yml):${opt:stage, self:provider.stage}}"
 
 functions:
-  command_handler:
-    handler: src/command_handler/handler.handler
-    timeout: 20
+  entry:
+    handler: src/entry/handler.handler
+    timeout: 5
     memorySize: 128
     environment:
-      REDIRECT_URI: ${self:custom.envpath.REDIRECT_URI}
+      TOPIC_COMMAND_HANDLER: ${self:custom.envpath.TOPIC_COMMAND_HANDLER}
     events:
       - http:
           path: /
