@@ -1,5 +1,5 @@
 const database = require('../../database.js');
-const constants = require('../../constants.js');
+const time = require('../../time.js');
 
 const tablePlayer = 'player';
 const keyId = 'id';
