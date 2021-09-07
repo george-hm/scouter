@@ -13,7 +13,7 @@ class HourlyCheckIn extends Command {
             const timeUntilHourly = Time.timeUntilHourly(lastHourlyCheckIn);
             return new InteractionResponse(
                 InteractionResponse.RESPOND,
-                `Sorry, come back in ${timeUntilHourly} for your hourly check-in`,
+                `Sorry, hourly check-in available in **${timeUntilHourly}**`,
             );
         }
 

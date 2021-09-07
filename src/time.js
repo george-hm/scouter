@@ -120,16 +120,20 @@ class Time {
             timeString += `${days}d`;
         }
         if (hours) {
-            timeString += `${hours}h`;
+            timeString += ` ${hours}h`;
         }
         if (mins) {
-            timeString += `${mins}m`;
+            timeString += ` ${mins}m`;
         }
         if (secs) {
-            timeString += `${secs}s`;
+            timeString += ` ${secs}s`;
         }
 
         timeString = start + timeString;
+
+        // remove any double spaces and trim
+        timeString = timeString.replace(/\s+/g, ' ')
+            .trim();
 
         return timeString;
     }

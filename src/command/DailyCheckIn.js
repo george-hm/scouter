@@ -13,7 +13,7 @@ class DailyCheckIn extends Command {
             const timeUntilDaily = Time.timeUntilDaily(lastDailyCheckIn);
             return new InteractionResponse(
                 InteractionResponse.RESPOND,
-                `Sorry, come back in ${timeUntilDaily} for your daily check-in`,
+                `Sorry, daily check-in available in **${timeUntilDaily}**`,
             );
         }
 
