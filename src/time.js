@@ -39,6 +39,10 @@ class Time {
         return this._timeUntil(lastCheckIn, hour);
     }
 
+    static timeUntilDaily(lastCheckIn) {
+        return this._timeUntil(lastCheckIn, day);
+    }
+
     static _timeUntil(lastCheckIn, timeChunk) {
         const timeNow = this.getTime();
         return this._formatTime((lastCheckIn + timeChunk) - timeNow);
