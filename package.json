@@ -11,6 +11,7 @@
     "deploy:dev": "serverless deploy -s dev"
   },
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.29.0",
     "@discordjs/builders": "^0.6.0",
     "axios": "^0.21.1",
     "knex": "^0.95.6",
