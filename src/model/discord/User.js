@@ -156,9 +156,14 @@ class User {
 
         return reward;
     }
-}
 
-User.HourlyReward = 5;
-User.DailyReward = 20;
+    static get HourlyReward() {
+        return 5;
+    }
+
+    static get DailyReward() {
+        return 20;
+    }
+}
 
 module.exports = User;
