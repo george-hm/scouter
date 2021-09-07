@@ -44,6 +44,23 @@ class Constants {
 
         return isVerified;
     }
+
+    static getSNSMessageFromEvent(event) {
+        const message = event?.Records?.[0]?.Sns?.Message;
+        if (!message) {
+            throw new Error('Missing SNS payload');
+        }
+
+        if (typeof message !== 'string') {
+            throw new Error('Invalid message, must be string');
+        }
+
+        try {
+            return JSON.parse(message);
+        } catch (err) {
+            throw new Error(`Invalid JSON: ${message}`);
+        }
+    }
 }
 
 module.exports = Constants;
