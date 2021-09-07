@@ -1,26 +1,11 @@
 /* eslint-disable no-await-in-loop */
 const axios = require('axios');
+const commandList = require('../command/index.js').mapping;
 
 const APPLICATION_ID = 'REPLACE_ME';
 const BOT_TOKEN = 'REPLACE_ME';
 
-const commands = [
-    {
-        id: 'commandone',
-        name: 'testing',
-        description: 'This is a test why are you reading this',
-    },
-    {
-        id: 'itssummontime',
-        name: 'summon',
-        description: 'Summon a character',
-    },
-    {
-        id: 'hourly',
-        name: 'hourly',
-        description: 'Perform your hourly check-in',
-    },
-];
+const commands = Object.values(commandList).map(command => command.toJSON());
 
 async function main() {
     for (let i = 0; i < commands.length; i++) {
