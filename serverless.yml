@@ -40,6 +40,13 @@ functions:
           integration: lambda-proxy
           cors: true
 
+  command_handler:
+    handler: src/command_handler/handler.handler
+    timeout: 20
+    memorySize: 128
+    events:
+      - sns: ${self:custom.envpath.TOPIC_COMMAND_HANDLER}
+
 resources:
   Resources:
     IamRoleLambdaSNS:
