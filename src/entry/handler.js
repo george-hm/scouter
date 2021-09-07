@@ -1,4 +1,6 @@
-const { SNSClient, PublishCommand } = require('@aws-sdk/client-sns');
+// aws-sdk is included so it can be in dev dependencies
+// eslint-disable-next-line import/no-extraneous-dependencies
+const awsSDK = require('aws-sdk');
 const DiscordEvent = require('../model/discord/DiscordEvent.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const { createResponse, validateRequest } = require('../constants.js');
@@ -23,7 +25,7 @@ async function handler(event) {
 
     // check for ping and respond, otherwise send SNS
     const body = JSON.parse(event.body);
-    const discordEvent = new DiscordEvent(body);
+    const discordEvent = new DiscordEvent(body, true);
     console.log(discordEvent.getLogMessage());
     // discord is pinging us, pong
     if (discordEvent.type === DiscordEvent.PING) {
@@ -32,18 +34,21 @@ async function handler(event) {
         );
     }
 
+    const SNS = new awsSDK.SNS();
     // send the body to the commmand handler
-    const client = new SNSClient();
-    const messageData = new PublishCommand({
+    await SNS.publish({
         TopicArn: process.env.TOPIC_COMMAND_HANDLER,
         Message: event.body,
-    });
-    await client.send(messageData);
+    }).promise();
 
     // tell discord we received their request and we will reply later
     // must be done within 3 seconds
     return createResponse(new InteractionResponse(
         InteractionResponse.RESPOND_LATER_LOADING,
+        null,
+        null,
+        null,
+        true,
     ));
 }
 
