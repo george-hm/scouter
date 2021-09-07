@@ -1,9 +1,11 @@
-const constants = require('./constants.js');
-
 const hour = 3600;
 const day = hour * 24;
 
-class CheckIn {
+class Time {
+    static getTime() {
+        return Math.floor(Date.now() / 1000);
+    }
+
     static eligableForDaily(lastCheckIn) {
         return this._withinTime(lastCheckIn, day);
     }
@@ -12,17 +14,38 @@ class CheckIn {
         return this._withinTime(lastCheckIn, day);
     }
 
+    static dailyStreakIsValid(streak, lastCheckin) {
+        return this._streakIsValid(streak, day, lastCheckin);
+    }
+
+    static hourlyStreakIsValid(streak, lastCheckin) {
+        return this._streakIsValid(streak, day, lastCheckin);
+    }
+
+    static _streakIsValid(streak, timeframe, lastCheckin) {
+        if (!streak) {
+            return false;
+        }
+
+        const timeNow = this.getTime();
+        if (timeNow - lastCheckin > (timeframe * 2)) {
+            return false;
+        }
+
+        return true;
+    }
+
     static timeUntilHourly(lastCheckIn) {
         return this._timeUntil(lastCheckIn, hour);
     }
 
     static _timeUntil(lastCheckIn, timeChunk) {
-        const timeNow = constants.getTime();
+        const timeNow = this.getTime();
         return this._formatTime((lastCheckIn + timeChunk) - timeNow);
     }
 
     static _withinTime(timeToCheck, timeChunk) {
-        const time = constants.getTime();
+        const time = this.getTime();
         if (timeToCheck === 0) {
             return true;
         }
@@ -108,4 +131,4 @@ class CheckIn {
     }
 }
 
-module.exports = CheckIn;
+module.exports = Time;
