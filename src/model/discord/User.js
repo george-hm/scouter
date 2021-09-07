@@ -92,6 +92,10 @@ class User {
 
             this[key] = value;
         }
+
+        this[keyDailyStreak] = time.dailyStreakIsValid(this[keyDailyStreak]) ? this[keyDailyStreak] : 0;
+        this[keyHourlyStreak] = time.hourlyStreakIsValid(this[keyHourlyStreak]) ? this[keyHourlyStreak] : 0;
+
         this._playerLoaded = true;
         return this;
     }
