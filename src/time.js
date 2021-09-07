@@ -11,7 +11,7 @@ class Time {
     }
 
     static eligableForHourly(lastCheckIn) {
-        return this._withinTime(lastCheckIn, day);
+        return this._withinTime(lastCheckIn, hour);
     }
 
     static dailyStreakIsValid(streak, lastCheckin) {
