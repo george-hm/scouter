@@ -10,6 +10,7 @@ const commands = Object.values(commandList).map(command => command.toJSON());
 async function main() {
     for (let i = 0; i < commands.length; i++) {
         const command = commands[i];
+        console.log(command.name);
         try {
             await axios({
                 url: `https://discord.com/api/v8/applications/${APPLICATION_ID}/commands`,
