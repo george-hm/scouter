@@ -1,8 +1,6 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
-const Component = require('../model/discord/Component.js');
-const Character = require('../model/Character.js');
-const Embed = require('../model/discord/Embed.js');
 
 class Test extends Command {
     async main() {
@@ -15,6 +13,17 @@ class Test extends Command {
         );
 
         return response;
+    }
+
+    static toJSON() {
+        return new SlashCommandBuilder()
+            .setName(this.commandName)
+            .setDescription('Test command')
+            .toJSON();
+    }
+
+    static get commandName() {
+        return 'testing';
     }
 }
 

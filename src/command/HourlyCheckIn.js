@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const Constants = require('../constants.js');
@@ -24,6 +25,17 @@ class HourlyCheckIn extends Command {
             InteractionResponse.RESPOND,
             `<:bardockdisgust:850378401743110164> I see you've found ${rewardValue} Z-Orbs.\n**Streak**: ${user.hourlyStreak}`,
         );
+    }
+
+    static toJSON() {
+        return new SlashCommandBuilder()
+            .setName(this.commandName)
+            .setDescription('Do your hourly check-in and earn currency')
+            .toJSON();
+    }
+
+    static get commandName() {
+        return 'hourly';
     }
 }
 
