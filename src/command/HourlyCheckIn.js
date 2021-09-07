@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
-const Constants = require('../constants.js');
 const Time = require('../time.js');
 
 class HourlyCheckIn extends Command {
@@ -18,7 +17,7 @@ class HourlyCheckIn extends Command {
         }
 
         const rewardValue = user.grantHourlyReward();
-        user.lastHourlyCheckIn = Constants.getTime();
+        user.lastHourlyCheckIn = Time.getTime();
         await user.save();
 
         return new InteractionResponse(

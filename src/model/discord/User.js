@@ -43,7 +43,7 @@ class User {
     async _createPlayer() {
         const db = database.get();
 
-        const timeNow = constants.getTime();
+        const timeNow = time.getTime();
         await db.insert({
             [keyId]: this.getUserId(),
             [keyCurrency]: 0,
