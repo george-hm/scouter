@@ -44,10 +44,6 @@ class Constants {
 
         return isVerified;
     }
-
-    static getTime() {
-        return Math.floor(Date.now() / 1000);
-    }
 }
 
 module.exports = Constants;
