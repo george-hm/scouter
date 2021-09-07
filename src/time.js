@@ -19,7 +19,7 @@ class Time {
     }
 
     static hourlyStreakIsValid(streak, lastCheckin) {
-        return this._streakIsValid(streak, day, lastCheckin);
+        return this._streakIsValid(streak, hour, lastCheckin);
     }
 
     static _streakIsValid(streak, timeframe, lastCheckin) {
