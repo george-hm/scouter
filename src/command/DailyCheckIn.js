@@ -3,40 +3,40 @@ const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const Time = require('../time.js');
 
-class HourlyCheckIn extends Command {
+class DailyCheckIn extends Command {
     async main() {
         const user = this.getUser();
         await user.loadPlayerInfo();
         console.log(user);
-        const lastHourlyCheckIn = user.lastHourlyCheckIn;
-        if (!Time.eligableForHourly(lastHourlyCheckIn)) {
-            const timeUntilHourly = Time.timeUntilHourly(lastHourlyCheckIn);
+        const lastDailyCheckIn = user.lastDailyCheckIn;
+        if (!Time.eligableForDaily(lastDailyCheckIn)) {
+            const timeUntilDaily = Time.timeUntilDaily(lastDailyCheckIn);
             return new InteractionResponse(
                 InteractionResponse.RESPOND,
-                `Sorry, come back in ${timeUntilHourly} for your hourly check-in`,
+                `Sorry, come back in ${timeUntilDaily} for your daily check-in`,
             );
         }
 
-        const rewardValue = user.grantHourlyReward();
-        user.lastHourlyCheckIn = Time.getTime();
+        const rewardValue = user.grantDailyReward();
+        user.lastDailyCheckIn = Time.getTime();
         await user.save();
 
         return new InteractionResponse(
             InteractionResponse.RESPOND,
-            `<:bardockdisgust:850378401743110164> I see you've found ${rewardValue} Z-Orbs.\n**Streak**: ${user.hourlyStreak}`,
+            `<:PES_HmmSpecs:672161497413189680> Quite the haul I see. Found ${rewardValue} Z-Orbs.\n**Streak**: ${user.dailyStreak}`,
         );
     }
 
     static toJSON() {
         return new SlashCommandBuilder()
             .setName(this.commandName)
-            .setDescription('Do your hourly check-in and earn currency (1 hour cooldown)')
+            .setDescription('Do your daily check-in and earn currency (24 hour cooldown)')
             .toJSON();
     }
 
     static get commandName() {
-        return 'hourly';
+        return 'daily';
     }
 }
 
-module.exports = HourlyCheckIn;
+module.exports = DailyCheckIn;
