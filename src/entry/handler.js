@@ -35,8 +35,8 @@ async function handler(event) {
     // send the body to the commmand handler
     const client = new SNSClient();
     const messageData = new PublishCommand({
-        topic: process.env.TOPIC_COMMAND_HANDLER,
-        message: event.body,
+        TopicArn: process.env.TOPIC_COMMAND_HANDLER,
+        Message: event.body,
     });
     await client.send(messageData);
 
