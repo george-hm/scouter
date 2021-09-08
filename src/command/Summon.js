@@ -25,7 +25,7 @@ class Summon extends Command {
                 Component.STYLE_PRIMARY,
                 'Summon again',
                 null,
-                this.createCustomId('summon'),
+                this.createCustomId(Summon.commandName),
             ),
         ]);
         const roll = Character.getRandomRarity();
