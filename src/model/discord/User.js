@@ -176,6 +176,15 @@ class User {
     static get DailyReward() {
         return 20;
     }
+
+    addRarityToInventory(rarity) {
+        if (!this._playerLoaded) {
+            throw new Error('Player not loaded');
+        }
+        const inventory = this[keyInventory] || {};
+        inventory[rarity] = inventory[rarity] || 0;
+        inventory[rarity]++;
+    }
 }
 
 module.exports = User;
