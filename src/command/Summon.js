@@ -19,6 +19,8 @@ class Summon extends Command {
             );
         }
         const roll = Character.getRandomRarity();
+        const summonedCharacter = await Character.getRandomByRarity(roll);
+        summonedCharacter.addToPlayer(user.getUserId());
         console.log(roll);
         user.addRarityToInventory(roll);
         user.currency -= Summon.summonCost;
@@ -39,8 +41,8 @@ class Summon extends Command {
         ]);
         return new InteractionResponse(
             InteractionResponse.RESPOND,
-            `You rolled: ${Character.convertRarityToString(roll)}`,
-            null,
+            `${user.getMention()} you rolled: ${Character.convertRarityToString(roll)}`,
+            [summonedCharacter.toEmbed()],
             component,
         );
     }
