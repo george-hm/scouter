@@ -14,7 +14,7 @@ class Currency extends Command {
                 continue;
             }
             const amount = user.inventory[rarity];
-            inventoryString += `\n${Character.convertRarityToString(rarity)}: ${amount}`;
+            inventoryString += `\n${Character.convertRarityToEmoji(rarity)}: ${amount}`;
         }
 
         return new InteractionResponse(
