@@ -12,7 +12,7 @@ const mapping = {
 };
 
 module.exports.getCommand = (commandData, user) => {
-    const commandName = Command.getCommandName(commandData);
+    const commandName = commandData.commandName;
     const mappedCommand = mapping[commandName];
     if (!mappedCommand || typeof mappedCommand !== 'function') {
         return null;

@@ -7,7 +7,7 @@ class Command {
             throw new Error('User is not model');
         }
         this._id = commandData.id;
-        this._name = Command.getCommandName(commandData);
+        this._name = commandData.commandName;
         this._options = commandData.options;
         this._user = user;
         this._customId = commandData.custom_id;
@@ -23,22 +23,6 @@ class Command {
 
     getCommandName() {
         return this._name;
-    }
-
-    static getCommandName(data) {
-        if (data.name) {
-            return data.name;
-        }
-
-        if (!data.custom_id) {
-            throw new Error('No name or custom id');
-        }
-
-        const parts = data.custom_id.split('.');
-        if (!parts[0]) {
-            throw new Error('Invalid custom id');
-        }
-        return parts[0];
     }
 
     static toJSON() {
