@@ -41,15 +41,7 @@ class Response {
             }
         }
 
-        const toReturn = {
-            type: this._type,
-        };
-
-        if (Object.keys(data).length) {
-            toReturn.data = data;
-        }
-
-        return toReturn;
+        return data;
     }
 }
 
