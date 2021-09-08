@@ -7,8 +7,6 @@ class Currency extends Command {
     async main() {
         const user = this.getUser();
         await user.loadPlayerInfo();
-
-        console.log(user);
         const currency = user.currency;
         let inventoryString = '';
         for (const rarity in user.inventory) {

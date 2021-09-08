@@ -31,7 +31,6 @@ class Interaction {
      * @returns {Command|null}
      */
     getCommand() {
-        console.log(this._command);
         if (this._command && !(this._command instanceof Command)) {
             throw new Error('Command is not instance of command');
         }
