@@ -22,7 +22,7 @@ class DailyCheckIn extends Command {
 
         return new InteractionResponse(
             InteractionResponse.RESPOND,
-            `<:PES_HmmSpecs:672161497413189680> Quite the haul I see. Found ${rewardValue} Z-Orbs.\n**Streak**: ${user.dailyStreak}`,
+            `<:ss4smug:850163594556997633> This should keep you going. Found ${rewardValue} Z-Orbs.\n**Streak**: ${user.dailyStreak}`,
         );
     }
 
