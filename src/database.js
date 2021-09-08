@@ -10,10 +10,10 @@ class Database {
      */
     static get() {
         if (this._connection) {
-            return this._knex;
+            return this._connection;
         }
 
-        this._knex = Knex({
+        this._connection = Knex({
             client: 'mysql',
             connection: {
                 host: process.env.DB_HOST,
@@ -23,7 +23,7 @@ class Database {
             },
         });
 
-        return this._knex;
+        return this._connection;
     }
 
     static async close() {
@@ -31,7 +31,7 @@ class Database {
             return;
         }
 
-        await this._connection.end();
+        await this._connection.destory();
     }
 }
 
