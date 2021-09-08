@@ -10,9 +10,17 @@ client.on('interactionCreate', async interaction => {
     const event = new Interaction(interaction);
     console.log(event.getLogMessage());
     const command = event.getCommand();
-    const response = await command.main();
 
-    await interaction.reply(response.toObject());
+    try {
+        const response = await command.main();
+        await interaction.reply(response.toObject());
+    } catch (err) {
+        if (process.env.ERROR_USER_ID) {
+            const errorUser = client.users.cache.get(process.env.ERROR_USER_ID);
+            errorUser.send(`Something is fucked.\nUser: ${event._user.getName()}\nPayload: \`\`\`json\n${JSON.stringify(interaction, null, 4)}\`\`\`\nError: \`\`\`json\n${err.toString()}\`\`\``);
+        }
+        console.log(err);
+    }
 });
 
 client.login(process.env.BOT_TOKEN);
