@@ -4,7 +4,7 @@ const { createResponse, getSNSMessageFromEvent } = require('../constants.js');
 const DiscordEvent = require('../model/discord/DiscordEvent.js');
 
 async function handler(event) {
-    const body = JSON.parse(getSNSMessageFromEvent(event));
+    const body = getSNSMessageFromEvent(event);
     const discordEvent = new DiscordEvent(body);
     console.log(discordEvent.getLogMessage());
 
@@ -19,9 +19,7 @@ async function handler(event) {
     }
 
     const commandResponse = await command.main();
-    return createResponse(
-        commandResponse,
-    );
+    await commandResponse.sendCallbackRequest(discordEvent.getInteractionResponseURL());
 }
 
 module.exports.handler = async event => {
