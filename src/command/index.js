@@ -3,12 +3,14 @@ const HourlyCheckIn = require('./HourlyCheckIn.js');
 const DailyCheckIn = require('./DailyCheckIn.js');
 const Summon = require('./Summon.js');
 const Test = require('./Test.js');
+const Currency = require('./Currency.js');
 
 const mapping = {
     [Test.commandName]: Test,
     [Summon.commandName]: Summon,
     [HourlyCheckIn.commandName]: HourlyCheckIn,
     [DailyCheckIn.commandName]: DailyCheckIn,
+    [Currency.commandName]: Currency,
 };
 
 module.exports.getCommand = (commandName, customId, options, user) => {
