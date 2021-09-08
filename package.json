@@ -8,7 +8,8 @@
   "private": true,
   "scripts": {
     "lint": "eslint ./src",
-    "start": "cd ./src && node index.js"
+    "start": "cd ./src && node index.js",
+    "deploy": "cd ./src && node registerCommands.js"
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.29.0",
