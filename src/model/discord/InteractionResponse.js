@@ -1,3 +1,4 @@
+const axios = require('axios');
 const Embed = require('./Embed.js');
 const Component = require('./Component.js');
 
@@ -50,6 +51,17 @@ class Response {
         }
 
         return toReturn;
+    }
+
+    async sendCallbackRequest(url) {
+        await axios({
+            url,
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: this.toObject().data,
+        });
     }
 }
 

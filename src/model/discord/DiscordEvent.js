@@ -45,6 +45,10 @@ class DiscordEvent {
 
         return this._command;
     }
+
+    getInteractionResponseURL() {
+        return `https://discord.com/webhooks/${this._applicationId}/${this._token}/message/@original`;
+    }
 }
 
 DiscordEvent.PING = 1;
