@@ -5,27 +5,16 @@ const User = require('./User.js');
 // https://discord.com/developers/docs/interactions/slash-commands#interaction-object
 // What discord sends to us, this is the main body
 class DiscordEvent {
-    constructor(body, dontLoadCommand) {
-        this._type = body.type;
-        if (
-            this._type !== DiscordEvent.PING &&
-            this._type !== DiscordEvent.APPLICATION_COMMAND &&
-            this._type !== DiscordEvent.MESSAGE_COMPONENT
-        ) {
-            throw new Error('Invalid type');
-        }
-
-        this._channel = body.channel_id;
-        this._guild = body.guild_id;
+    constructor(body) {
+        this._channel = body.channelId;
+        this._guild = body.guildId;
         this._user = new User(body.user || body.member.user);
         this._token = body.token;
-        if (body.data && !dontLoadCommand) {
-            this._commandName = Command.getCommandName(body.data);
-            this._command = allCommands.getCommand(
-                body.data,
-                this._user,
-            );
-        }
+        this._commandName = body.commandName;
+        this._command = allCommands.getCommand(
+            body,
+            this._user,
+        );
     }
 
     getLogMessage() {
