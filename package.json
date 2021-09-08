@@ -7,12 +7,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "lint": "eslint ./src",
-    "deploy:dev": "serverless deploy -s dev"
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0",
     "knex": "^0.95.6",
     "mysql": "^2.18.1"
   },
