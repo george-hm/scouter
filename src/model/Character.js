@@ -87,6 +87,7 @@ class Character {
     }
 
     static convertRarityToString(rarity) {
+        rarity = parseInt(rarity);
         if (rarity === this.RARITY_N) {
             return 'N';
         }

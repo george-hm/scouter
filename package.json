@@ -8,18 +8,16 @@
   "private": true,
   "scripts": {
     "lint": "eslint ./src",
-    "deploy:dev": "serverless deploy -s dev"
+    "start": "cd ./src && node index.js",
+    "deploy": "cd ./src && node registerCommands.js"
   },
   "dependencies": {
     "@discordjs/builders": "^0.6.0",
     "axios": "^0.21.1",
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0",
     "knex": "^0.95.6",
-    "knex-serverless-mysql": "^1.1.0",
-    "serverless": "^1.78.1",
-    "serverless-mysql": "^1.5.4",
-    "serverless-plugin-optimize": "^4.2.1-rc.1",
-    "serverless-prune-plugin": "^1.4.3",
-    "tweetnacl": "^1.0.3"
+    "mysql": "^2.18.1"
   },
   "devDependencies": {
     "aws-sdk": "^2.984.0",

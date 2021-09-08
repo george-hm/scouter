@@ -5,17 +5,26 @@ const Component = require('../model/discord/Component.js');
 const Character = require('../model/Character.js');
 
 class Summon extends Command {
+    static get summonCost() {
+        return 5;
+    }
+
     async main() {
         const user = this.getUser();
-        if (user.getUserId() !== '129416238916042752') {
+        await user.loadPlayerInfo();
+        if (user.currency < Summon.summonCost) {
             return new InteractionResponse(
                 InteractionResponse.RESPOND,
-                'Sorry, come back later.',
-                null,
-                null,
-                true,
+                `<:babysmirk:850200356495687680> you need ${Summon.summonCost} Z-Orbs to do that`,
             );
         }
+        const roll = Character.getRandomRarity();
+        console.log(roll);
+        user.addRarityToInventory(roll);
+        user.currency -= Summon.summonCost;
+
+        await user.save();
+
         const component = new Component(
             Component.TYPE_CONTAINER,
         );
@@ -25,11 +34,9 @@ class Summon extends Command {
                 Component.STYLE_PRIMARY,
                 'Summon again',
                 null,
-                this.createCustomId('summon'),
+                this.createCustomId(Summon.commandName),
             ),
         ]);
-        const roll = Character.getRandomRarity();
-        console.log(roll);
         return new InteractionResponse(
             InteractionResponse.RESPOND,
             `You rolled: ${Character.convertRarityToString(roll)}`,

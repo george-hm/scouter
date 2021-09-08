@@ -1,6 +1,4 @@
 const Knex = require('knex');
-const knexServerlessMysql = require('knex-serverless-mysql');
-const serverlessMYSQL = require('serverless-mysql');
 
 class Database {
     /**
@@ -12,11 +10,12 @@ class Database {
      */
     static get() {
         if (this._connection) {
-            return this._knex;
+            return this._connection;
         }
 
-        this._connection = serverlessMYSQL({
-            config: {
+        this._connection = Knex({
+            client: 'mysql',
+            connection: {
                 host: process.env.DB_HOST,
                 user: process.env.DB_USER,
                 password: process.env.DB_PASSWORD,
@@ -24,12 +23,7 @@ class Database {
             },
         });
 
-        this._knex = Knex({
-            client: knexServerlessMysql,
-            mysql: this._connection,
-        });
-
-        return this._knex;
+        return this._connection;
     }
 
     static async close() {
@@ -37,7 +31,7 @@ class Database {
             return;
         }
 
-        await this._connection.end();
+        await this._connection.destory();
     }
 }
 

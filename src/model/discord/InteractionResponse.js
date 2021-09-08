@@ -18,9 +18,7 @@ class Response {
             this._components = [components.toComponentObject()];
         }
 
-        if (ephemeral) {
-            this._ephemeral = 64;
-        }
+        this._ephemeral = ephemeral;
     }
 
     toObject() {
@@ -28,7 +26,7 @@ class Response {
             content: this._messageContent,
             embeds: this._embeds,
             components: this._components,
-            flags: this._ephemeral,
+            ephemeral: !!this._ephemeral,
         };
 
         // remove all falsey/optional data
@@ -42,15 +40,7 @@ class Response {
             }
         }
 
-        const toReturn = {
-            type: this._type,
-        };
-
-        if (Object.keys(data).length) {
-            toReturn.data = data;
-        }
-
-        return toReturn;
+        return data;
     }
 
     async sendCallbackRequest(url) {
