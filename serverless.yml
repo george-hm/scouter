@@ -33,6 +33,7 @@ functions:
     memorySize: 128
     environment:
       TOPIC_COMMAND_HANDLER: ${self:custom.envpath.TOPIC_COMMAND_HANDLER}
+    role: ${self:custom.envpath.roleLambdaSNS}
     events:
       - http:
           path: /
