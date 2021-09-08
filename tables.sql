@@ -13,6 +13,7 @@ CREATE TABLE `character` (
   `super` JSON NOT NULL,
   `passive` JSON NOT NULL,
   `links` JSON NOT NULL,
+  `hasImage` TINYINT DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `v_rarity` (`v_rarity`)
 );
