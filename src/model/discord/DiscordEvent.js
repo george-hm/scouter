@@ -5,7 +5,7 @@ const User = require('./User.js');
 // https://discord.com/developers/docs/interactions/slash-commands#interaction-object
 // What discord sends to us, this is the main body
 class DiscordEvent {
-    constructor(body) {
+    constructor(body, dontLoadCommand) {
         this._type = body.type;
         if (
             this._type !== DiscordEvent.PING &&
@@ -19,7 +19,7 @@ class DiscordEvent {
         this._guild = body.guild_id;
         this._user = new User(body.user || body.member.user);
         this._token = body.token;
-        if (body.data) {
+        if (body.data && !dontLoadCommand) {
             this._commandName = Command.getCommandName(body.data);
             this._command = allCommands.getCommand(
                 body.data,

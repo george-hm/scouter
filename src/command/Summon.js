@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const Component = require('../model/discord/Component.js');
@@ -36,6 +37,16 @@ class Summon extends Command {
             component,
         );
     }
-}
 
+    static toJSON() {
+        return new SlashCommandBuilder()
+            .setName(this.commandName)
+            .setDescription('Summon a new character')
+            .toJSON();
+    }
+
+    static get commandName() {
+        return 'summon';
+    }
+}
 module.exports = Summon;

@@ -1,12 +1,14 @@
 const Command = require('./Command.js');
+const HourlyCheckIn = require('./HourlyCheckIn.js');
+const DailyCheckIn = require('./DailyCheckIn.js');
 const Summon = require('./Summon.js');
 const Test = require('./Test.js');
-const TestOptionOne = require('./TestOptionOne.js');
 
 const mapping = {
-    testing: Test,
-    TestOptionOne,
-    summon: Summon,
+    [Test.commandName]: Test,
+    [Summon.commandName]: Summon,
+    [HourlyCheckIn.commandName]: HourlyCheckIn,
+    [DailyCheckIn.commandName]: DailyCheckIn,
 };
 
 module.exports.getCommand = (commandData, user) => {
@@ -22,3 +24,5 @@ module.exports.getCommand = (commandData, user) => {
     }
     return new mapping[commandName](commandData, user);
 };
+
+module.exports.mapping = mapping;

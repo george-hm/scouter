@@ -1,40 +1,22 @@
 /* eslint-disable no-await-in-loop */
 const axios = require('axios');
+const commandList = require('../command/index.js').mapping;
 
 const APPLICATION_ID = 'REPLACE_ME';
 const BOT_TOKEN = 'REPLACE_ME';
+// leave this null if you want to update commands globally
+const GUILD_ID = null;
 
-const commands = [
-    {
-        name: 'testing',
-        description: 'This is a test why are you reading this',
-        options: [
-            {
-                name: 'option-one',
-                description: 'test option one',
-                type: 3,
-                required: false,
-                choices: [
-                    {
-                        name: 'option-choice-one',
-                        value: 'option_choice_one',
-                    },
-                    {
-                        name: 'option-choice-two',
-                        value: 'option_choice_two',
-                    },
-                ],
-            },
-        ],
-    },
-];
+const commands = Object.values(commandList).map(command => command.toJSON());
 
 async function main() {
     for (let i = 0; i < commands.length; i++) {
         const command = commands[i];
+        console.log(command.name);
+        const url = `https://discord.com/api/v8/applications/${APPLICATION_ID}${GUILD_ID ? `/guilds/${GUILD_ID}` : ''}/commands`;
         try {
             await axios({
-                url: `https://discord.com/api/v8/applications/${APPLICATION_ID}/commands`,
+                url,
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,6 +29,7 @@ async function main() {
             console.log(err.response.data.errors);
         }
     }
+    console.log('Registered all commands');
 }
 
 main();

@@ -23,3 +23,15 @@ CREATE TABLE `category` (
   PRIMARY KEY (`category`, `id`),
   KEY `category` (`category`)
 );
+
+CREATE TABLE `player` (
+  `id` varchar(18) NOT NULL,
+  `currency` int NOT NULL,
+  `inventory` json NOT NULL,
+  `lastHourlyCheckIn` bigint NOT NULL,
+  `hourlyStreak` int NOT NULL,
+  `lastDailyCheckIn` bigint NOT NULL,
+  `dailyStreak` int NOT NULL,
+  `created` bigint NOT NULL,
+  PRIMARY KEY (`id`)
+);

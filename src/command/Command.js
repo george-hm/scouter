@@ -41,6 +41,10 @@ class Command {
         return parts[0];
     }
 
+    static toJSON() {
+        throw new Error('Not implemented');
+    }
+
     createCustomId(name) {
         return `${name}.${this.getUser().getUserId()}`;
     }
@@ -50,6 +54,10 @@ class Command {
         const userId = parts[1];
 
         return userId === this._user.getUserId();
+    }
+
+    static get commandName() {
+        throw new Error('Not implemented');
     }
 }
 
