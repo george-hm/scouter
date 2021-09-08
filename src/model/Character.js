@@ -2,6 +2,7 @@ const database = require('../database.js');
 const Embed = require('./discord/Embed.js');
 
 const table = 'character';
+const tableInventory = 'inventory';
 
 class Character {
     constructor(
@@ -36,6 +37,43 @@ class Character {
             this.getCharacterURL(),
             this.getCharacterThumbnailURL(),
         );
+    }
+
+    static async getRandomByRarity(rarityNum) {
+        if (typeof rarityNum !== 'number') {
+            throw new Error(`Rarity is not number: ${rarityNum}`);
+        }
+
+        const dbInstance = database.get();
+        const response = await dbInstance(table)
+            .where({
+                v_rarity: rarityNum,
+                hasImage: 1,
+            }).orderByRaw('RAND()')
+            .limit(1);
+
+        const charResult = response[0];
+
+        const loadedChar = new this(
+            charResult.id,
+            charResult.resource_id,
+            charResult.name,
+            charResult.secondname,
+            rarityNum,
+            charResult.type,
+        );
+
+        return loadedChar;
+    }
+
+    async addToPlayer(userId) {
+        const dbInstance = database.get();
+
+        await dbInstance(tableInventory)
+            .insert({
+                playerId: userId,
+                characterId: this._id,
+            });
     }
 
     static async getById(id) {
