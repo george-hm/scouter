@@ -87,6 +87,7 @@ class Character {
     }
 
     static convertRarityToString(rarity) {
+        // eslint-disable-next-line no-param-reassign
         rarity = parseInt(rarity);
         if (rarity === this.RARITY_N) {
             return 'N';
