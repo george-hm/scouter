@@ -36,3 +36,12 @@ CREATE TABLE `player` (
   `created` bigint NOT NULL,
   PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `inventory` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `playerId` varchar(18) NOT NULL,
+  `characterId` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`playerId`) REFERENCES `player`(id),
+  FOREIGN KEY (`characterId`) REFERENCES `character`(id)
+);
