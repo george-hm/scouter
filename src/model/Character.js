@@ -32,7 +32,7 @@ class Character {
     toEmbed() {
         return new Embed(
             `${this._name}, ${this._secondaryName}`,
-            `Type: ${this._type}\nRarity: ${this._rarityNum}`,
+            `Type: ${this._type}\nRarity: ${Character.convertRarityToString(this._rarityNum)}`,
             null,
             this.getCharacterURL(),
             this.getCharacterThumbnailURL(),
