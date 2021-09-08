@@ -1,5 +1,4 @@
 const Knex = require('knex');
-const MYSQL = require('mysql');
 
 class Database {
     /**
