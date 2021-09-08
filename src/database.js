@@ -31,7 +31,7 @@ class Database {
             return;
         }
 
-        await this._connection.destory();
+        await this._connection.destroy();
     }
 }
 
