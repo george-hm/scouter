@@ -2,3 +2,4 @@ _optimize/
 .serverless/
 node_modules
 serverless.env.yml
+yarn-error.log
