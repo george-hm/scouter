@@ -17,9 +17,7 @@ class Response {
             this._components = [components.toComponentObject()];
         }
 
-        if (ephemeral) {
-            this._ephemeral = 64;
-        }
+        this._ephemeral = ephemeral;
     }
 
     toObject() {
@@ -27,7 +25,7 @@ class Response {
             content: this._messageContent,
             embeds: this._embeds,
             components: this._components,
-            flags: this._ephemeral,
+            ephemeral: !!this._ephemeral,
         };
 
         // remove all falsey/optional data
