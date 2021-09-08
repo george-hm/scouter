@@ -15,13 +15,12 @@ class Summon extends Command {
         if (user.currency < Summon.summonCost) {
             return new InteractionResponse(
                 InteractionResponse.RESPOND,
-                `<:babysmirk:850200356495687680> you need ${Summon.summonCost} Z-Orbs to do that`,
+                `${user.getMention()} <:babysmirk:850200356495687680> you need ${Summon.summonCost} Z-Orbs to do that`,
             );
         }
         const roll = Character.getRandomRarity();
         const summonedCharacter = await Character.getRandomByRarity(roll);
         summonedCharacter.addToPlayer(user.getUserId());
-        console.log(roll);
         user.addRarityToInventory(roll);
         user.currency -= Summon.summonCost;
 
