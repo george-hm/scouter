@@ -5,6 +5,15 @@ const InteractionResponse = require('../model/discord/InteractionResponse.js');
 class Test extends Command {
     async main() {
         const user = this.getUser();
+        if (user.getUserId() !== '129416238916042752') {
+            return new InteractionResponse(
+                InteractionResponse.RESPOND,
+                'Not for the public!',
+                null,
+                null,
+                true,
+            );
+        }
         await user.loadPlayerInfo();
         const message = `\`\`\`json\n${JSON.stringify(user, null, 4)}\`\`\``;
         const response = new InteractionResponse(
