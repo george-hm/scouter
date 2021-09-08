@@ -157,6 +157,15 @@ class Character {
 
         throw new Error('Invalid rarity');
     }
+
+    static convertRarityToEmoji(rarity) {
+        let rarityForLookup = rarity;
+        if (!Number.isNaN(parseInt(rarity))) {
+            rarityForLookup = this.convertRarityToString(rarityForLookup);
+        }
+
+        return emojiMapping[rarityForLookup];
+    }
 }
 Character.RARITY_N = 0;
 Character.RARITY_R = 1;
