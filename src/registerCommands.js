@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 const axios = require('axios');
-const commandList = require('../command/index.js').mapping;
+const commandList = require('./command/index.js').mapping;
 
 const APPLICATION_ID = 'REPLACE_ME';
 const BOT_TOKEN = 'REPLACE_ME';
