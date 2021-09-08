@@ -3,6 +3,18 @@ const Embed = require('./discord/Embed.js');
 
 const table = 'character';
 const tableInventory = 'inventory';
+const emojiMapping = {
+    N: '<:n_:885253426261401630>',
+    R: '<:r_:885253425963630673>',
+    SR: '<:sr:885253425758097489>',
+    SSR: '<:ssr:885253425791664159>',
+    STR: '<:str:885253426013962300>',
+    AGL: '<:agl:885253426022318160>',
+    INT: '<:int:885253425976209428>',
+    TEQ: '<:teq:885253426030718987>',
+    UR: '<:ur:885253426169143337>',
+    PHY: '<:phy:885253425984577536>',
+};
 
 class Character {
     constructor(
@@ -32,7 +44,7 @@ class Character {
     toEmbed() {
         return new Embed(
             `${this._name}, ${this._secondaryName}`,
-            `Type: ${this._type}\nRarity: ${Character.convertRarityToString(this._rarityNum)}`,
+            `Type: ${emojiMapping[this._type]}\nRarity: ${emojiMapping[Character.convertRarityToString(this._rarityNum)]}`,
             null,
             this.getCharacterURL(),
             this.getCharacterThumbnailURL(),
