@@ -2,6 +2,20 @@ const hour = 3600;
 const day = hour * 24;
 
 class Time {
+    static getPrintableTimestamp() {
+        const time = this.getTime() * 1000;
+        const date = new Date(time);
+        const currentDay = this._pad0(date.getDate());
+        const currentMonth = this._pad0(date.getMonth() + 1);
+        const currentYear = date.getFullYear();
+
+        const hours = this._pad0(date.getHours());
+        const minutes = this._pad0(date.getMinutes());
+        const seconds = this._pad0(date.getSeconds());
+
+        return `[${currentDay}-${currentMonth}-${currentYear} ${hours}:${minutes}:${seconds}]`;
+    }
+
     static getTime() {
         return Math.floor(Date.now() / 1000);
     }
