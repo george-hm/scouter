@@ -69,10 +69,10 @@ class Character {
         return `${process.env.BASE_URL}/${this._resourceId}/card_${this._resourceId}_circle.png`;
     }
 
-    toEmbed() {
+    toEmbed(count) {
         return new Embed(
             this.getFullName(),
-            `Type: ${emojiMapping[this._type]}\nRarity: ${emojiMapping[Character.convertRarityToString(this._rarityNum)]}`,
+            `${count ? `Owned: ${count}\n` : ''}Type: ${emojiMapping[this._type]}\nRarity: ${emojiMapping[Character.convertRarityToString(this._rarityNum)]}`,
             null,
             this.getCharacterURL(),
             this.getCharacterThumbnailURL(),
