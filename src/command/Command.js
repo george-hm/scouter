@@ -1,3 +1,4 @@
+const { CommandInteractionOptionResolver } = require('discord.js');
 const User = require('../model/User.js');
 
 // https://discord.com/developers/docs/interactions/slash-commands#interaction-object-application-command-interaction-data-structure
@@ -7,13 +8,19 @@ class Command {
             throw new Error('User is not model');
         }
         this._commandName = commandName;
-        this._options = options;
+        if (options instanceof CommandInteractionOptionResolver) {
+            this._options = options;
+        }
         this._user = user;
         this._customId = customId;
     }
 
     async main() {
         throw new Error('Main function not implemented');
+    }
+
+    getOptions() {
+        return this._options;
     }
 
     getUser() {
