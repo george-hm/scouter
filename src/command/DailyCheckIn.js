@@ -11,7 +11,6 @@ class DailyCheckIn extends Command {
         if (!Time.eligableForDaily(lastDailyCheckIn)) {
             const timeUntilDaily = Time.timeUntilDaily(lastDailyCheckIn);
             return new InteractionResponse(
-                InteractionResponse.RESPOND,
                 `Sorry, daily check-in available in **${timeUntilDaily}**`,
             );
         }
@@ -21,7 +20,6 @@ class DailyCheckIn extends Command {
         await user.save();
 
         return new InteractionResponse(
-            InteractionResponse.RESPOND,
             `<:ss4smug:850163594556997633> This should keep you going. Found ${rewardValue} Z-Orbs.\n**Streak**: ${user.dailyStreak}`,
         );
     }

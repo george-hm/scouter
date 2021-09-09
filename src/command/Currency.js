@@ -18,7 +18,6 @@ class Currency extends Command {
         }
 
         return new InteractionResponse(
-            InteractionResponse.RESPOND,
             `Currency: ${currency}\n\nInventory: ${inventoryString || 'None'}`,
         );
     }

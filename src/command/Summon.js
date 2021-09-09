@@ -14,7 +14,6 @@ class Summon extends Command {
         await user.loadPlayerInfo();
         if (user.currency < Summon.summonCost) {
             return new InteractionResponse(
-                InteractionResponse.RESPOND,
                 `${user.getMention()} <:babysmirk:850200356495687680> you need ${Summon.summonCost} Z-Orbs to do that`,
             );
         }
@@ -39,7 +38,6 @@ class Summon extends Command {
             ),
         ]);
         return new InteractionResponse(
-            InteractionResponse.RESPOND,
             `${user.getMention()} you rolled: ${Character.convertRarityToString(roll)}`,
             [summonedCharacter.toEmbed()],
             component,
