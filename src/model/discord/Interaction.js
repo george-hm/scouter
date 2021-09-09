@@ -1,6 +1,6 @@
 const allCommands = require('../../command/index.js');
 const Command = require('../../command/Command.js');
-const User = require('./User.js');
+const User = require('../User.js');
 const Time = require('../../time.js');
 
 class Interaction {
