@@ -3,7 +3,6 @@ const HourlyCheckIn = require('./HourlyCheckIn.js');
 const DailyCheckIn = require('./DailyCheckIn.js');
 const Summon = require('./Summon.js');
 const Test = require('./Test.js');
-const Currency = require('./Currency.js');
 const Inventory = require('./Inventory.js');
 
 const mapping = {
@@ -11,7 +10,6 @@ const mapping = {
     [Summon.commandName]: Summon,
     [HourlyCheckIn.commandName]: HourlyCheckIn,
     [DailyCheckIn.commandName]: DailyCheckIn,
-    [Currency.commandName]: Currency,
     [Inventory.commandName]: Inventory,
 };
 
