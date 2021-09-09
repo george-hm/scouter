@@ -33,6 +33,34 @@ class Character {
         this._type = type;
     }
 
+    getFullName() {
+        return `${this._name}, ${this._secondaryName}`;
+    }
+
+    getRarityNum() {
+        return this._rarityNum;
+    }
+
+    getType() {
+        return this._type;
+    }
+
+    getRarityAsEmoji() {
+        return Character.convertRarityToEmoji(this.getRarityNum());
+    }
+
+    getTypeAsEmoji() {
+        const emoji = emojiMapping[this.getType()];
+        if (!emoji) {
+            throw new Error(`Missing type emoji for ${this.getType}`);
+        }
+        return emojiMapping[this.getType()];
+    }
+
+    getId() {
+        return this._id;
+    }
+
     getCharacterURL() {
         return `${process.env.BASE_URL}/${this._resourceId}/card_${this._resourceId}_character.png`;
     }
@@ -43,7 +71,7 @@ class Character {
 
     toEmbed() {
         return new Embed(
-            `${this._name}, ${this._secondaryName}`,
+            this.getFullName(),
             `Type: ${emojiMapping[this._type]}\nRarity: ${emojiMapping[Character.convertRarityToString(this._rarityNum)]}`,
             null,
             this.getCharacterURL(),
