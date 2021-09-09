@@ -40,7 +40,6 @@ class Inventory extends Command {
         const mappedSummary = characters.map(char => `\`${char.getId().toString(16)}\`${char.getRarityAsEmoji()} - **${char.getFullName()}** ${char.getTypeAsEmoji()} x${characterCounts[char.getId()]}`);
 
         let pageNumber = this._options?.getNumber(optionPageNumber) || this.getPageNumberFromButton();
-        console.log(pageNumber);
         const pages = [];
         while (mappedSummary.length) {
             pages.push(mappedSummary.splice(0, 10));
@@ -121,8 +120,6 @@ class Inventory extends Command {
     getPageNumberFromButton() {
         const customId = this.getCustomIdValue();
 
-        console.log('cus');
-        console.log(customId);
         return parseInt(customId) || 0;
     }
 

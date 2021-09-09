@@ -36,7 +36,6 @@ class Command {
     }
 
     getCustomIdValue() {
-        console.log(this._customId);
         if (!this._customId) {
             return null;
         }
