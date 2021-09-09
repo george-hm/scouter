@@ -19,6 +19,11 @@ client.on('interactionCreate', async interaction => {
             const errorUser = client.users.cache.get(process.env.ERROR_USER_ID);
             errorUser.send(`Something is fucked.\nUser: ${event._user.getName()}\nPayload: \`\`\`json\n${JSON.stringify(interaction, null, 4)}\`\`\`\nError: \`\`\`json\n${err.toString()}\`\`\``);
         }
+
+        if (err.toString().includes('closed connection')) {
+            await Database.close();
+            Database.get();
+        }
         console.log(err);
     }
 });
