@@ -7,7 +7,6 @@ class Test extends Command {
         const user = this.getUser();
         if (user.getUserId() !== '129416238916042752') {
             return new InteractionResponse(
-                InteractionResponse.RESPOND,
                 'Not for the public!',
                 null,
                 null,
@@ -17,7 +16,6 @@ class Test extends Command {
         await user.loadPlayerInfo();
         const message = `\`\`\`json\n${JSON.stringify(user, null, 4)}\`\`\``;
         const response = new InteractionResponse(
-            InteractionResponse.RESPOND,
             message,
         );
 

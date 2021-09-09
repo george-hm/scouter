@@ -11,7 +11,6 @@ class HourlyCheckIn extends Command {
         if (!Time.eligableForHourly(lastHourlyCheckIn)) {
             const timeUntilHourly = Time.timeUntilHourly(lastHourlyCheckIn);
             return new InteractionResponse(
-                InteractionResponse.RESPOND,
                 `Sorry, hourly check-in available in **${timeUntilHourly}**`,
             );
         }
@@ -21,7 +20,6 @@ class HourlyCheckIn extends Command {
         await user.save();
 
         return new InteractionResponse(
-            InteractionResponse.RESPOND,
             `<:bardockdisgust:850378401743110164> I see you've found ${rewardValue} Z-Orbs.\n**Streak**: ${user.hourlyStreak}`,
         );
     }
