@@ -17,8 +17,6 @@ class Inventory extends Command {
             );
         }
 
-        console.log(this._options);
-
         if (this._options.getString(optionViewCharacter)) {
             return await this.viewCharacter(
                 this._options.getString(optionViewCharacter),
