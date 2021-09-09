@@ -32,7 +32,16 @@ class Command {
     }
 
     createCustomId(name) {
-        return `${name}.${this.getUser().getUserId()}`;
+        return `${this.commandName}.${name}.${this.getUser().getUserId()}`;
+    }
+
+    getCustomIdValue() {
+        console.log(this._customId);
+        if (!this._customId) {
+            return null;
+        }
+
+        return this._customId.split('.')[1];
     }
 
     validateCustomIdBelongsToUser() {
@@ -41,7 +50,7 @@ class Command {
         }
 
         const parts = this._customId.split('.');
-        const userId = parts[1];
+        const userId = parts.pop();
 
         return userId === this._user.getUserId();
     }
