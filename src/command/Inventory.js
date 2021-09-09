@@ -2,14 +2,15 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const Embed = require('../model/discord/Embed.js');
+const Component = require('../model/discord/Component.js');
 
 const optionViewCharacter = 'id';
+const optionPageNumber = 'page';
 
 class Inventory extends Command {
     async main() {
         if (this._customId && !this.validateCustomIdBelongsToUser()) {
             return new InteractionResponse(
-                InteractionResponse.RESPOND,
                 `This is not your inventory, try /${this.commandName} instead.`,
                 null,
                 null,
@@ -17,7 +18,7 @@ class Inventory extends Command {
             );
         }
 
-        if (this._options.getString(optionViewCharacter)) {
+        if (this._options?.getString(optionViewCharacter)) {
             return await this.viewCharacter(
                 this._options.getString(optionViewCharacter),
             );
@@ -29,19 +30,68 @@ class Inventory extends Command {
         let characters = user.getUniqueCharacters();
         characters = characters.sort((a, b) => a.getRarityNum() - b.getRarityNum());
 
+        if (!characters.length) {
+            return new InteractionResponse(
+                'You do not have any characters. Get started with /daily and /summon',
+            );
+        }
+
         const characterCounts = user.getUniqueCharacterCounts();
         const mappedSummary = characters.map(char => `\`${char.getId().toString(16)}\`${char.getRarityAsEmoji()} - **${char.getFullName()}** ${char.getTypeAsEmoji()} x${characterCounts[char.getId()]}`);
-        const embedSummary = new Embed(
-            'Summary',
-            mappedSummary.join('\n'),
+
+        let pageNumber = this._options?.getNumber(optionPageNumber) || this.getPageNumberFromButton();
+        console.log(pageNumber);
+        const pages = [];
+        while (mappedSummary.length) {
+            pages.push(mappedSummary.splice(0, 10));
+        }
+        if (!pages[pageNumber]) {
+            pageNumber = 0;
+        }
+        const buttons = [];
+        if (pageNumber !== 0) {
+            buttons.push(
+                new Component(
+                    Component.TYPE_BUTTON,
+                    Component.STYLE_SECONDARY,
+                    null,
+                    {
+                        name: '◀️',
+                    },
+                    this.createCustomId(pageNumber - 1),
+                ),
+            );
+        }
+
+        if (pages[pageNumber + 1]) {
+            buttons.push(
+                new Component(
+                    Component.TYPE_BUTTON,
+                    Component.STYLE_SECONDARY,
+                    null,
+                    {
+                        name: '▶️',
+                    },
+                    this.createCustomId(pageNumber + 1),
+                ),
+            );
+        }
+
+        const compButtons = new Component(
+            Component.TYPE_CONTAINER,
         );
-        const response = new InteractionResponse(
-            InteractionResponse.RESPOND,
+        compButtons.setComponents(buttons);
+        const embedSummary = new Embed(
+            `Summary\nPage ${pageNumber + 1} of ${pages.length}`,
+            pages[pageNumber].join('\n'),
+        );
+        return new InteractionResponse(
             null,
             [embedSummary],
+            compButtons,
+            null,
+            true,
         );
-
-        return response;
     }
 
     async viewCharacter(hexId) {
@@ -53,7 +103,6 @@ class Inventory extends Command {
         const character = user.getCharacterFromInventoryById(numId);
         if (!character) {
             return new InteractionResponse(
-                InteractionResponse.RESPOND,
                 'You do not own this character!',
                 null,
                 null,
@@ -64,10 +113,17 @@ class Inventory extends Command {
         const ownedCount = user.getUniqueCharacterCounts()[numId];
 
         return new InteractionResponse(
-            InteractionResponse.RESPOND,
             null,
             [character.toEmbed(ownedCount)],
         );
+    }
+
+    getPageNumberFromButton() {
+        const customId = this.getCustomIdValue();
+
+        console.log('cus');
+        console.log(customId);
+        return parseInt(customId) || 0;
     }
 
     static get commandName() {
@@ -80,6 +136,9 @@ class Inventory extends Command {
             .setDescription('View your inventory')
             .addStringOption(option => option.setName(optionViewCharacter)
                 .setDescription('The ID of the character you wish to view')
+                .setRequired(false))
+            .addNumberOption(option => option.setName(optionPageNumber)
+                .setDescription('What page of your inventory you\'d like to go to')
                 .setRequired(false))
             .toJSON();
     }
