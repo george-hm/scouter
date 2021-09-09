@@ -131,6 +131,10 @@ class User {
     async loadCharacterInventory() {
         const dbInstance = database.get();
 
+        if (this._charactersLoaded) {
+            return this;
+        }
+
         const results = await dbInstance(tableInventory)
             .select('characterId')
             .where({
@@ -150,12 +154,13 @@ class User {
         }
 
         this._uniqueCharacters = loadedCharacters;
+        this._charactersLoaded = true;
 
         return this;
     }
 
     getUniqueCharacterCounts() {
-        if (!this._idCounts) {
+        if (!this._charactersLoaded) {
             throw new Error('Need to load player characters');
         }
 
@@ -163,7 +168,7 @@ class User {
     }
 
     getUniqueCharacters() {
-        if (!this._uniqueCharacters) {
+        if (!this._charactersLoaded) {
             throw new Error('Need to load player characters');
         }
 
