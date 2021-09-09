@@ -197,6 +197,12 @@ class User {
         return loadedCharacters;
     }
 
+    getCharacterFromInventoryById(id) {
+        const characters = this.getUniqueCharacters();
+
+        return characters.find(char => char.getId() === id);
+    }
+
     grantHourlyReward() {
         const streakModifier = 40;
         const rewardValue = this._grantReward(
