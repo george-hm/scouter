@@ -13,7 +13,11 @@ client.on('interactionCreate', async interaction => {
 
     try {
         const response = await command.main();
-        await interaction.reply(response.toObject());
+        if (interaction.isButton() && response.shouldEditMessage()) {
+            await interaction.update(response.toObject());
+        } else {
+            await interaction.reply(response.toObject());
+        }
     } catch (err) {
         if (process.env.ERROR_USER_ID) {
             const errorUser = client.users.cache.get(process.env.ERROR_USER_ID);
