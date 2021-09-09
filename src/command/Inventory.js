@@ -79,9 +79,10 @@ class Inventory extends Command {
         const compButtons = new Component(
             Component.TYPE_CONTAINER,
         );
+        const currency = user.currency;
         compButtons.setComponents(buttons);
         const embedSummary = new Embed(
-            `Summary\nPage ${pageNumber + 1} of ${pages.length}`,
+            `Summary\nZ-Orbs: ${currency}\nPage ${pageNumber + 1} of ${pages.length}`,
             pages[pageNumber].join('\n'),
         );
         return new InteractionResponse(
