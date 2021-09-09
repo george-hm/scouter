@@ -1,6 +1,7 @@
 const allCommands = require('../../command/index.js');
 const Command = require('../../command/Command.js');
 const User = require('./User.js');
+const Time = require('../../time.js');
 
 class Interaction {
     constructor(data) {
@@ -18,7 +19,7 @@ class Interaction {
 
     getLogMessage() {
         const user = this._user;
-        return `User: ${user.getName()}\nCommand: ${this._commandName || null}`;
+        return `${Time.getPrintableTimestamp()}\nUser: ${user.getName()}\nCommand: ${this._commandName || null}`;
     }
 
     get user() {
