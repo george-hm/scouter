@@ -194,6 +194,21 @@ class Character {
 
         return emojiMapping[rarityForLookup];
     }
+
+    static async loadCharactersByIds(characterIds) {
+        const dbInstance = database.get();
+        const results = await dbInstance(table)
+            .whereIn('id', characterIds);
+
+        return results.map(rawCharacter => new Character(
+            rawCharacter.id,
+            rawCharacter.resource_id,
+            rawCharacter.name,
+            rawCharacter.secondname,
+            rawCharacter.v_rarity,
+            rawCharacter.type,
+        ));
+    }
 }
 Character.RARITY_N = 0;
 Character.RARITY_R = 1;
