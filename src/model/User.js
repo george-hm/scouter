@@ -1,7 +1,9 @@
 const database = require('../database.js');
 const time = require('../time.js');
+const Character = require('./Character.js');
 
 const tablePlayer = 'player';
+const tableInventory = 'inventory';
 const keyId = 'id';
 const keyCurrency = 'currency';
 const keyInventory = 'inventory';
@@ -124,6 +126,70 @@ class User {
                 keyLastDailyCheckIn,
                 keyDailyStreak,
             ]);
+    }
+
+    async loadCharacterInventory() {
+        const dbInstance = database.get();
+
+        const results = await dbInstance(tableInventory)
+            .select('characterId')
+            .where({
+                playerId: this.getUserId(),
+            });
+
+        const allCharacterIds = results.map(record => record.characterId);
+        // all items here are unique so we'll need to add duplicates if any
+        const loadedCharacters = await Character.loadCharactersByIds(allCharacterIds);
+
+        // we need to see how many duplicate character
+        this._idCounts = {};
+        for (let i = 0; i < allCharacterIds.length; i++) {
+            const characterId = allCharacterIds[i];
+            this._idCounts[characterId] = this._idCounts[characterId] || 0;
+            this._idCounts[characterId]++;
+        }
+
+        this._uniqueCharacters = loadedCharacters;
+
+        return this;
+    }
+
+    getUniqueCharacterCounts() {
+        if (!this._idCounts) {
+            throw new Error('Need to load player characters');
+        }
+
+        return this._idCounts;
+    }
+
+    getUniqueCharacters() {
+        if (!this._uniqueCharacters) {
+            throw new Error('Need to load player characters');
+        }
+
+        return Array.from(this._uniqueCharacters);
+    }
+
+    getAllCharacters() {
+        const idCounts = this.getUniqueCharacterCounts();
+        const loadedCharacters = this.getUniqueCharacters();
+        for (const characterId in idCounts) {
+            if (!Object.hasOwnProperty.call(idCounts, characterId)) {
+                continue;
+            }
+            const amount = idCounts[characterId];
+            if (amount <= 1) {
+                continue;
+            }
+
+            const characterToDuplicate = loadedCharacters.find(char => char.getId() === characterId);
+            for (let i = 0; i < amount; i++) {
+                // yes we're pushing the same instance but this shouldn't matter
+                loadedCharacters.push(characterToDuplicate);
+            }
+        }
+
+        return loadedCharacters;
     }
 
     grantHourlyReward() {
