@@ -26,7 +26,6 @@ async function main() {
             });
         } catch (err) {
             console.log(err.response.status);
-            console.log(err.response.data.errors);
         }
     }
     console.log('Registered all commands');
