@@ -3,9 +3,13 @@ const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const Embed = require('../model/discord/Embed.js');
 const Component = require('../model/discord/Component.js');
+const Character = require('../model/Character.js');
 
 const optionViewCharacter = 'id';
 const optionPageNumber = 'page';
+const optionRarityFilter = 'rarity';
+const optionNameFilter = 'name';
+const customValueEmpty = 'empty';
 
 class Inventory extends Command {
     async main() {
@@ -37,15 +41,30 @@ class Inventory extends Command {
         }
 
         const characterCounts = user.getUniqueCharacterCounts();
+        const rarityFilter = this.getRarityFilter();
+        const nameFilter = this.getNameFilter();
+        if (rarityFilter) {
+            console.log(rarityFilter);
+            console.log(characters.map(c => c.getRarityString()));
+            characters = characters.filter(char => char.getRarityString() === rarityFilter);
+        }
+
+        if (nameFilter) {
+            characters = characters.filter(char => char.getFullName().toLowerCase().includes(nameFilter));
+        }
         const mappedSummary = characters.map(char => `\`${char.getId().toString(16)}\`${char.getRarityAsEmoji()} - **${char.getFullName()}** ${char.getTypeAsEmoji()} x${characterCounts[char.getId()]}`);
 
-        let pageNumber = this._options?.getNumber(optionPageNumber) || this.getPageNumberFromButton();
+        let pageNumber = this.getPageNumber();
         const pages = [];
         while (mappedSummary.length) {
             pages.push(mappedSummary.splice(0, 10));
         }
         if (!pages[pageNumber]) {
             pageNumber = 0;
+        }
+
+        if (!pages.length) {
+            pages.push(['No characters found.']);
         }
         const buttons = [];
         if (pageNumber !== 0) {
@@ -57,7 +76,11 @@ class Inventory extends Command {
                     {
                         name: '◀️',
                     },
-                    this.createCustomId(pageNumber - 1),
+                    this.createCustomId(
+                        pageNumber - 1,
+                        rarityFilter,
+                        nameFilter,
+                    ),
                 ),
             );
         }
@@ -71,16 +94,23 @@ class Inventory extends Command {
                     {
                         name: '▶️',
                     },
-                    this.createCustomId(pageNumber + 1),
+                    this.createCustomId(
+                        pageNumber + 1,
+                        rarityFilter,
+                        nameFilter,
+                    ),
                 ),
             );
         }
 
-        const compButtons = new Component(
+        let compButtons = new Component(
             Component.TYPE_CONTAINER,
         );
         const currency = user.currency;
         compButtons.setComponents(buttons);
+        if (!buttons.length) {
+            compButtons = null;
+        }
         const embedSummary = new Embed(
             `Summary\nZ-Orbs: ${currency}\nPage ${pageNumber + 1} of ${pages.length}`,
             pages[pageNumber].join('\n'),
@@ -118,13 +148,69 @@ class Inventory extends Command {
         );
     }
 
-    getPageNumberFromButton() {
-        const customId = this.getCustomIdValue();
-        let num = parseInt(customId);
-        if (num) {
-            num--;
+    getPageNumber() {
+        if (this._options?.getNumber(optionPageNumber)) {
+            return this._options?.getNumber(optionPageNumber);
         }
-        return num || 0;
+
+        const customId = this._customId;
+        if (!customId) {
+            return 0;
+        }
+
+        const customIdParts = customId.split('.');
+
+        return parseInt(customIdParts[1]) || 0;
+    }
+
+    getRarityFilter() {
+        if (this._options?.getString(optionRarityFilter)) {
+            return this._options?.getString(optionRarityFilter);
+        }
+        const customId = this._customId;
+        if (!customId) {
+            return null;
+        }
+        const customIdParts = customId.split('.');
+
+        const rarityFilterFromCustomId = customIdParts[2];
+        if (rarityFilterFromCustomId === customValueEmpty) {
+            return null;
+        }
+
+        return rarityFilterFromCustomId;
+    }
+
+    getNameFilter() {
+        if (this._options?.getString(optionNameFilter)) {
+            return this._options?.getString(optionNameFilter).toLowerCase();
+        }
+        const customId = this._customId;
+        if (!customId) {
+            return null;
+        }
+        const customIdParts = customId.split('.');
+
+        const nameFilterFromCustomId = customIdParts[3];
+        if (nameFilterFromCustomId === customValueEmpty) {
+            return null;
+        }
+
+        return nameFilterFromCustomId.toLowerCase();
+    }
+
+    createCustomId(
+        pageNumber,
+        rarity,
+        name,
+    ) {
+        let customId = this.commandName;
+        customId += `.${pageNumber || customValueEmpty}`;
+        customId += `.${rarity || customValueEmpty}`;
+        customId += `.${name || customValueEmpty}`;
+        customId += `.${this.getUser().getUserId()}`;
+
+        return customId;
     }
 
     static get commandName() {
@@ -132,6 +218,7 @@ class Inventory extends Command {
     }
 
     static toJSON() {
+        console.log(Character.convertRarityToString(Character.RARITY_N));
         return new SlashCommandBuilder()
             .setName(this.commandName)
             .setDescription('View your inventory')
@@ -140,6 +227,32 @@ class Inventory extends Command {
                 .setRequired(false))
             .addNumberOption(option => option.setName(optionPageNumber)
                 .setDescription('What page of your inventory you\'d like to go to')
+                .setRequired(false))
+            .addStringOption(option => option.setName(optionRarityFilter)
+                .setDescription('Filter by rarity')
+                .addChoice(
+                    Character.convertRarityToString(Character.RARITY_N),
+                    Character.convertRarityToString(Character.RARITY_N),
+                )
+                .addChoice(
+                    Character.convertRarityToString(Character.RARITY_R),
+                    Character.convertRarityToString(Character.RARITY_R),
+                )
+                .addChoice(
+                    Character.convertRarityToString(Character.RARITY_SR),
+                    Character.convertRarityToString(Character.RARITY_SR),
+                )
+                .addChoice(
+                    Character.convertRarityToString(Character.RARITY_SSR),
+                    Character.convertRarityToString(Character.RARITY_SSR),
+                )
+                .addChoice(
+                    Character.convertRarityToString(Character.RARITY_UR),
+                    Character.convertRarityToString(Character.RARITY_UR),
+                )
+                .setRequired(false))
+            .addStringOption(option => option.setName(optionNameFilter)
+                .setDescription('Filter by name')
                 .setRequired(false))
             .toJSON();
     }
