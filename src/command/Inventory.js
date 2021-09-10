@@ -44,8 +44,6 @@ class Inventory extends Command {
         const rarityFilter = this.getRarityFilter();
         const nameFilter = this.getNameFilter();
         if (rarityFilter) {
-            console.log(rarityFilter);
-            console.log(characters.map(c => c.getRarityString()));
             characters = characters.filter(char => char.getRarityString() === rarityFilter);
         }
 
@@ -218,7 +216,6 @@ class Inventory extends Command {
     }
 
     static toJSON() {
-        console.log(Character.convertRarityToString(Character.RARITY_N));
         return new SlashCommandBuilder()
             .setName(this.commandName)
             .setDescription('View your inventory')
