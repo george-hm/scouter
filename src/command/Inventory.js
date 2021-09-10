@@ -120,8 +120,11 @@ class Inventory extends Command {
 
     getPageNumberFromButton() {
         const customId = this.getCustomIdValue();
-
-        return parseInt(customId) || 0;
+        let num = parseInt(customId);
+        if (num) {
+            num--;
+        }
+        return num || 0;
     }
 
     static get commandName() {
