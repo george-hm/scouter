@@ -45,6 +45,10 @@ class Character {
         return this._type;
     }
 
+    getRarityString() {
+        return Character.convertRarityToString(this._rarityNum);
+    }
+
     getRarityAsEmoji() {
         return Character.convertRarityToEmoji(this.getRarityNum());
     }
