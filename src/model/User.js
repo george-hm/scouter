@@ -214,6 +214,8 @@ class User {
 
     grantHourlyReward() {
         const streakModifier = 30;
+        this[keyHourlyStreak] = time.dailyStreakIsValid(this[keyHourlyStreak], this[keyLastHourlyCheckIn]) ?
+            this[keyHourlyStreak] : 0;
         const rewardValue = this._grantReward(
             User.HourlyReward,
             streakModifier,
@@ -225,6 +227,8 @@ class User {
 
     grantDailyReward() {
         const streakModifier = 20;
+        this[keyDailyStreak] = time.dailyStreakIsValid(this[keyDailyStreak], this[keyLastDailyCheckIn]) ?
+            this[keyDailyStreak] : 0;
         const rewardValue = this._grantReward(
             User.DailyReward,
             streakModifier,
