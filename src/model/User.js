@@ -12,6 +12,7 @@ const keyHourlyStreak = 'hourlyStreak';
 const keyLastDailyCheckIn = 'lastDailyCheckIn';
 const keyDailyStreak = 'dailyStreak';
 const keyCreated = 'created';
+const userCache = {};
 
 // https://discord.com/developers/docs/resources/user#user-object
 class User {
@@ -28,6 +29,18 @@ class User {
         this._flags = user.flags;
         this._premiumType = user.premium_type;
         this._publicFlags = user.public_flags;
+    }
+
+    static create(user) {
+        if (userCache[user.id]) {
+            console.log('loaded from cache');
+            return userCache[user.id];
+        }
+
+        const userCreated = new this(user);
+        userCache[user.id] = userCreated;
+
+        return userCreated;
     }
 
     getName() {
