@@ -33,7 +33,6 @@ class User {
 
     static create(user) {
         if (userCache[user.id]) {
-            console.log('loaded from cache');
             return userCache[user.id];
         }
 
