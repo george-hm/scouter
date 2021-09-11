@@ -206,6 +206,8 @@ class Inventory extends Command {
         customId += `.${pageNumber || customValueEmpty}`;
         customId += `.${rarity || customValueEmpty}`;
         customId += `.${name || customValueEmpty}`;
+
+        customId += `.${Math.random().toString(32).slice(-8)}`;
         customId += `.${this.getUser().getUserId()}`;
 
         return customId;
