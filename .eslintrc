@@ -62,7 +62,7 @@
       ],
       "padded-blocks": 1,
       "prefer-arrow-callback": 0,
-      "prefer-destructuring": 0,
+      "prefer-destructuring": 1,
       "prefer-object-spread": 0,
       "quotes": [
         "error",
