@@ -64,42 +64,71 @@ class Inventory extends Command {
         if (!pages.length) {
             pages.push(['No characters found.']);
         }
-        const buttons = [];
-        if (pageNumber !== 0) {
-            buttons.push(
-                new Component(
-                    Component.TYPE_BUTTON,
-                    Component.STYLE_SECONDARY,
-                    null,
-                    {
-                        name: '◀️',
-                    },
-                    this.createCustomId(
-                        pageNumber - 1,
-                        rarityFilter,
-                        nameFilter,
-                    ),
-                ),
-            );
-        }
 
-        if (pages[pageNumber + 1]) {
-            buttons.push(
-                new Component(
-                    Component.TYPE_BUTTON,
-                    Component.STYLE_SECONDARY,
-                    null,
-                    {
-                        name: '▶️',
-                    },
-                    this.createCustomId(
-                        pageNumber + 1,
-                        rarityFilter,
-                        nameFilter,
-                    ),
+        // push all control buttons
+        const buttons = [];
+        buttons.push(
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_SECONDARY,
+                null,
+                {
+                    name: '⏪',
+                },
+                this.createCustomId(
+                    0,
+                    rarityFilter,
+                    nameFilter,
                 ),
-            );
-        }
+                null,
+                pageNumber === 0,
+            ),
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_SECONDARY,
+                null,
+                {
+                    name: '◀️',
+                },
+                this.createCustomId(
+                    pageNumber - 1,
+                    rarityFilter,
+                    nameFilter,
+                ),
+                null,
+                pageNumber === 0,
+            ),
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_SECONDARY,
+                null,
+                {
+                    name: '▶️',
+                },
+                this.createCustomId(
+                    pageNumber + 1,
+                    rarityFilter,
+                    nameFilter,
+                ),
+                null,
+                !pages[pageNumber + 1],
+            ),
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_SECONDARY,
+                null,
+                {
+                    name: '⏩',
+                },
+                this.createCustomId(
+                    pages.length - 1,
+                    rarityFilter,
+                    nameFilter,
+                ),
+                null,
+                pageNumber === pages.length - 1,
+            ),
+        );
 
         let compButtons = new Component(
             Component.TYPE_CONTAINER,
