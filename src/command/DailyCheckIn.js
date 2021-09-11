@@ -11,7 +11,7 @@ class DailyCheckIn extends Command {
         if (!Time.eligableForDaily(lastDailyCheckIn)) {
             const timeUntilDaily = Time.timeUntilDaily(lastDailyCheckIn);
             return new InteractionResponse(
-                `Sorry, daily check-in available in **${timeUntilDaily}**`,
+                `Sorry, daily check-in available in **${timeUntilDaily}**\nCurrent Streak: **${user.dailyStreak}**`,
             );
         }
 

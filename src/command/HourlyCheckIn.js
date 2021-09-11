@@ -11,7 +11,7 @@ class HourlyCheckIn extends Command {
         if (!Time.eligableForHourly(lastHourlyCheckIn)) {
             const timeUntilHourly = Time.timeUntilHourly(lastHourlyCheckIn);
             return new InteractionResponse(
-                `Sorry, hourly check-in available in **${timeUntilHourly}**`,
+                `Sorry, hourly check-in available in **${timeUntilHourly}**\nCurrent Streak: **${user.hourlyStreak}**`,
             );
         }
 
