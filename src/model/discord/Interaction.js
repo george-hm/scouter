@@ -7,7 +7,7 @@ class Interaction {
     constructor(data) {
         this._channel = data.channelId;
         this._guild = data.guildId;
-        this._user = new User(data.user || data.member.user);
+        this._user = User.create(data.user || data.member.user);
         this._command = allCommands.getCommand(
             data.commandName,
             data.customId,
