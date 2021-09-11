@@ -21,7 +21,7 @@ class Stats extends Command {
             `Current Hourly Streak: ${hourlyStreak}`,
             `All time summons: ${totalSummons}`,
             '',
-            'Total Rarities:',
+            '**Total Rarities**:',
         ];
         let addedRarities = false;
         // TODO user.inventory should have all rarities (not just ones owned)
@@ -41,10 +41,12 @@ class Stats extends Command {
         toReturn.push(`\nTotal characters: ${totalCharacters}`);
 
         const embed = new Embed(
-            'Statistics',
+            `Statistics for ${user.getName()}`,
             toReturn.join('\n'),
+            5763719,
+            null,
+            user.getAvatarURL(),
         );
-        console.log(embed);
         return new InteractionResponse(
             null,
             [embed],
