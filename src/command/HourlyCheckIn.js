@@ -7,7 +7,7 @@ class HourlyCheckIn extends Command {
     async main() {
         const user = this.getUser();
         await user.loadPlayerInfo();
-        const lastHourlyCheckIn = user.lastHourlyCheckIn;
+        const { lastHourlyCheckIn } = user;
         if (!Time.eligableForHourly(lastHourlyCheckIn)) {
             const timeUntilHourly = Time.timeUntilHourly(lastHourlyCheckIn);
             return new InteractionResponse(

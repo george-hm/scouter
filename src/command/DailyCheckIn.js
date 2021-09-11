@@ -7,7 +7,7 @@ class DailyCheckIn extends Command {
     async main() {
         const user = this.getUser();
         await user.loadPlayerInfo();
-        const lastDailyCheckIn = user.lastDailyCheckIn;
+        const { lastDailyCheckIn } = user;
         if (!Time.eligableForDaily(lastDailyCheckIn)) {
             const timeUntilDaily = Time.timeUntilDaily(lastDailyCheckIn);
             return new InteractionResponse(

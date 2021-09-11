@@ -133,7 +133,7 @@ class Inventory extends Command {
         let compButtons = new Component(
             Component.TYPE_CONTAINER,
         );
-        const currency = user.currency;
+        const { currency } = user;
         compButtons.setComponents(buttons);
         if (!buttons.length) {
             compButtons = null;
