@@ -21,7 +21,7 @@ class User {
         this._id = user.id;
         this._username = user.username;
         this._discriminator = user.discriminator;
-        this._avatar = user.avatar;
+        this._avatar = user.avatarURL({ dynamic: true });
         this._bot = user.bot;
         this._system = user.system;
         this._locale = user.locale;
