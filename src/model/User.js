@@ -217,7 +217,7 @@ class User {
     }
 
     grantHourlyReward() {
-        const streakModifier = 40;
+        const streakModifier = 30;
         const rewardValue = this._grantReward(
             User.HourlyReward,
             streakModifier,
