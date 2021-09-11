@@ -43,6 +43,10 @@ class User {
         return userCreated;
     }
 
+    getAvatarURL() {
+        return this._avatar;
+    }
+
     getName() {
         return `${this._username}#${this._discriminator}`;
     }
