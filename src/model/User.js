@@ -12,6 +12,7 @@ const keyHourlyStreak = 'hourlyStreak';
 const keyLastDailyCheckIn = 'lastDailyCheckIn';
 const keyDailyStreak = 'dailyStreak';
 const keyCreated = 'created';
+const keyTotalSummons = 'totalSummons';
 const userCache = {};
 
 // https://discord.com/developers/docs/resources/user#user-object
@@ -67,6 +68,7 @@ class User {
             [keyLastDailyCheckIn]: 0,
             [keyDailyStreak]: 0,
             [keyCreated]: timeNow,
+            [keyTotalSummons]: 0,
         })
             .into(tablePlayer);
     }
@@ -84,6 +86,7 @@ class User {
             .select(keyLastDailyCheckIn)
             .select(keyHourlyStreak)
             .select(keyDailyStreak)
+            .select(keyTotalSummons)
             .where({
                 [keyId]: this.getUserId(),
             })
@@ -127,17 +130,11 @@ class User {
             [keyHourlyStreak]: this[keyHourlyStreak],
             [keyLastDailyCheckIn]: this[keyLastDailyCheckIn],
             [keyDailyStreak]: this[keyDailyStreak],
+            [keyTotalSummons]: this[keyTotalSummons],
         })
             .into(tablePlayer)
             .onConflict()
-            .merge([
-                keyCurrency,
-                keyInventory,
-                keyLastHourlyCheckIn,
-                keyHourlyStreak,
-                keyLastDailyCheckIn,
-                keyDailyStreak,
-            ]);
+            .merge();
     }
 
     async loadCharacterInventory() {
@@ -273,6 +270,8 @@ class User {
         const inventory = this[keyInventory] || {};
         inventory[rarity] = inventory[rarity] || 0;
         inventory[rarity]++;
+        this[keyTotalSummons]++;
+        this._charactersLoaded = false;
     }
 }
 
