@@ -44,6 +44,17 @@ class Summon extends Command {
         );
     }
 
+    createCustomId(bannerId) {
+        return Summon.createCustomId(bannerId, this.getUser().getUserId());
+    }
+
+    static createCustomId(bannerId, userId) {
+        if (!userId) {
+            throw new Error('Missing user id');
+        }
+        return `${this.commandName}.${bannerId || customIdEmpty}.${userId}`;
+    }
+
     static toJSON() {
         return new SlashCommandBuilder()
             .setName(this.commandName)
