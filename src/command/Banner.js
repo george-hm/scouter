@@ -30,8 +30,9 @@ class BannerCommand extends Command {
         }
 
         let bannerCharacter = null;
+        let chosenBanner = null;
         if (this.getBannerId()) {
-            const chosenBanner = allBanners.find(banner => banner.getBannerId() === this.getBannerId());
+            chosenBanner = allBanners.find(banner => banner.getBannerId() === this.getBannerId());
             bannerCharacter = await chosenBanner.getCharacterFromBanner();
         }
 
@@ -51,8 +52,8 @@ class BannerCommand extends Command {
         let embed = null;
         if (bannerCharacter) {
             embed = new Embed(
-                `Banner Information - ${bannerCharacter.getFirstName()}`,
-                `Type: ${bannerCharacter.getTypeAsEmoji()}\nRarity: ${bannerCharacter.getRarityAsEmoji()}`,
+                'Banner Information',
+                `Character: **${bannerCharacter.getFirstName()}**\nType: ${bannerCharacter.getTypeAsEmoji()}\nRarity: ${bannerCharacter.getRarityAsEmoji()}\n\nClick the button below to summon from this banner!\n**Expires in:** ${chosenBanner.getTimeUntilExpires()}`,
                 null,
                 bannerCharacter.getCharacterURL(),
             );
