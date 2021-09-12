@@ -5,7 +5,7 @@ const Interaction = require('./model/discord/Interaction.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand() && !interaction.isButton()) return;
+    if (!interaction.isCommand() && !interaction.isButton() && !interaction.isSelectMenu()) return;
 
     const event = new Interaction(interaction);
     console.log(event.getLogMessage());
