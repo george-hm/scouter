@@ -50,16 +50,16 @@ class Time {
     }
 
     static timeUntilHourly(lastCheckIn) {
-        return this._timeUntil(lastCheckIn, hour);
+        return this.timeUntil(lastCheckIn, hour);
     }
 
     static timeUntilDaily(lastCheckIn) {
-        return this._timeUntil(lastCheckIn, day);
+        return this.timeUntil(lastCheckIn, day);
     }
 
-    static _timeUntil(lastCheckIn, timeChunk) {
+    static timeUntil(lastCheckIn, timeChunk) {
         const timeNow = this.getTime();
-        return this._formatTime((lastCheckIn + timeChunk) - timeNow);
+        return this.formatTime((lastCheckIn + (timeChunk || 0)) - timeNow);
     }
 
     static _withinTime(timeToCheck, timeChunk) {
@@ -93,7 +93,7 @@ class Time {
      *
      * @returns {string}
      */
-    static _formatTime(time) {
+    static formatTime(time) {
         let timestamp = time;
         let start = '';
         if (timestamp < 0) {
