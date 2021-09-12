@@ -46,3 +46,17 @@ CREATE TABLE `inventory` (
   FOREIGN KEY (`playerId`) REFERENCES `player`(id),
   FOREIGN KEY (`characterId`) REFERENCES `character`(id)
 );
+
+CREATE TABLE `banner` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `secondname` varchar(255) NOT NULL,
+  `characterId` bigint NOT NULL,
+  `expires` bigint NOT NULL DEFAULT 0,
+  `rarity` int NOT NULL,
+  `type` tinyint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`name`),
+  FOREIGN KEY (`characterId`) REFERENCES `character`(id),
+  KEY idxExpires(`expires`)
+);
