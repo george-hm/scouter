@@ -42,7 +42,7 @@ class Command {
     }
 
     createCustomId(name) {
-        return `${this.commandName}.${name}.${this.getUser().getUserId()}`;
+        return `${this.commandName}.${name || Math.random().toString().slice(-4)}.${this.getUser().getUserId()}`;
     }
 
     getCustomIdValue() {
