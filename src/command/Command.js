@@ -5,7 +5,7 @@ const User = require('../model/User.js');
 
 // https://discord.com/developers/docs/interactions/slash-commands#interaction-object-application-command-interaction-data-structure
 class Command {
-    constructor(commandName, customId, options, user) {
+    constructor(commandName, customId, options, user, values) {
         if (!(user instanceof User)) {
             throw new Error('User is not model');
         }
@@ -15,6 +15,11 @@ class Command {
         }
         this._user = user;
         this._customId = customId;
+        this._values = values;
+    }
+
+    getValues() {
+        return this._values || [];
     }
 
     /**

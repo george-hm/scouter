@@ -15,7 +15,7 @@ const mapping = {
     [Stats.commandName]: Stats,
 };
 
-module.exports.getCommand = (commandName, customId, options, user) => {
+module.exports.getCommand = (commandName, customId, options, user, values) => {
     if (!commandName && !customId) {
         throw new Error('Missing commandName and customId');
     }
@@ -35,6 +35,7 @@ module.exports.getCommand = (commandName, customId, options, user) => {
         customId,
         options,
         user,
+        values,
     );
     if (!(commandInstance instanceof Command)) {
         throw new Error('Command is not instanceof command');

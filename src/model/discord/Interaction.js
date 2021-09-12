@@ -13,6 +13,7 @@ class Interaction {
             data.customId,
             data.options,
             this._user,
+            data.values,
         );
         this._commandName = this._command?.commandName;
     }
