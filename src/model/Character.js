@@ -8,11 +8,12 @@ const emojiMapping = {
     R: '<:r_:885253425963630673>',
     SR: '<:sr:885253425758097489>',
     SSR: '<:ssr:885253425791664159>',
+    UR: '<:ur:885253426169143337>',
+    LR: '<:lr:885461691075272714>',
     STR: '<:str:885253426013962300>',
     AGL: '<:agl:885253426022318160>',
     INT: '<:int:885253425976209428>',
     TEQ: '<:teq:885253426030718987>',
-    UR: '<:ur:885253426169143337>',
     PHY: '<:phy:885253425984577536>',
 };
 
@@ -156,6 +157,7 @@ class Character {
             [this.RARITY_SR]: 30,
             [this.RARITY_SSR]: 15,
             [this.RARITY_UR]: 3,
+            [this.RARITY_UR]: 0.15,
         };
         const roll = Math.random() * 100;
         let rarityChosen = null;
@@ -223,5 +225,6 @@ Character.RARITY_R = 1;
 Character.RARITY_SR = 2;
 Character.RARITY_SSR = 3;
 Character.RARITY_UR = 4;
+Character.RARITY_LR = 5;
 
 module.exports = Character;
