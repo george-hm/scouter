@@ -55,8 +55,9 @@ class Component {
 
     setComponents(components) {
         this._components = this._components || [];
-        for (let i = 0; i < components.length; i++) {
-            const comp = components[i];
+        const componentsConverted = Array.isArray(components) ? components : [components];
+        for (let i = 0; i < componentsConverted.length; i++) {
+            const comp = componentsConverted[i];
             if (!(comp instanceof Component)) {
                 throw new Error('Component is not instance of component');
             }
