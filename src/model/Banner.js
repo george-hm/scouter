@@ -37,7 +37,6 @@ class Banner {
     }
 
     getTimeUntilExpires() {
-        console.log(this[keyExpires]);
         return Time.timeUntil(this[keyExpires]);
     }
 
