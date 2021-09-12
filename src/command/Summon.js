@@ -3,6 +3,9 @@ const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const Component = require('../model/discord/Component.js');
 const Character = require('../model/Character.js');
+const Banner = require('../model/Banner.js');
+
+const customIdEmpty = 'empty';
 
 class Summon extends Command {
     static get summonCost() {
@@ -18,7 +21,20 @@ class Summon extends Command {
             );
         }
         const roll = Character.getRandomRarity();
-        const summonedCharacter = await Character.getRandomByRarity(roll);
+        const bannerId = this.getBannerId();
+        let summonedCharacter = null;
+        let bannerMessage = '';
+        if (bannerId) {
+            const loadedBanner = await Banner.getBannerById(bannerId);
+            if (!loadedBanner) {
+                throw new Error(`Missing banner id: ${bannerId}`);
+            }
+
+            bannerMessage = `from banner **${loadedBanner.getBannerName()}**`;
+            summonedCharacter = await loadedBanner.summon(roll);
+        } else {
+            summonedCharacter = await Character.getRandomByRarity(roll);
+        }
         summonedCharacter.addToPlayer(user.getUserId());
         user.addRarityToInventory(roll);
         user.currency -= Summon.summonCost;
@@ -34,14 +50,24 @@ class Summon extends Command {
                 Component.STYLE_PRIMARY,
                 'Summon again',
                 null,
-                this.createCustomId(Summon.commandName),
+                this.createCustomId(bannerId),
             ),
         ]);
         return new InteractionResponse(
-            `${user.getMention()} you rolled: ${Character.convertRarityToString(roll)}`,
+            `${user.getMention()} you rolled: ${Character.convertRarityToEmoji(roll)} ${bannerMessage}`,
             [summonedCharacter.toEmbed()],
             component,
         );
+    }
+
+    getBannerId() {
+        const customId = this._customId;
+        if (!customId) {
+            return null;
+        }
+
+        const customIdParts = customId.split('.');
+        return parseInt(customIdParts[1]) || null;
     }
 
     createCustomId(bannerId) {
