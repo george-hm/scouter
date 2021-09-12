@@ -29,6 +29,7 @@ CREATE TABLE `player` (
   `id` varchar(18) NOT NULL,
   `currency` int NOT NULL,
   `inventory` json NOT NULL,
+  `totalSummons` int NOT NULL,
   `lastHourlyCheckIn` bigint NOT NULL,
   `hourlyStreak` int NOT NULL,
   `lastDailyCheckIn` bigint NOT NULL,
