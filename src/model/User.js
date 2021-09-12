@@ -33,12 +33,12 @@ class User {
     }
 
     static create(user) {
-        // if (userCache[user.id]) {
-        //     return userCache[user.id];
-        // }
+        if (userCache[user.id]) {
+            return userCache[user.id];
+        }
 
         const userCreated = new this(user);
-        // userCache[user.id] = userCreated;
+        userCache[user.id] = userCreated;
 
         return userCreated;
     }
