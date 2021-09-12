@@ -1,4 +1,6 @@
 const { CommandInteractionOptionResolver } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const User = require('../model/User.js');
 
 // https://discord.com/developers/docs/interactions/slash-commands#interaction-object-application-command-interaction-data-structure
@@ -15,6 +17,9 @@ class Command {
         this._customId = customId;
     }
 
+    /**
+     * @returns {Promise<InteractionResponse>}
+     */
     async main() {
         throw new Error('Main function not implemented');
     }
