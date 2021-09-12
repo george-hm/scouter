@@ -10,9 +10,12 @@ class Response {
         if (embeds && Array.isArray(embeds)) {
             this._embeds = embeds.filter(currentEmbed => currentEmbed instanceof Embed);
             this._embeds = embeds.map(embed => embed.toEmbedObject());
+        } else if (embeds && embeds instanceof Embed) {
+            this._embeds = [embeds.toEmbedObject()];
         }
         if (components && Array.isArray(components)) {
             this._components = components.filter(currentComponent => currentComponent instanceof Component);
+            this._components = this._components.map(component => component.toComponentObject());
         } else if (components && components instanceof Component) {
             this._components = [components.toComponentObject()];
         }
