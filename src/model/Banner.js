@@ -11,12 +11,13 @@ const keyExpires = 'expires';
 const keyRarity = 'rarity';
 
 class Banner {
-    constructor(bannerId, name, characterId, rarity, description) {
+    constructor(bannerId, name, characterId, rarity, description, expires) {
         this[keyBannerId] = bannerId;
         this[keyName] = name;
         this[keyCharacterId] = characterId;
         this[keyRarity] = rarity;
         this[keySecondName] = description;
+        this[keyExpires] = expires;
     }
 
     getBannerId() {
@@ -35,6 +36,11 @@ class Banner {
         return Character.convertRarityToString(this[keyRarity]);
     }
 
+    getTimeUntilExpires() {
+        console.log(this[keyExpires]);
+        return Time.timeUntil(this[keyExpires]);
+    }
+
     static async getBanners() {
         const db = Database.get();
 
@@ -44,6 +50,7 @@ class Banner {
             .select(keyCharacterId)
             .select(keyRarity)
             .select(keySecondName)
+            .select(keyExpires)
             .where(keyExpires, '>', Time.getTime())
             .limit(3);
 
@@ -60,6 +67,7 @@ class Banner {
                 bannerRecord[keyCharacterId],
                 bannerRecord[keyRarity],
                 bannerRecord[keySecondName],
+                bannerRecord[keyExpires],
             ));
         }
 
@@ -75,6 +83,7 @@ class Banner {
             .select(keyCharacterId)
             .select(keyRarity)
             .select(keySecondName)
+            .select(keyExpires)
             .where(keyExpires, '>', Time.getTime())
             .where({
                 [keyBannerId]: bannerId,
@@ -92,6 +101,7 @@ class Banner {
             bannerRecord[keyCharacterId],
             bannerRecord[keyRarity],
             bannerRecord[keySecondName],
+            bannerRecord[keyExpires],
         );
     }
 
