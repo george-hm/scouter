@@ -37,6 +37,10 @@ class Character {
         return `${this._name}, ${this._secondaryName}`;
     }
 
+    getFirstName() {
+        return this._name;
+    }
+
     getRarityNum() {
         return this._rarityNum;
     }
