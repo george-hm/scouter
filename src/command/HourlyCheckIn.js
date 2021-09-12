@@ -12,7 +12,7 @@ class HourlyCheckIn extends Command {
         if (!Time.eligableForHourly(lastHourlyCheckIn)) {
             const timeUntilHourly = Time.timeUntilHourly(lastHourlyCheckIn);
             return new InteractionResponse(
-                `Sorry, hourly check-in available in **${timeUntilHourly}**\nCurrent Streak: **${user.hourlyStreak}**`,
+                `Sorry, hourly check-in available in **${timeUntilHourly}**\nStreak: **${user.hourlyStreak}**`,
             );
         }
 
@@ -21,7 +21,7 @@ class HourlyCheckIn extends Command {
         await user.save();
 
         return new InteractionResponse(
-            `<:bardockdisgust:850378401743110164> I see you've found ${rewardValue} ${Character.getZOrbEmoji()} Z-Orbs.\n**Streak**: ${user.hourlyStreak}`,
+            `<:bardockdisgust:850378401743110164> I see you've found ${rewardValue} ${Character.getZOrbEmoji()} Z-Orbs.\nStreak: **${user.hourlyStreak}**`,
         );
     }
 

@@ -12,7 +12,7 @@ class DailyCheckIn extends Command {
         if (!Time.eligableForDaily(lastDailyCheckIn)) {
             const timeUntilDaily = Time.timeUntilDaily(lastDailyCheckIn);
             return new InteractionResponse(
-                `Sorry, daily check-in available in **${timeUntilDaily}**\nCurrent Streak: **${user.dailyStreak}**`,
+                `Sorry, daily check-in available in **${timeUntilDaily}**\nStreak: **${user.dailyStreak}**`,
             );
         }
 
@@ -21,7 +21,7 @@ class DailyCheckIn extends Command {
         await user.save();
 
         return new InteractionResponse(
-            `<:ss4smug:850163594556997633> This should keep you going. Found ${rewardValue} ${Character.getZOrbEmoji()} Z-Orbs.\n**Streak**: ${user.dailyStreak}`,
+            `<:ss4smug:850163594556997633> This should keep you going. Found ${rewardValue} ${Character.getZOrbEmoji()} Z-Orbs.\nStreak: **${user.dailyStreak}**`,
         );
     }
 
