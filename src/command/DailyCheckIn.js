@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const Time = require('../time.js');
+const Character = require('../model/Character.js');
 
 class DailyCheckIn extends Command {
     async main() {
@@ -20,7 +21,7 @@ class DailyCheckIn extends Command {
         await user.save();
 
         return new InteractionResponse(
-            `<:ss4smug:850163594556997633> This should keep you going. Found ${rewardValue} Z-Orbs.\n**Streak**: ${user.dailyStreak}`,
+            `<:ss4smug:850163594556997633> This should keep you going. Found ${rewardValue} ${Character.getZOrbEmoji()} Z-Orbs.\n**Streak**: ${user.dailyStreak}`,
         );
     }
 

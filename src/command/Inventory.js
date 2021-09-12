@@ -139,7 +139,7 @@ class Inventory extends Command {
             compButtons = null;
         }
         const embedSummary = new Embed(
-            `Summary\nZ-Orbs: ${currency}\nPage ${pageNumber + 1} of ${pages.length}`,
+            `Summary\n${Character.getZOrbEmoji()} Z-Orbs: ${currency}\nPage ${pageNumber + 1} of ${pages.length}`,
             pages[pageNumber].join('\n'),
         );
         return new InteractionResponse(

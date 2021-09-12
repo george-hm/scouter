@@ -15,6 +15,7 @@ const emojiMapping = {
     INT: '<:int:885253425976209428>',
     TEQ: '<:teq:885253426030718987>',
     PHY: '<:phy:885253425984577536>',
+    ZORB: '<:zorb:886518823417696266>',
 };
 
 class Character {
@@ -32,6 +33,10 @@ class Character {
         this._secondaryName = secondaryName;
         this._rarityNum = rarityNum;
         this._type = type;
+    }
+
+    static getZOrbEmoji() {
+        return emojiMapping.ZORB;
     }
 
     getFullName() {

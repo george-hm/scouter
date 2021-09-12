@@ -16,7 +16,7 @@ class Stats extends Command {
         const { totalSummons } = user;
         const totalCharacters = Object.values(user.getUniqueCharacterCounts()).reduce((a, b) => a + b);
         const toReturn = [
-            `Z-Orbs: ${currency}`,
+            `${Character.getZOrbEmoji()} Z-Orbs: ${currency}`,
             `Current Daily Streak: ${dailyStreak}`,
             `Current Hourly Streak: ${hourlyStreak}`,
             `All time summons: ${totalSummons}`,

@@ -17,7 +17,7 @@ class Summon extends Command {
         await user.loadPlayerInfo();
         if (user.currency < Summon.summonCost) {
             return new InteractionResponse(
-                `${user.getMention()} <:babysmirk:850200356495687680> you need ${Summon.summonCost} Z-Orbs to do that`,
+                `${user.getMention()} <:babysmirk:850200356495687680> you need ${Summon.summonCost} ${Character.getZOrbEmoji()} Z-Orbs to do that`,
             );
         }
         const roll = Character.getRandomRarity();

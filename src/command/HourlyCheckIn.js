@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const Command = require('./Command.js');
 const InteractionResponse = require('../model/discord/InteractionResponse.js');
 const Time = require('../time.js');
+const Character = require('../model/Character.js');
 
 class HourlyCheckIn extends Command {
     async main() {
@@ -20,7 +21,7 @@ class HourlyCheckIn extends Command {
         await user.save();
 
         return new InteractionResponse(
-            `<:bardockdisgust:850378401743110164> I see you've found ${rewardValue} Z-Orbs.\n**Streak**: ${user.hourlyStreak}`,
+            `<:bardockdisgust:850378401743110164> I see you've found ${rewardValue} ${Character.getZOrbEmoji()} Z-Orbs.\n**Streak**: ${user.hourlyStreak}`,
         );
     }
 
