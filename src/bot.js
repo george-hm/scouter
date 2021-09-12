@@ -13,7 +13,7 @@ client.on('interactionCreate', async interaction => {
 
     try {
         const response = await command.main();
-        if (interaction.isButton() && response.shouldEditMessage()) {
+        if ((interaction.isButton() || interaction.isSelectMenu()) && response.shouldEditMessage()) {
             await interaction.update(response.toObject());
         } else {
             await interaction.reply(response.toObject());
