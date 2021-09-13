@@ -162,7 +162,7 @@ class Character {
             [this.RARITY_SR]: 30,
             [this.RARITY_SSR]: 15,
             [this.RARITY_UR]: 3,
-            [this.RARITY_UR]: 0.15,
+            [this.RARITY_LR]: 0.15,
         };
         const roll = Math.random() * 100;
         let rarityChosen = null;
