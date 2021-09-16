@@ -197,8 +197,11 @@ class Character {
         if (rarity === this.RARITY_UR) {
             return 'UR';
         }
+        if (rarity === this.RARITY_LR) {
+            return 'LR';
+        }
 
-        throw new Error('Invalid rarity');
+        throw new Error(`Invalid rarity: ${rarity}`);
     }
 
     static convertRarityToEmoji(rarity) {
