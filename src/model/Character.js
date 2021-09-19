@@ -160,7 +160,7 @@ class Character {
             [this.RARITY_N]: 100,
             [this.RARITY_R]: 50,
             [this.RARITY_SR]: 30,
-            [this.RARITY_SSR]: 15,
+            [this.RARITY_SSR]: 13,
             [this.RARITY_UR]: 3,
             [this.RARITY_LR]: 0.15,
         };
