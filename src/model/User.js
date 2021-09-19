@@ -263,6 +263,15 @@ class User {
         return reward;
     }
 
+    async addCurrency(amount) {
+        if (!this._playerLoaded) {
+            await this.loadPlayerInfo();
+        }
+
+        this[keyCurrency] += amount;
+        return this;
+    }
+
     static get HourlyReward() {
         return 5;
     }
