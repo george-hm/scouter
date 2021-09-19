@@ -62,7 +62,6 @@ class Recycle extends Command {
     }
 
     getRarityChosen() {
-        console.log(this._options);
         return parseInt(this._options?.getString(optionRarity));
     }
 
