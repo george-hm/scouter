@@ -227,6 +227,21 @@ class Character {
             rawCharacter.type,
         ));
     }
+
+    static getCurrencyValueForRarity(rarityNum) {
+        switch (rarityNum) {
+            case this.RARITY_N:
+                return 1;
+            case this.RARITY_R:
+                return 3;
+            case this.RARITY_SR:
+                return 5;
+            case this.RARITY_SSR:
+                return 8;
+            default:
+                throw new Error(`Value for rarity ${rarityNum} not found`);
+        }
+    }
 }
 Character.RARITY_N = 0;
 Character.RARITY_R = 1;
