@@ -200,7 +200,10 @@ class User {
                 continue;
             }
 
-            const characterToDuplicate = loadedCharacters.find(char => char.getId() === characterId);
+            const characterToDuplicate = loadedCharacters.find(char => char.getId() === parseInt(characterId));
+            if (!characterToDuplicate) {
+                throw new Error(`Cannot find character with id ${characterId}`);
+            }
             for (let i = 0; i < amount; i++) {
                 // yes we're pushing the same instance but this shouldn't matter
                 loadedCharacters.push(characterToDuplicate);
