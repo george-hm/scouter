@@ -23,19 +23,27 @@ class Stats extends Command {
             '',
             '**Total Rarities**:',
         ];
-        let addedRarities = false;
-        // TODO user.inventory should have all rarities (not just ones owned)
-        for (const rartiyNum in user.inventory) {
-            if (!Object.hasOwnProperty.call(user.inventory, rartiyNum)) {
-                continue;
-            }
-            addedRarities = true;
-            const rarityCount = user.inventory[rartiyNum];
-            toReturn.push(`${Character.convertRarityToEmoji(rartiyNum)}: ${rarityCount}`);
+
+        const rarityCounts = {
+            [Character.RARITY_N]: 0,
+            [Character.RARITY_R]: 0,
+            [Character.RARITY_SR]: 0,
+            [Character.RARITY_SSR]: 0,
+            [Character.RARITY_UR]: 0,
+            [Character.RARITY_LR]: 0,
+        };
+        const allCharacters = user.getAllCharacters();
+        for (let i = 0; i < allCharacters.length; i++) {
+            const character = allCharacters[i];
+            rarityCounts[character.getRarityNum()]++;
         }
 
-        if (!addedRarities) {
-            toReturn.push('None.');
+        for (const rarityNum in rarityCounts) {
+            if (!Object.hasOwnProperty.call(rarityCounts, rarityNum)) {
+                continue;
+            }
+            const count = rarityCounts[rarityNum];
+            toReturn.push(`${Character.convertRarityToEmoji(rarityNum)}: ${count}`);
         }
 
         toReturn.push(`\nTotal characters: ${totalCharacters}`);
