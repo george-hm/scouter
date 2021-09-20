@@ -13,7 +13,9 @@ class Command {
         if (options instanceof CommandInteractionOptionResolver) {
             this._options = options;
         }
-        this._user = user;
+        if (user instanceof User) {
+            this._user = user;
+        }
         this._customId = customId;
         this._values = values;
     }

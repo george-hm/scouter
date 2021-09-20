@@ -13,6 +13,7 @@ const keyLastDailyCheckIn = 'lastDailyCheckIn';
 const keyDailyStreak = 'dailyStreak';
 const keyCreated = 'created';
 const keyTotalSummons = 'totalSummons';
+const keyCharacterId = 'characterId';
 const userCache = {};
 
 // https://discord.com/developers/docs/resources/user#user-object
@@ -172,6 +173,20 @@ class User {
         return this;
     }
 
+    async removeCharactersFromInventory(characterIds) {
+        // setting this to false so we dont have to mess
+        // with removing from the players loaded inventory
+        this._charactersLoaded = false;
+
+        const db = database.get();
+        await db(tableInventory)
+            .where({
+                playerId: this.getUserId(),
+            })
+            .whereIn(keyCharacterId, characterIds)
+            .del();
+    }
+
     getUniqueCharacterCounts() {
         if (!this._charactersLoaded) {
             throw new Error('Need to load player characters');
@@ -200,7 +215,10 @@ class User {
                 continue;
             }
 
-            const characterToDuplicate = loadedCharacters.find(char => char.getId() === characterId);
+            const characterToDuplicate = loadedCharacters.find(char => char.getId() === parseInt(characterId));
+            if (!characterToDuplicate) {
+                throw new Error(`Cannot find character with id ${characterId}`);
+            }
             for (let i = 0; i < amount; i++) {
                 // yes we're pushing the same instance but this shouldn't matter
                 loadedCharacters.push(characterToDuplicate);
@@ -261,6 +279,15 @@ class User {
         this[keyCurrency] += reward;
 
         return reward;
+    }
+
+    async addCurrency(amount) {
+        if (!this._playerLoaded) {
+            await this.loadPlayerInfo();
+        }
+
+        this[keyCurrency] += amount;
+        return this;
     }
 
     static get HourlyReward() {
