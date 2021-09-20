@@ -79,6 +79,10 @@ class Character {
         return this._id;
     }
 
+    getInventoryId() {
+        return this[keyInventoryId] || null;
+    }
+
     getCharacterURL() {
         return `${process.env.BASE_URL}/${this._resourceId}/card_${this._resourceId}_character.png`;
     }
