@@ -143,31 +143,29 @@ class User {
     }
 
     async loadCharacterInventory() {
-        const dbInstance = database.get();
-
         if (this._charactersLoaded) {
             return this;
         }
 
-        const results = await dbInstance(tableInventory)
-            .select('characterId')
-            .where({
-                playerId: this.getUserId(),
-            });
-
-        const allCharacterIds = results.map(record => record.characterId);
-        // all items here are unique so we'll need to add duplicates if any
-        const loadedCharacters = await Character.loadCharactersByIds(allCharacterIds);
+        const loadedCharacters = await Character.loadInventoryCharactersByPlayerId(
+            this.getUserId(),
+        );
 
         // we need to see how many duplicate character
         this._idCounts = {};
-        for (let i = 0; i < allCharacterIds.length; i++) {
-            const characterId = allCharacterIds[i];
-            this._idCounts[characterId] = this._idCounts[characterId] || 0;
-            this._idCounts[characterId]++;
+        this._uniqueCharacters = [];
+        const arrCharacterIdsFound = [];
+        for (let i = 0; i < loadedCharacters.length; i++) {
+            const currentCharacter = loadedCharacters[i];
+            const charId = currentCharacter.getId();
+            this._idCounts[charId] = this._idCounts[charId] || 0;
+            this._idCounts[charId]++;
+            if (!arrCharacterIdsFound.includes(charId)) {
+                arrCharacterIdsFound.push(charId);
+                this._uniqueCharacters.push(currentCharacter);
+            }
         }
 
-        this._uniqueCharacters = loadedCharacters;
         this._charactersLoaded = true;
 
         return this;
