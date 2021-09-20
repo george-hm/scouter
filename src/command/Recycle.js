@@ -43,15 +43,9 @@ class Recycle extends Command {
         await user.addCurrency(currencyToAward);
         await user.save();
 
-        // this isnt the most elegant way of returning a message
-        // but its a lot more readable than a really long 1 liner
-        const embedDesc = [
-            `${Character.getZOrbEmoji()} Z-Orbs gained: ${currencyToAward}`,
-
-        ];
         const embed = new Embed(
             `♻️ Recycled ${Character.convertRarityToEmoji(rarityChosen)} ${charactersToRecyle.length} characters`,
-            embedDesc.join('\n'),
+            `${Character.getZOrbEmoji()} Z-Orbs gained: ${currencyToAward}`,
             5763719, // TODO static getters for colours
         );
 
