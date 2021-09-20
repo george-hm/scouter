@@ -13,7 +13,6 @@ const keyLastDailyCheckIn = 'lastDailyCheckIn';
 const keyDailyStreak = 'dailyStreak';
 const keyCreated = 'created';
 const keyTotalSummons = 'totalSummons';
-const keyCharacterId = 'characterId';
 const userCache = {};
 
 // https://discord.com/developers/docs/resources/user#user-object
@@ -171,7 +170,7 @@ class User {
         return this;
     }
 
-    async removeCharactersFromInventory(characterIds) {
+    async removeCharactersFromInventory(inventoryIds) {
         // setting this to false so we dont have to mess
         // with removing from the players loaded inventory
         this._charactersLoaded = false;
@@ -181,7 +180,7 @@ class User {
             .where({
                 playerId: this.getUserId(),
             })
-            .whereIn(keyCharacterId, characterIds)
+            .whereIn(keyId, inventoryIds)
             .del();
     }
 
