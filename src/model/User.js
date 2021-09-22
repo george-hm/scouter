@@ -165,6 +165,7 @@ class User {
             }
         }
 
+        this._allCharcters = loadedCharacters;
         this._charactersLoaded = true;
 
         return this;
@@ -201,28 +202,11 @@ class User {
     }
 
     getAllCharacters() {
-        const idCounts = this.getUniqueCharacterCounts();
-        const loadedCharacters = this.getUniqueCharacters();
-        for (const characterId in idCounts) {
-            if (!Object.hasOwnProperty.call(idCounts, characterId)) {
-                continue;
-            }
-            const amount = idCounts[characterId];
-            if (amount <= 1) {
-                continue;
-            }
-
-            const characterToDuplicate = loadedCharacters.find(char => char.getId() === parseInt(characterId));
-            if (!characterToDuplicate) {
-                throw new Error(`Cannot find character with id ${characterId}`);
-            }
-            for (let i = 0; i < amount; i++) {
-                // yes we're pushing the same instance but this shouldn't matter
-                loadedCharacters.push(characterToDuplicate);
-            }
+        if (!this._charactersLoaded) {
+            throw new Error('Need to load player characters');
         }
 
-        return loadedCharacters;
+        return this._allCharcters;
     }
 
     getCharacterFromInventoryById(id) {
