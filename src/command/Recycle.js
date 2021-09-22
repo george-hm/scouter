@@ -5,6 +5,7 @@ const Character = require('../model/Character.js');
 const Embed = require('../model/discord/Embed.js');
 
 const optionRarity = 'rarity';
+const optionDuplicatesOnly = 'duplicates';
 
 class Recycle extends Command {
     async main() {
@@ -17,14 +18,37 @@ class Recycle extends Command {
         await user.loadPlayerInfo();
         await user.loadCharacterInventory();
 
-        const charactersToRecyle = user.getAllCharacters().filter(character => character.getRarityNum() === rarityChosen);
-        if (!charactersToRecyle.length) {
+        const charactersMatchingRarity = user.getAllCharacters().filter(character => character.getRarityNum() === rarityChosen);
+        if (!charactersMatchingRarity.length) {
             return new InteractionResponse(
                 `You have no ${Character.convertRarityToEmoji(rarityChosen)} characters to recycle.`,
             );
         }
 
-        const idsToRemove = [...new Set(charactersToRecyle.map(character => character.getId()))];
+        const inventoryIdsToRemove = [];
+        if (!this.shouldRemoveDuplicatesOnly()) {
+            inventoryIdsToRemove.push(
+                ...charactersMatchingRarity.map(character => character.getInventoryId()),
+            );
+        } else {
+            // only push duplicates
+            const characterIdAndAmount = user.getUniqueCharacterCounts();
+            for (const characterId in characterIdAndAmount) {
+                if (!Object.hasOwnProperty.call(characterIdAndAmount, characterId)) {
+                    continue;
+                }
+                const amount = characterIdAndAmount[characterId];
+                if (amount <= 1) {
+                    continue;
+                }
+
+                const inventoryIdsForCharacter = charactersMatchingRarity.filter(character => character.getId() === characterId);
+                // delete the first entry because we want to keep at least 1 copy of this character
+                inventoryIdsForCharacter.splice(0, 1);
+                inventoryIdsToRemove.push(...inventoryIdsForCharacter);
+            }
+        }
+
         let rarityCurrencyValue;
         try {
             rarityCurrencyValue = Character.getCurrencyValueForRarity(rarityChosen);
@@ -38,20 +62,14 @@ class Recycle extends Command {
 
             throw err;
         }
-        await user.removeCharactersFromInventory(idsToRemove);
-        const currencyToAward = charactersToRecyle.length * rarityCurrencyValue;
+        await user.removeCharactersFromInventory(inventoryIdsToRemove);
+        const currencyToAward = inventoryIdsToRemove.length * rarityCurrencyValue;
         await user.addCurrency(currencyToAward);
         await user.save();
 
-        // this isnt the most elegant way of returning a message
-        // but its a lot more readable than a really long 1 liner
-        const embedDesc = [
-            `${Character.getZOrbEmoji()} Z-Orbs gained: ${currencyToAward}`,
-
-        ];
         const embed = new Embed(
-            `♻️ Recycled ${Character.convertRarityToEmoji(rarityChosen)} ${charactersToRecyle.length} characters`,
-            embedDesc.join('\n'),
+            `♻️ Recycled ${Character.convertRarityToEmoji(rarityChosen)} ${inventoryIdsToRemove.length} characters`,
+            `${Character.getZOrbEmoji()} Z-Orbs gained: ${currencyToAward}`,
             5763719, // TODO static getters for colours
         );
 
@@ -63,6 +81,10 @@ class Recycle extends Command {
 
     getRarityChosen() {
         return parseInt(this._options?.getString(optionRarity));
+    }
+
+    shouldRemoveDuplicatesOnly() {
+        return this._options?.getBoolean(optionDuplicatesOnly);
     }
 
     static toJSON() {
@@ -92,6 +114,8 @@ class Recycle extends Command {
                     `${Character.RARITY_UR}`,
                 )
                 .setRequired(true))
+            .addBooleanOption(option => option.setName(optionDuplicatesOnly)
+                .setDescription('Only recycle duplicates'))
             .toJSON();
     }
 

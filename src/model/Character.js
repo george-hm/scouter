@@ -18,6 +18,8 @@ const emojiMapping = {
     ZORB: '<:zorb:886518823417696266>',
 };
 
+const keyInventoryId = 'inventoryId';
+
 class Character {
     constructor(
         id,
@@ -26,6 +28,7 @@ class Character {
         secondaryName,
         rarityNum,
         type,
+        inventoryId,
     ) {
         this._id = id;
         this._resourceId = resourceId;
@@ -33,6 +36,7 @@ class Character {
         this._secondaryName = secondaryName;
         this._rarityNum = rarityNum;
         this._type = type;
+        this[keyInventoryId] = inventoryId;
     }
 
     static getZOrbEmoji() {
@@ -73,6 +77,10 @@ class Character {
 
     getId() {
         return this._id;
+    }
+
+    getInventoryId() {
+        return this[keyInventoryId] || null;
     }
 
     getCharacterURL() {
@@ -225,6 +233,36 @@ class Character {
             rawCharacter.secondname,
             rawCharacter.v_rarity,
             rawCharacter.type,
+        ));
+    }
+
+    static async loadInventoryCharactersByPlayerId(playerId) {
+        const db = database.get();
+        // yes this will load duplicate character data, which could slow down queries a bit
+        // however this seems better than messing around in the code trying to create duplicates
+        // and we have the inventory id right off the bat
+        const results = await db(tableInventory)
+            .select(`${tableInventory}.id as ${keyInventoryId}`)
+            .select('resource_id')
+            .select('name')
+            .select('secondname')
+            .select('v_rarity')
+            .select('type')
+            .select('characterId')
+            .where({
+                playerId,
+            })
+            .innerJoin(table, `${tableInventory}.characterid`, `${table}.id`);
+
+        // TODO make consts for each of these keys
+        return results.map(rawCharacter => new Character(
+            rawCharacter.characterId,
+            rawCharacter.resource_id,
+            rawCharacter.name,
+            rawCharacter.secondname,
+            rawCharacter.v_rarity,
+            rawCharacter.type,
+            rawCharacter[keyInventoryId],
         ));
     }
 
