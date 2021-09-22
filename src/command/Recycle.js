@@ -5,7 +5,7 @@ const Character = require('../model/Character.js');
 const Embed = require('../model/discord/Embed.js');
 
 const optionRarity = 'rarity';
-const optionDuplicatesOnly = 'duplicates';
+const optionRecycleAllOfRarity = 'all';
 
 class Recycle extends Command {
     async main() {
@@ -26,7 +26,7 @@ class Recycle extends Command {
         }
 
         const inventoryIdsToRemove = [];
-        if (!this.shouldRemoveDuplicatesOnly()) {
+        if (this.shouldRecycleAllOfRarity()) {
             inventoryIdsToRemove.push(
                 ...charactersMatchingRarity.map(character => character.getInventoryId()),
             );
@@ -87,14 +87,14 @@ class Recycle extends Command {
         return parseInt(this._options?.getString(optionRarity));
     }
 
-    shouldRemoveDuplicatesOnly() {
-        return this._options?.getBoolean(optionDuplicatesOnly);
+    shouldRecycleAllOfRarity() {
+        return this._options?.getBoolean(optionRecycleAllOfRarity);
     }
 
     static toJSON() {
         return new SlashCommandBuilder()
             .setName(this.commandName)
-            .setDescription('Recycle unwanted characters')
+            .setDescription('Recycle unwanted character (by default duplicates only)')
             .addStringOption(option => option.setName(optionRarity)
                 .setDescription('The rarity you wish to recycle')
                 .addChoice(
@@ -118,8 +118,8 @@ class Recycle extends Command {
                     `${Character.RARITY_UR}`,
                 )
                 .setRequired(true))
-            .addBooleanOption(option => option.setName(optionDuplicatesOnly)
-                .setDescription('Only recycle duplicates'))
+            .addBooleanOption(option => option.setName(optionRecycleAllOfRarity)
+                .setDescription('Recycle all characters of the chosen rarity'))
             .toJSON();
     }
 
