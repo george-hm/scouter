@@ -42,10 +42,14 @@ class Recycle extends Command {
                     continue;
                 }
 
-                const inventoryIdsForCharacter = charactersMatchingRarity.filter(character => character.getId() === characterId);
+                const inventoryIdsForCharacter = charactersMatchingRarity
+                    .filter(character => character.getId() === parseInt(characterId))
+                    .map(character => character.getInventoryId());
                 // delete the first entry because we want to keep at least 1 copy of this character
                 inventoryIdsForCharacter.splice(0, 1);
-                inventoryIdsToRemove.push(...inventoryIdsForCharacter);
+                inventoryIdsToRemove.push(
+                    ...inventoryIdsForCharacter,
+                );
             }
         }
 
