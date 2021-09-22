@@ -278,6 +278,10 @@ class Inventory extends Command {
                     Character.convertRarityToString(Character.RARITY_UR),
                     Character.convertRarityToString(Character.RARITY_UR),
                 )
+                .addChoice(
+                    Character.convertRarityToString(Character.RARITY_LR),
+                    Character.convertRarityToString(Character.RARITY_LR),
+                )
                 .setRequired(false))
             .addStringOption(option => option.setName(optionNameFilter)
                 .setDescription('Filter by name')
