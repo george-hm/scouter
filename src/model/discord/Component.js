@@ -47,7 +47,7 @@ class Component {
         if (this._style !== Component.STYLE_LINK && !this._customId) {
             throw new Error(`Style ${this._style} needs a custom id`);
         }
-        this._disabled = disabled;
+        this._disabled = !!disabled;
         if (components && Array.isArray(components)) {
             this._components = components.map(comp => comp.toComponentObject());
         }
