@@ -22,9 +22,11 @@ class Inventory extends Command {
             );
         }
 
-        if (this._options?.getString(optionViewCharacter)) {
+        if (this._options?.getString(optionViewCharacter) || this.getCharacterHexId()) {
             return await this.viewCharacter(
-                this._options.getString(optionViewCharacter),
+                this._options?.getString(optionViewCharacter) || this.getCharacterHexId(),
+                this.getRarityFilter(),
+                this.getNameFilter(),
             );
         }
 
@@ -151,7 +153,7 @@ class Inventory extends Command {
         );
     }
 
-    async viewCharacter(hexId) {
+    async viewCharacter(hexId, rarityFilter, nameFilter) {
         const numId = parseInt(hexId, 16);
         const user = this.getUser();
         await user.loadPlayerInfo();
@@ -169,9 +171,104 @@ class Inventory extends Command {
 
         const ownedCount = user.getUniqueCharacterCounts()[numId];
 
+        let uniqueCharacters = user.getUniqueCharacters().sort((a, b) => a.getRarityNum() - b.getRarityNum());
+        if (rarityFilter) {
+            uniqueCharacters = uniqueCharacters.filter(char => char.getRarityString() === rarityFilter);
+        }
+        if (nameFilter) {
+            uniqueCharacters = uniqueCharacters.filter(char => char.getFullName().toLowerCase().includes(nameFilter));
+        }
+
+        const characterIds = uniqueCharacters.map(char => char.getId());
+        const chosenCharIndex = characterIds.indexOf(numId);
+
+        // someones name/rarity filters arent compatible, call again with no filters
+        if (!chosenCharIndex === -1) {
+            return this.viewCharacter(hexId);
+        }
+        const prevCharHexId = parseInt(characterIds[chosenCharIndex - 1] || 0).toString(16);
+        const nextCharHexId = parseInt(characterIds[chosenCharIndex + 1] || 0).toString(16);
+
+        // push all control buttons
+        const buttons = [];
+        buttons.push(
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_SECONDARY,
+                null,
+                {
+                    name: '⏪',
+                },
+                this.createCustomId(
+                    null,
+                    rarityFilter,
+                    nameFilter,
+                    parseInt(characterIds[0]).toString(16),
+                ),
+                null,
+                chosenCharIndex === 0,
+            ),
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_SECONDARY,
+                null,
+                {
+                    name: '◀️',
+                },
+                this.createCustomId(
+                    null,
+                    rarityFilter,
+                    nameFilter,
+                    prevCharHexId,
+                ),
+                null,
+                chosenCharIndex === 0,
+            ),
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_SECONDARY,
+                null,
+                {
+                    name: '▶️',
+                },
+                this.createCustomId(
+                    null,
+                    rarityFilter,
+                    nameFilter,
+                    nextCharHexId,
+                ),
+                null,
+                chosenCharIndex === (characterIds.length - 1),
+            ),
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_SECONDARY,
+                null,
+                {
+                    name: '⏩',
+                },
+                this.createCustomId(
+                    null,
+                    rarityFilter,
+                    nameFilter,
+                    parseInt(characterIds[characterIds.length - 1]).toString(16),
+                ),
+                null,
+                chosenCharIndex === (characterIds.length - 1),
+            ),
+        );
+
+        const compButtons = new Component(
+            Component.TYPE_CONTAINER,
+        );
+        compButtons.setComponents(buttons);
+
         return new InteractionResponse(
             null,
             [character.toEmbed(ownedCount)],
+            compButtons,
+            false,
+            true,
         );
     }
 
@@ -226,15 +323,32 @@ class Inventory extends Command {
         return nameFilterFromCustomId.toLowerCase();
     }
 
+    getCharacterHexId() {
+        const customId = this._customId;
+        if (!customId) {
+            return null;
+        }
+        const customIdParts = customId.split('.');
+
+        const nameFilterFromCustomId = customIdParts[4];
+        if (nameFilterFromCustomId === customValueEmpty) {
+            return null;
+        }
+
+        return nameFilterFromCustomId;
+    }
+
     createCustomId(
         pageNumber,
         rarity,
         name,
+        hexId,
     ) {
         let customId = this.commandName;
         customId += `.${pageNumber || customValueEmpty}`;
         customId += `.${rarity || customValueEmpty}`;
         customId += `.${name || customValueEmpty}`;
+        customId += `.${hexId || customValueEmpty}`;
 
         customId += `.${Math.random().toString(32).slice(-8)}`;
         customId += `.${this.getUser().getUserId()}`;
