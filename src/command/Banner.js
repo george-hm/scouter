@@ -33,7 +33,9 @@ class BannerCommand extends Command {
         let chosenBanner = null;
         if (this.getBannerId()) {
             chosenBanner = allBanners.find(banner => banner.getBannerId() === this.getBannerId());
-            bannerCharacter = await chosenBanner.getCharacterFromBanner();
+            if (chosenBanner) {
+                bannerCharacter = await chosenBanner.getCharacterFromBanner();
+            }
         }
 
         const selectMenu = new SelectMenu(
