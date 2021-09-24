@@ -87,6 +87,7 @@ class Banner {
             .where({
                 [keyExpires]: null,
             })
+            .limit(3)
             .orderByRaw('RAND()');
 
         // there are no banners which have not been rotated yet
