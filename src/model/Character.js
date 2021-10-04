@@ -84,11 +84,11 @@ class Character {
     }
 
     getCharacterURL() {
-        return `${process.env.BASE_URL}/${this._resourceId}/card_${this._resourceId}_character.png`;
+        return `${process.env.BASE_URL}/0/card/${this._resourceId}/card_${this._resourceId}_character.png`;
     }
 
     getCharacterThumbnailURL() {
-        return `${process.env.BASE_URL}/${this._resourceId}/card_${this._resourceId}_circle.png`;
+        return `${process.env.BASE_URL}/0/card/${this._resourceId}/card_${this._resourceId}_circle.png`;
     }
 
     toEmbed(count) {

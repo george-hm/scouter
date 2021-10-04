@@ -85,7 +85,7 @@ class Banner {
         const bannersToUpdate = await db(tableBanner)
             .select(keyBannerId)
             .where({
-                [keyExpires]: null,
+                [keyExpires]: 0,
             })
             .limit(3)
             .orderByRaw('RAND()');
@@ -98,7 +98,7 @@ class Banner {
             }
             await db(tableBanner)
                 .update({
-                    [keyExpires]: null,
+                    [keyExpires]: 0,
                 });
 
             return await this._addNewBanners(true);
