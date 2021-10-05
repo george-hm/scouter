@@ -1,3 +1,5 @@
+const { DateTime } = require('luxon');
+
 const hour = 3600;
 const day = hour * 24;
 
@@ -150,6 +152,25 @@ class Time {
             .trim();
 
         return timeString;
+    }
+
+    // 1 = monday 7 = sunday
+    static getUpcomingDayOfWeek(dayOfWeek) {
+        if ((!dayOfWeek && dayOfWeek !== 0) || dayOfWeek > 6) {
+            throw new Error(`Invalid day of week: ${dayOfWeek}`);
+        }
+
+        let linstance = DateTime.now().toUTC();
+        const currentDay = linstance.weekday;
+        let daysToAdd = dayOfWeek - currentDay;
+        if (daysToAdd < 0) {
+            daysToAdd = 7 + daysToAdd;
+        }
+        // set the day we want
+        linstance = linstance.plus({ days: daysToAdd })
+            .set({ hour: 0, minute: 0, seconds: 0 });
+
+        return Math.floor(linstance.toSeconds());
     }
 }
 
