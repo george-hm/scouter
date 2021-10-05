@@ -10,8 +10,7 @@ const keyCharacterId = 'characterId';
 const keyExpires = 'expires';
 const keyRarity = 'rarity';
 
-// 7 days
-const bannerPeriod = 86400 * 7;
+const bannerRotationDay = 5; // friday
 
 class Banner {
     constructor(bannerId, name, characterId, rarity, description, expires) {
@@ -104,7 +103,7 @@ class Banner {
             return await this._addNewBanners(true);
         }
 
-        const newExpireTime = Time.getTime() + bannerPeriod;
+        const newExpireTime = Time.getUpcomingDayOfWeek(bannerRotationDay);
         await db(tableBanner)
             .update({
                 [keyExpires]: newExpireTime,
