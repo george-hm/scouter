@@ -51,6 +51,9 @@ class User {
         return `${this._username}#${this._discriminator}`;
     }
 
+    /**
+     * @returns {string}
+     */
     getUserId() {
         return this._id;
     }
@@ -139,6 +142,13 @@ class User {
             .into(tablePlayer)
             .onConflict()
             .merge();
+    }
+
+    // I don't think we really *need* this but I wanted to be extra careful
+    // when trading to avoid duplications
+    async reloadCharacters() {
+        this._charactersLoaded = false;
+        return await this.loadCharacterInventory();
     }
 
     async loadCharacterInventory() {
