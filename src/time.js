@@ -156,7 +156,7 @@ class Time {
 
     // 1 = monday 7 = sunday
     static getUpcomingDayOfWeek(dayOfWeek) {
-        if ((!dayOfWeek && dayOfWeek !== 0) || dayOfWeek > 6) {
+        if (!dayOfWeek || dayOfWeek > 7) {
             throw new Error(`Invalid day of week: ${dayOfWeek}`);
         }
 
