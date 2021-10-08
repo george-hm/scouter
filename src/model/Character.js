@@ -101,6 +101,18 @@ class Character {
         );
     }
 
+    async moveCharacter(playerId) {
+        const dbInstance = database.get();
+
+        await dbInstance(tableInventory)
+            .update({
+                playerId,
+            })
+            .where({
+                [keyInventoryId]: this.getInventoryId(),
+            });
+    }
+
     static async getRandomByRarity(rarityNum) {
         if (typeof rarityNum !== 'number') {
             throw new Error(`Rarity is not number: ${rarityNum}`);
