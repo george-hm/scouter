@@ -151,6 +151,10 @@ class User {
         return await this.loadCharacterInventory();
     }
 
+    unloadCharacters() {
+        this._charactersLoaded = false;
+    }
+
     async loadCharacterInventory() {
         if (this._charactersLoaded) {
             return this;
