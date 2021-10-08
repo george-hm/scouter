@@ -58,8 +58,25 @@ class TradeUser {
     }
 
     async assertAllCharactersExist() {
+        // TODO - disable recycling if trade is open?
+
         // reload inventory, go through inv and offers, validate everything exists in their inv
         // (e.g. stop duplication where they have started a trade then recycled a character)
+        await this._user.reloadCharacters();
+
+        const charsInInv = this._user.getAllCharacters();
+        for (const character of this._offers) {
+            const presentChar = charsInInv.find(invChar => invChar.getInventoryId() === character.getInventoryId());
+            if (!presentChar) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    get offers() {
+        return this._offers;
     }
 }
 
