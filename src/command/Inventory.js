@@ -52,6 +52,8 @@ class Inventory extends Command {
         if (nameFilter) {
             characters = characters.filter(char => char.getFullName().toLowerCase().includes(nameFilter));
         }
+
+        // TODO: replace this with method
         const mappedSummary = characters.map(char => `\`${char.getId().toString(16)}\`${char.getRarityAsEmoji()} - **${char.getFullName()}** ${char.getTypeAsEmoji()} x${characterCounts[char.getId()]}`);
 
         let pageNumber = this.getPageNumber();
