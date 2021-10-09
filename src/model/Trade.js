@@ -76,6 +76,14 @@ class Trade {
 
         await Promise.all(promises);
     }
+
+    toEmbed() {
+        const title = `Trade between ${this._tradeUsers.map(tuser => tuser.user.getName()).join(' and ')}`;
+        let strDescription = '';
+        for (const tradeUser of this._tradeUsers) {
+            strDescription += `**${tradeUser.user.getName()}** Offers:\n`;
+        }
+    }
 }
 
 module.exports = Trade;
