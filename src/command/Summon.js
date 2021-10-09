@@ -15,6 +15,7 @@ class Summon extends Command {
     }
 
     async main() {
+        // return;
         const user = this.getUser();
         await user.loadPlayerInfo();
         if (user.currency < Summon.summonCost) {
@@ -67,11 +68,11 @@ class Summon extends Command {
                 null,
                 this.createCustomId(bannerId),
             ),
+        ]);
+
+        let embedToReturn = new Embed(
             `Summoned ${this.getSummonCount()} characters`,
             allSummons.map(character => character.stringSummary).join('\n'),
-        let embedToReturn = new Embed(
-            `${user.getMention()} rolled ${this.getSummonCount()} characters ${bannerMessage}`,
-            allSummons.map(character => character.stringSummary),
         );
         if (!allSummons.length) {
             throw new Error('No summons');
@@ -106,13 +107,13 @@ class Summon extends Command {
     getSummonCount() {
         let number = 1;
         const customId = this._customId;
-        if (!customId) {
+        if (customId) {
             const customIdParts = customId.split('.');
             number = parseInt(customIdParts[2]) || null;
         }
 
         if (!number || number === 1) {
-            number = parseInt(this._options?.getString(optionCount));
+            number = parseInt(this._options?.getNumber(optionCount));
         }
 
         if (number > 10) {
