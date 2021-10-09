@@ -7,6 +7,7 @@ const Banner = require('../model/Banner.js');
 const Embed = require('../model/discord/Embed.js');
 
 const customIdEmpty = 'empty';
+const optionCount = 'count';
 
 class Summon extends Command {
     static get summonCost() {
@@ -93,18 +94,22 @@ class Summon extends Command {
     }
 
     getSummonCount() {
+        let number = 1;
         const customId = this._customId;
         if (!customId) {
-            return 1;
+            const customIdParts = customId.split('.');
+            number = parseInt(customIdParts[2]) || null;
         }
 
-        const customIdParts = customId.split('.');
-        const number = parseInt(customIdParts[2]) || null;
+        if (!number || number === 1) {
+            number = parseInt(this._options?.getString(optionCount));
+        }
+
         if (number > 10) {
             return 10;
         }
 
-        if (number < 1) {
+        if (!number || number < 1) {
             return 1;
         }
     }
@@ -124,7 +129,7 @@ class Summon extends Command {
         return new SlashCommandBuilder()
             .setName(this.commandName)
             .setDescription('Summon a new character')
-            .addNumberOption(option => option.setName('Count')
+            .addNumberOption(option => option.setName(optionCount)
                 .setDescription('The number of summons to do (max 10)')
                 .setRequired(false))
             .toJSON();
