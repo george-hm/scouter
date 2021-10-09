@@ -78,6 +78,26 @@ class TradeUser {
     get offers() {
         return this._offers;
     }
+
+    get charCountAndNameAsString() {
+        let strSummary = '';
+
+        const nameAndCount = {};
+        for (const character of this._offers) {
+            nameAndCount[character.stringSummary] = nameAndCount[character.stringSummary] || 0;
+            nameAndCount[character.stringSummary]++;
+        }
+
+        for (const name in nameAndCount) {
+            if (!Object.hasOwnProperty.call(nameAndCount, name)) {
+                continue;
+            }
+            const count = nameAndCount[name];
+            strSummary += `${name} x${count}`;
+        }
+
+        return strSummary;
+    }
 }
 
 module.exports = TradeUser;
