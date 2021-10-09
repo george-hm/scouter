@@ -292,6 +292,10 @@ class Character {
                 throw new Error(`Value for rarity ${rarityNum} not found`);
         }
     }
+
+    get stringSummary() {
+        return `\`${this.getId().toString(16)}\`${this.getRarityAsEmoji()} - **${this.getFullName()}** ${this.getTypeAsEmoji()}`;
+    }
 }
 Character.RARITY_N = 0;
 Character.RARITY_R = 1;
