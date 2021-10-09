@@ -43,6 +43,9 @@ class Summon extends Command {
         const allSummons = [];
         let roll;
         for (let i = 0; i < this.getSummonCount(); i++) {
+            if (user.currency < Summon.summonCost) {
+                break;
+            }
             roll = Character.getRandomRarity();
             const summonedCharacter = await summoner(roll);
             allSummons.push(summonedCharacter);
@@ -64,8 +67,8 @@ class Summon extends Command {
                 null,
                 this.createCustomId(bannerId),
             ),
-        ]);
-
+            `Summoned ${this.getSummonCount()} characters`,
+            allSummons.map(character => character.stringSummary).join('\n'),
         let embedToReturn = new Embed(
             `${user.getMention()} rolled ${this.getSummonCount()} characters ${bannerMessage}`,
             allSummons.map(character => character.stringSummary),
@@ -76,8 +79,15 @@ class Summon extends Command {
         if (allSummons.length === 1) {
             embedToReturn = allSummons[0].toEmbed();
         }
+
+        let messageContent = `${user.getMention()} you rolled`;
+        if (allSummons.length > 1) {
+            messageContent += ` ${allSummons.length} characters ${bannerMessage}`;
+        } else {
+            messageContent += `: ${Character.convertRarityToEmoji(roll)} ${bannerMessage}`;
+        }
         return new InteractionResponse(
-            `${user.getMention()} you rolled: ${Character.convertRarityToEmoji(roll)} ${bannerMessage}`,
+            messageContent,
             [embedToReturn],
             component,
         );
@@ -112,6 +122,8 @@ class Summon extends Command {
         if (!number || number < 1) {
             return 1;
         }
+
+        return number;
     }
 
     createCustomId(bannerId, count) {
