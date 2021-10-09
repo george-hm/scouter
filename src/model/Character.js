@@ -128,7 +128,7 @@ class Character {
 
         const charResult = response[0];
 
-        const loadedChar = new this(
+        const loadedChar = new Character(
             charResult.id,
             charResult.resource_id,
             charResult.name,
