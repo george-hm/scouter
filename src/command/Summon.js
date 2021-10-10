@@ -34,7 +34,6 @@ class Summon extends Command {
             }
 
             bannerMessage = `from banner **${loadedBanner.getBannerName()}**`;
-            console.log(loadedBanner);
             summonClass = loadedBanner;
         } else {
             summonClass = Character;
