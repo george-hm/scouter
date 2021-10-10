@@ -76,7 +76,7 @@ class Summon extends Command {
         ]);
 
         let embedToReturn = new Embed(
-            `Summoned ${this.getSummonCount()} characters`,
+            `Summoned ${this.allSummons.length} characters`,
             allSummons.map(character => character.stringSummary).join('\n'),
         );
         if (!allSummons.length) {
