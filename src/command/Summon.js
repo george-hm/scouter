@@ -52,7 +52,7 @@ class Summon extends Command {
             if (bannerMessage) {
                 summonedCharacter = await summonClass.summon(roll);
             } else {
-                summonedCharacter = summonClass.getRandomByRarity(roll);
+                summonedCharacter = await summonClass.getRandomByRarity(roll);
             }
             allSummons.push(summonedCharacter);
             await summonedCharacter.addToPlayer(user.getUserId());
