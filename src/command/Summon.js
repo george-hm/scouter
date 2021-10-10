@@ -26,7 +26,7 @@ class Summon extends Command {
         const bannerId = this.getBannerId();
         let bannerMessage = '';
 
-        let summoner = null;
+        let summonClass = null;
         if (bannerId) {
             const loadedBanner = await Banner.getBannerById(bannerId);
             if (!loadedBanner) {
@@ -34,9 +34,10 @@ class Summon extends Command {
             }
 
             bannerMessage = `from banner **${loadedBanner.getBannerName()}**`;
-            summoner = loadedBanner.summon;
+            console.log(loadedBanner);
+            summonClass = loadedBanner;
         } else {
-            summoner = Character.getRandomByRarity;
+            summonClass = Character;
         }
 
         // TODO: change this and dont wait in loop
@@ -48,7 +49,12 @@ class Summon extends Command {
                 break;
             }
             roll = Character.getRandomRarity();
-            const summonedCharacter = await summoner(roll);
+            let summonedCharacter;
+            if (bannerMessage) {
+                summonedCharacter = await summonClass.summon(roll);
+            } else {
+                summonedCharacter = summonClass.getRandomByRarity(roll);
+            }
             allSummons.push(summonedCharacter);
             await summonedCharacter.addToPlayer(user.getUserId());
             user.addRarityToInventory(roll);
