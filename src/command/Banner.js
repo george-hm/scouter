@@ -63,16 +63,29 @@ class BannerCommand extends Command {
             const buttonContainer = new Component(
                 Component.TYPE_CONTAINER,
             );
-            buttonContainer.setComponents(new Component(
-                Component.TYPE_BUTTON,
-                Component.STYLE_PRIMARY,
-                'Summon',
-                null,
-                Summon.createCustomId(
-                    this.getBannerId(),
-                    this.getUser().getUserId(),
+            buttonContainer.setComponents([
+                new Component(
+                    Component.TYPE_BUTTON,
+                    Component.STYLE_PRIMARY,
+                    'Summon',
+                    null,
+                    Summon.createCustomId(
+                        this.getBannerId(),
+                        this.getUser().getUserId(),
+                    ),
                 ),
-            ));
+                new Component(
+                    Component.TYPE_BUTTON,
+                    Component.STYLE_PRIMARY,
+                    'Summon 10',
+                    null,
+                    Summon.createCustomId(
+                        this.getBannerId(),
+                        this.getUser().getUserId(),
+                        10,
+                    ),
+                ),
+            ]);
             allComponents.push(buttonContainer);
         } else {
             embed = new Embed(
