@@ -71,7 +71,10 @@ class Summon extends Command {
                 Component.STYLE_PRIMARY,
                 'Summon again',
                 null,
-                this.createCustomId(bannerId),
+                this.createCustomId(
+                    bannerId,
+                    this.getSummonCount(),
+                ),
             ),
         ]);
 
