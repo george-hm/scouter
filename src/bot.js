@@ -2,7 +2,42 @@ const { Client, Intents } = require('discord.js');
 const Database = require('./database.js');
 const Interaction = require('./model/discord/Interaction.js');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+
+client.on('messageCreate', async message => {
+    if (message.author.id !== '129416238916042752') {
+        return;
+    }
+
+    const prefix = '-';
+    const replacePrefixCommand = /^-([A-z0-9])+\s/;
+    if (!message.content.startsWith(prefix)) {
+        return;
+    }
+
+    const command = message.content.split(' ').shift().replace(prefix, '');
+    let messageContent = message.content.replace(replacePrefixCommand, '');
+    let reply = '';
+    switch (command) {
+        case 'eval':
+            try {
+                messageContent = messageContent.replace(/^```(js|)/, '')
+                    .replace(/```$/, '');
+                console.log(messageContent);
+                reply = `${await eval(messageContent)}`;
+                if (reply.length > 4000) {
+                    reply = 'reply too big';
+                }
+            } catch (err) {
+                reply = `${err}`;
+            }
+            break;
+        default:
+            return;
+    }
+
+    message.reply(reply);
+});
 
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand() && !interaction.isButton() && !interaction.isSelectMenu()) return;
