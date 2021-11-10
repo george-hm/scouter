@@ -63,6 +63,8 @@ class Component {
             }
             this._components.push(comp.toComponentObject());
         }
+
+        return this;
     }
 
     toComponentObject() {
