@@ -22,7 +22,7 @@ class User {
         this._username = user.username;
         this._discriminator = user.discriminator;
         this._avatar = user.avatarURL({ dynamic: true });
-        this._bot = user.bot;
+        this.bot = user.bot;
         this._system = user.system;
         this._locale = user.locale;
         this._verified = user.verified;
