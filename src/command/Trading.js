@@ -264,14 +264,26 @@ class Trading extends Command {
         return new SlashCommandBuilder()
             .setName(this.commandName)
             .setDescription('Trade characters with another player')
+            .addStringOption(option => option.setName(optionAction)
+                .addChoice(
+                    'Add',
+                    optionActionChoiceAdd,
+                ).addChoice(
+                    'Remove',
+                    optionActionChoiceRemove,
+                ).addChoice(
+                    'Open trade',
+                    optionActionChoiceOpen,
+                ))
+            .setRequired(true)
             .addStringOption(option => option.setName(optionCharacterId)
-                .setDescription('The character you wish to trade')
+                .setDescription('The character used for this action')
                 .setRequired(true))
             .addUserOption(option => option.setName(optionUser)
-                .setDescription('The player you wish to trade with')
+                .setDescription('The player you wish to trade with (Open trade action only)')
                 .setRequired(false))
-            .addStringOption(option => option.setName(optionTradingId)
-                .setDescription('An existing trade to add to, if any')
+            .addStringOption(option => option.setName(optionTradeId)
+                .setDescription('An ID from a trade (Add/Remove only)')
                 .setRequired(false))
             .toJSON();
     }
