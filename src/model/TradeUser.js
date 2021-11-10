@@ -19,6 +19,10 @@ class TradeUser {
         return this._accept;
     }
 
+    set accepted(value) {
+        this._accept = !!value;
+    }
+
     async addCharacterToTrade(characterId) {
         await this._user.loadCharacterInventory();
         const allCharacters = this._user.getAllCharacters();
