@@ -12,7 +12,11 @@ const customIdAccept = 'accept';
 const customIdDecline = 'decline';
 const optionUser = 'player';
 const optionCharacterId = 'characterid';
-const optionTradingId = 'tradingid';
+const optionTradeId = 'id';
+const optionAction = 'action';
+const optionActionChoiceAdd = 'actionadd';
+const optionActionChoiceRemove = 'actionremove';
+const optionActionChoiceOpen = 'actionopen';
 
 class Trading extends Command {
     async main() {
@@ -27,16 +31,26 @@ class Trading extends Command {
         }
         await user.loadPlayerInfo();
 
-        const actionFromButton = this.getActionFromButton();
+        const action = this.getAction();
 
-        if (actionFromButton === customIdAccept) {
-            return this.acceptAction();
+        switch (action) {
+            case customIdAccept:
+                return await this.acceptAction();
+            case customIdDecline:
+                return await this.declineAction();
+            case optionActionChoiceAdd:
+                return await this.addCharacterToTrade();
+            case optionActionChoiceRemove:
+                return await this.removeCharacterFromTrade();
+            case optionActionChoiceOpen:
+                return await this.openTrade();
+            default:
+                throw new Error('Invalid or missing action');
         }
+    }
 
-        if (actionFromButton === customIdDecline) {
-            return this.declineAction();
-        }
-
+    async openTrade() {
+        const user = this.getUser();
         const userToTradewith = this.getUserFromOption();
         if (!userToTradewith) {
             console.log(this._options);
@@ -53,9 +67,7 @@ class Trading extends Command {
             );
         }
 
-        await user.loadCharacterInventory();
-
-        const characterToTradeWith = user.getCharacterFromInventoryById(this.getCharacterId());
+        const characterToTradeWith = await this.getTradingCharacter();
         if (!characterToTradeWith) {
             return new InteractionResponse(
                 'You do not own any characters with this id!',
@@ -79,7 +91,7 @@ class Trading extends Command {
 
     async acceptAction() {
         const user = this.getUser();
-        const tradeId = this.getTradeIdFromButton();
+        const tradeId = this.getTradeIdFromOptionOrButton();
 
         console.log('tradeid', tradeId);
         console.log(tradeMappings);
@@ -131,7 +143,7 @@ class Trading extends Command {
         // set active to false
         // end trade (and remove trade from allTrades)
         const user = this.getUser();
-        const tradeId = this.getTradeIdFromButton();
+        const tradeId = this.getTradeIdFromOptionOrButton();
 
         console.log('declineid', tradeId);
         console.log(tradeMappings);
@@ -176,6 +188,12 @@ class Trading extends Command {
         );
     }
 
+    async addCharacterToTrade() {
+
+    }
+
+    async removeCharacterFromTrade() {
+    }
 
     async getOpenTrade() {
         const tradeId = this.getTradeIdFromOptionOrButton();
