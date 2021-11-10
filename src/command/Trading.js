@@ -77,39 +77,6 @@ class Trading extends Command {
         return this.createTradeResponse(trade);
     }
 
-    createTradeResponse(trade, update) {
-        if (!(trade instanceof Trade)) {
-            throw new Error('Missing or invalid trade');
-        }
-
-        const tradeId = trade.id;
-        const container = new Component(
-            Component.TYPE_CONTAINER,
-        ).setComponents([
-            new Component(
-                Component.TYPE_BUTTON,
-                Component.STYLE_PRIMARY,
-                'Accept',
-                null,
-                this.createCustomId(tradeId, customIdAccept),
-            ),
-            new Component(
-                Component.TYPE_BUTTON,
-                Component.STYLE_DANGER,
-                'Decline',
-                null,
-                this.createCustomId(tradeId, customIdDecline),
-            ),
-        ]);
-        return new InteractionResponse(
-            null,
-            [trade.toEmbed()],
-            container,
-            null,
-            !!update,
-        );
-    }
-
     async acceptAction() {
         const user = this.getUser();
         const tradeId = this.getTradeIdFromButton();
@@ -209,8 +176,92 @@ class Trading extends Command {
         );
     }
 
-    getActionFromButton() {
-        const action = this._customId?.split('.').pop();
+
+    async getOpenTrade() {
+        const tradeId = this.getTradeIdFromOptionOrButton();
+        if (!tradeId) {
+            return new InteractionResponse(
+                'No trade id provided!',
+                null,
+                null,
+                true,
+            );
+        }
+
+        const trade = tradeMappings[tradeId];
+        if (!trade || !(trade instanceof Trade)) {
+            return new InteractionResponse(
+                'Could not find this trade, create a new one with the \'Open\' action',
+                null,
+                null,
+                true,
+            );
+        }
+
+        const user = this.getUser();
+        if (!trade.findUser(user.getUserId())) {
+            return new InteractionResponse(
+                'You are not a participant in this trade!',
+                null,
+                null,
+                true,
+            );
+        }
+
+        return trade;
+    }
+
+    async getTradingCharacter() {
+        const user = this.getUser();
+        const characterId = this.getCharacterId();
+        if (!characterId) {
+            throw new Error('No character id provided');
+        }
+
+        await user.loadCharacterInventory();
+        const character = user.getCharacterFromInventoryById(characterId);
+        if (!character) {
+            return null;
+        }
+
+        return character;
+    }
+
+    createTradeResponse(trade, update) {
+        if (!(trade instanceof Trade)) {
+            throw new Error('Missing or invalid trade');
+        }
+
+        const tradeId = trade.id;
+        const container = new Component(
+            Component.TYPE_CONTAINER,
+        ).setComponents([
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_PRIMARY,
+                'Accept',
+                null,
+                this.createCustomId(tradeId, customIdAccept),
+            ),
+            new Component(
+                Component.TYPE_BUTTON,
+                Component.STYLE_DANGER,
+                'Decline',
+                null,
+                this.createCustomId(tradeId, customIdDecline),
+            ),
+        ]);
+        return new InteractionResponse(
+            null,
+            [trade.toEmbed()],
+            container,
+            null,
+            !!update,
+        );
+    }
+
+    getAction() {
+        const action = this._customId?.split('.').pop() || this._options?.getString(optionAction);
         if (!action || action === customIdEmpty) {
             return null;
         }
@@ -218,10 +269,10 @@ class Trading extends Command {
         return action;
     }
 
-    getTradeIdFromButton() {
-        const id = this._customId?.split('.')[2];
+    getTradeIdFromOptionOrButton() {
+        const id = this._customId?.split('.')[2] || this._options?.getString(optionTradeId);
         if (!id) {
-            throw new Error('Missing trade id from button');
+            throw new Error('Missing trade id');
         }
 
         return id;
