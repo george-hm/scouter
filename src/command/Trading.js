@@ -324,17 +324,20 @@ class Trading extends Command {
             .setName(this.commandName)
             .setDescription('Trade characters with another player')
             .addStringOption(option => option.setName(optionAction)
+                .setDescription('Action to perform on the trade')
                 .addChoice(
                     'Add',
                     optionActionChoiceAdd,
-                ).addChoice(
+                )
+                .addChoice(
                     'Remove',
                     optionActionChoiceRemove,
-                ).addChoice(
+                )
+                .addChoice(
                     'Open trade',
                     optionActionChoiceOpen,
-                ))
-            .setRequired(true)
+                )
+                .setRequired(true))
             .addStringOption(option => option.setName(optionCharacterId)
                 .setDescription('The character used for this action')
                 .setRequired(true))
