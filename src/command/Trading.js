@@ -91,18 +91,11 @@ class Trading extends Command {
 
     async acceptAction() {
         const user = this.getUser();
-        const tradeId = this.getTradeIdFromOptionOrButton();
 
-        console.log('tradeid', tradeId);
-        console.log(tradeMappings);
-        const trade = tradeMappings[tradeId];
-        if (!trade || !(trade instanceof Trade)) {
-            return new InteractionResponse(
-                'Could not find this trade, sorry!',
-                null,
-                null,
-                true,
-            );
+        const trade = await this.getOpenTrade();
+        // invalid trade, just the error response
+        if (trade instanceof InteractionResponse) {
+            return trade;
         }
 
         if (trade.tradeCommitted || !trade.active) {
@@ -138,43 +131,13 @@ class Trading extends Command {
     }
 
     async declineAction() {
-        // get trade
-        // validate user is in trade
-        // set active to false
-        // end trade (and remove trade from allTrades)
-        const user = this.getUser();
-        const tradeId = this.getTradeIdFromOptionOrButton();
-
-        console.log('declineid', tradeId);
-        console.log(tradeMappings);
-        const trade = tradeMappings[tradeId];
-        if (!trade || !(trade instanceof Trade)) {
-            return new InteractionResponse(
-                'Could not find this trade, sorry!',
-                null,
-                null,
-                true,
-            );
+        const trade = await this.getOpenTrade();
+        // invalid trade so return the error response
+        if (trade instanceof InteractionResponse) {
+            return trade;
         }
 
-        if (trade.tradeCommitted || !trade.active) {
-            return new InteractionResponse(
-                'This trade is no longer active',
-                null,
-                null,
-                true,
-            );
-        }
-
-        const tradeUser = trade.findUser(user.getUserId());
-        if (!tradeUser) {
-            return new InteractionResponse(
-                'You are not a participant in this trade!',
-                null,
-                null,
-                true,
-            );
-        }
+        const tradeId = trade.id;
 
         trade.active = false;
         delete tradeMappings[trade.id];
@@ -189,10 +152,37 @@ class Trading extends Command {
     }
 
     async addCharacterToTrade() {
+        const trade = await this.getOpenTrade();
+        if (trade instanceof InteractionResponse) {
+            return trade;
+        }
 
+        trade.addCharacterToTrade(
+            this.getUser().getUserId(),
+            this.getCharacterId(),
+        );
+
+        return this.createTradeResponse(
+            trade,
+            true,
+        );
     }
 
     async removeCharacterFromTrade() {
+        const trade = await this.getOpenTrade();
+        if (trade instanceof InteractionResponse) {
+            return trade;
+        }
+
+        trade.addCharacterToTrade(
+            this.getUser().getUserId(),
+            this.getCharacterId(),
+        );
+
+        return this.createTradeResponse(
+            trade,
+            true,
+        );
     }
 
     async getOpenTrade() {
