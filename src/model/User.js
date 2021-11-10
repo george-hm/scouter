@@ -226,7 +226,12 @@ class User {
     getCharacterFromInventoryById(id) {
         const characters = this.getUniqueCharacters();
 
-        return characters.find(char => char.getId() === id);
+        const foundCharacter = characters.find(char => char.getId() === id);
+        if (!foundCharacter || !(foundCharacter instanceof Character)) {
+            return null;
+        }
+
+        return foundCharacter;
     }
 
     grantHourlyReward() {
