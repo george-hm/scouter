@@ -7,6 +7,7 @@ const Inventory = require('./Inventory.js');
 const Stats = require('./Stats.js');
 const Banner = require('./Banner.js');
 const Recycle = require('./Recycle.js');
+const Trading = require('./Trading.js');
 
 const mapping = {
     [Test.commandName]: Test,
@@ -17,6 +18,7 @@ const mapping = {
     [Stats.commandName]: Stats,
     [Banner.commandName]: Banner,
     [Recycle.commandName]: Recycle,
+    [Trading.commandName]: Trading,
 };
 
 module.exports.getCommand = (commandName, customId, options, user, values) => {
