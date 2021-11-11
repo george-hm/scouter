@@ -5,7 +5,7 @@ const Component = require('./Component.js');
 // https://discord.com/developers/docs/interactions/slash-commands#interaction-response-object-interaction-response-structure
 // this is what our body will be when we reply
 class Response {
-    constructor(messageContent, embeds, components, ephemeral, editMessage) {
+    constructor(messageContent, embeds, components, ephemeral, editMessage, fetchReply, followUp) {
         this._messageContent = messageContent || '';
         if (embeds && Array.isArray(embeds)) {
             this._embeds = embeds.filter(currentEmbed => currentEmbed instanceof Embed);
@@ -22,6 +22,8 @@ class Response {
 
         this._ephemeral = ephemeral;
         this._deleteOriginal = editMessage;
+        this._fetchedReply = fetchReply;
+        this.followUp = !!followUp;
     }
 
     shouldEditMessage() {
@@ -34,6 +36,7 @@ class Response {
             embeds: this._embeds,
             components: this._components,
             ephemeral: !!this._ephemeral,
+            fetchReply: !!this._fetchedReply,
         };
 
         // remove all falsey/optional data
