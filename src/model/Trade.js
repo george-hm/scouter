@@ -1,3 +1,4 @@
+const { Message } = require('discord.js');
 const User = require('./User.js');
 const TradeUser = require('./TradeUser.js');
 const Embed = require('./discord/Embed.js');
@@ -122,6 +123,18 @@ class Trade {
 
     get tradeCommitted() {
         return this._tradeCommitted;
+    }
+
+    set tradeMessage(message) {
+        if (!(message instanceof Message)) {
+            throw new Error(`${message} is not an instance of Message`);
+        }
+
+        this._tradeMessage = message;
+    }
+
+    get tradeMessage() {
+        return this._tradeMessage;
     }
 }
 
