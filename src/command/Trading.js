@@ -1,3 +1,4 @@
+const { Client, Interaction, Message } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Command = require('./Command.js');
 const User = require('../model/User.js');
@@ -19,7 +20,14 @@ const optionActionChoiceRemove = 'actionremove';
 const optionActionChoiceOpen = 'actionopen';
 
 class Trading extends Command {
-    async main() {
+    async main(client, interaction) {
+        if (client instanceof Client) {
+            this.client = client;
+        }
+
+        if (interaction instanceof Interaction) {
+            this.interaction = interaction;
+        }
         const user = this.getUser();
         if (user.getUserId() !== '129416238916042752') {
             return new InteractionResponse(
@@ -53,8 +61,12 @@ class Trading extends Command {
         const user = this.getUser();
         const userToTradewith = this.getUserFromOption();
         if (!userToTradewith) {
-            console.log(this._options);
-            throw new Error('No user to trade with');
+            return new InteractionResponse(
+                'No user provided, use the \'User\' option',
+                null,
+                null,
+                true,
+            );
         }
 
         console.log(userToTradewith);
@@ -86,7 +98,23 @@ class Trading extends Command {
 
         await trade.addCharacterToTrade(user.getUserId(), this.getCharacterId());
 
-        return this.createTradeResponse(trade);
+        const tradeMessageSent = this.interaction.reply(this.createTradeResponse(trade));
+        if (!(tradeMessageSent instanceof Message)) {
+            throw new Error('Failed to send trade message');
+        }
+
+        trade.tradeMessage = tradeMessageSent;
+
+        // TODO interaction responses are getting a bit large... maybe we should use offical discord responses?
+        return new InteractionResponse(
+            `Successfully opened tade \`${trade.id}\``,
+            null,
+            null,
+            true,
+            false,
+            false,
+            true,
+        );
     }
 
     async acceptAction() {
@@ -120,14 +148,24 @@ class Trading extends Command {
         tradeUser.accepted = true;
 
         if (!trade.allUsersAccepted()) {
-            return this.createTradeResponse(
-                trade,
+            const { tradeMessage } = trade;
+            await tradeMessage.edit(this.createTradeResponse(trade));
+
+            return new InteractionResponse(
+                'Waiting for other users to accept trade',
+                null,
+                null,
                 true,
             );
         }
 
         await trade.commitTrade();
-        // return trade success response
+        return new InteractionResponse(
+            `You have accepted trade \`${trade.id}\`!`,
+            null,
+            null,
+            true,
+        );
     }
 
     async declineAction() {
@@ -162,6 +200,9 @@ class Trading extends Command {
             this.getCharacterId(),
         );
 
+        const { tradeMessage } = trade;
+        await tradeMessage.edit(this.createTradeResponse(trade));
+
         return this.createTradeResponse(
             trade,
             true,
@@ -174,13 +215,18 @@ class Trading extends Command {
             return trade;
         }
 
-        trade.addCharacterToTrade(
+        trade.removeCharacterFromTrade(
             this.getUser().getUserId(),
             this.getCharacterId(),
         );
 
-        return this.createTradeResponse(
-            trade,
+        const { tradeMessage } = trade;
+        await tradeMessage.edit(this.createTradeResponse(trade));
+
+        return new InteractionResponse(
+            `Removed character \`${this.getCharacterId()}\` from trade \`${trade.id}\``,
+            null,
+            null,
             true,
         );
     }
@@ -259,6 +305,8 @@ class Trading extends Command {
                 this.createCustomId(tradeId, customIdDecline),
             ),
         ]);
+        console.log('update');
+        console.log(!!update);
         return new InteractionResponse(
             null,
             [trade.toEmbed()],
@@ -326,15 +374,15 @@ class Trading extends Command {
             .addStringOption(option => option.setName(optionAction)
                 .setDescription('Action to perform on the trade')
                 .addChoice(
-                    'Add',
+                    'Add character to trade',
                     optionActionChoiceAdd,
                 )
                 .addChoice(
-                    'Remove',
+                    'Remove character from trade',
                     optionActionChoiceRemove,
                 )
                 .addChoice(
-                    'Open trade',
+                    'Open a new trade',
                     optionActionChoiceOpen,
                 )
                 .setRequired(true))
