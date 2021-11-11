@@ -47,12 +47,17 @@ client.on('interactionCreate', async interaction => {
     const command = event.getCommand();
 
     try {
-        const response = await command.main();
-        if ((interaction.isButton() || interaction.isSelectMenu()) && response.shouldEditMessage()) {
-            await interaction.update(response.toObject());
-        } else {
-            await interaction.reply(response.toObject());
+        const response = await command.main(client, interaction);
+        const replyContent = response.getReplyContent();
+        if (response.followUp) {
+            return await interaction.followUp(replyContent);
         }
+
+        if ((interaction.isButton() || interaction.isSelectMenu()) && response.shouldEditMessage()) {
+            return await interaction.update(replyContent);
+        }
+
+        return await interaction.reply(replyContent);
     } catch (err) {
         if (process.env.ERROR_USER_ID) {
             const errorUser = client.users.cache.get(process.env.ERROR_USER_ID);
