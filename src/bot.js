@@ -24,6 +24,7 @@ client.on('messageCreate', async message => {
                 messageContent = messageContent.replace(/^```(js|)/, '')
                     .replace(/```$/, '');
                 console.log(messageContent);
+                // eslint-disable-next-line no-eval
                 reply = `${await eval(messageContent)}`;
                 if (reply.length > 4000) {
                     reply = 'reply too big';
@@ -48,7 +49,7 @@ client.on('interactionCreate', async interaction => {
 
     try {
         const response = await command.main(client, interaction);
-        const replyContent = response.getReplyContent();
+        const replyContent = response.toObject();
         if (response.followUp) {
             return await interaction.followUp(replyContent);
         }
