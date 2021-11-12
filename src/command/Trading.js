@@ -17,7 +17,6 @@ const optionTradeId = 'id';
 const optionAction = 'action';
 const optionActionChoiceAdd = 'actionadd';
 const optionActionChoiceRemove = 'actionremove';
-const optionActionChoiceOpen = 'actionopen';
 
 class Trading extends Command {
     async main(client, interaction) {
