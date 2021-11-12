@@ -28,14 +28,14 @@ class Trading extends Command {
             this.interaction = interaction;
         }
         const user = this.getUser();
-        if (user.getUserId() !== '129416238916042752' && user.getUserId() !== '84005689822810112') {
-            return new InteractionResponse(
-                'Please try again later',
-                null,
-                null,
-                true,
-            );
-        }
+        // if (user.getUserId() !== '129416238916042752' && user.getUserId() !== '84005689822810112') {
+        //     return new InteractionResponse(
+        //         'Please try again later',
+        //         null,
+        //         null,
+        //         true,
+        //     );
+        // }
         await user.loadPlayerInfo();
 
         const action = this.getAction();
