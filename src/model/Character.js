@@ -109,7 +109,7 @@ class Character {
                 playerId,
             })
             .where({
-                [keyInventoryId]: this.getInventoryId(),
+                id: this.getInventoryId(),
             });
     }
 
@@ -283,11 +283,11 @@ class Character {
             case this.RARITY_N:
                 return 1;
             case this.RARITY_R:
-                return 3;
+                return 2;
             case this.RARITY_SR:
-                return 5;
+                return 4;
             case this.RARITY_SSR:
-                return 8;
+                return 6;
             default:
                 throw new Error(`Value for rarity ${rarityNum} not found`);
         }

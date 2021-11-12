@@ -22,7 +22,7 @@ class User {
         this._username = user.username;
         this._discriminator = user.discriminator;
         this._avatar = user.avatarURL({ dynamic: true });
-        this._bot = user.bot;
+        this.bot = user.bot;
         this._system = user.system;
         this._locale = user.locale;
         this._verified = user.verified;
@@ -226,11 +226,16 @@ class User {
     getCharacterFromInventoryById(id) {
         const characters = this.getUniqueCharacters();
 
-        return characters.find(char => char.getId() === id);
+        const foundCharacter = characters.find(char => char.getId() === id);
+        if (!foundCharacter || !(foundCharacter instanceof Character)) {
+            return null;
+        }
+
+        return foundCharacter;
     }
 
     grantHourlyReward() {
-        const streakModifier = 35;
+        const streakModifier = 33;
         this[keyHourlyStreak] = time.hourlyStreakIsValid(this[keyHourlyStreak], this[keyLastHourlyCheckIn]) ?
             this[keyHourlyStreak] : 0;
         const rewardValue = this._grantReward(
@@ -243,7 +248,7 @@ class User {
     }
 
     grantDailyReward() {
-        const streakModifier = 20;
+        const streakModifier = 18;
         this[keyDailyStreak] = time.dailyStreakIsValid(this[keyDailyStreak], this[keyLastDailyCheckIn]) ?
             this[keyDailyStreak] : 0;
         const rewardValue = this._grantReward(

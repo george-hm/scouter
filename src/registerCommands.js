@@ -1,9 +1,9 @@
 /* eslint-disable no-await-in-loop */
+require('dotenv').config({ path: '../process.env' });
 const axios = require('axios');
 const commandList = require('./command/index.js').mapping;
 
-const APPLICATION_ID = 'REPLACE_ME';
-const BOT_TOKEN = 'REPLACE_ME';
+const { APPLICATION_ID, BOT_TOKEN } = process.env;
 // leave this null if you want to update commands globally
 const GUILD_ID = null;
 
