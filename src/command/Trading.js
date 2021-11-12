@@ -158,11 +158,9 @@ class Trading extends Command {
                 this.createTradeResponse(trade).toObject(),
             );
 
+            const userTradingWith = trade.tradeUsers.find(tuser => tuser.user.getUserId() !== this.getUser().getUserId());
             return new InteractionResponse(
-                'Waiting for other users to accept trade',
-                null,
-                null,
-                true,
+                `${user.getMention()} has accepted the trade with ${userTradingWith.user.getMention()}`,
             );
         }
 
@@ -183,15 +181,8 @@ class Trading extends Command {
         );
 
         const userTradingWith = trade.tradeUsers.find(tuser => tuser.user.getUserId() !== user.getUserId());
-        await this.interaction.channel.send(
-            `${userTradingWith.user.getMention()} your trade with ${this.getUser().getMention()} has been accepted!`,
-        );
-
         return new InteractionResponse(
-            `You have accepted trade with user ${userTradingWith.user.getMention()}!`,
-            null,
-            null,
-            true,
+            `${userTradingWith.user.getMention()} your trade with ${this.getUser().getMention()} has been accepted, trade complete.`,
         );
     }
 
