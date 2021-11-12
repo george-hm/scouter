@@ -73,7 +73,7 @@ class Trade {
         for (const tradeUser of this.tradeUsers) {
             const userIdToMoveTo = this.tradeUsers.find(tuser => tuser.user.getUserId() !== tradeUser.user.getUserId());
             for (const character of tradeUser.offers) {
-                promises.push(character.moveCharacter(userIdToMoveTo));
+                promises.push(character.moveCharacter(userIdToMoveTo.user.getUserId()));
             }
 
             // unload inventory for safety/avoid messing around with loaded inventories
