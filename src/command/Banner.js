@@ -11,7 +11,7 @@ const Summon = require('./Summon.js');
 class BannerCommand extends Command {
     async main() {
         const allBanners = await BannerModel.getBanners();
-        if (!allBanners) {
+        if (!allBanners?.length) {
             return new InteractionResponse(
                 'Sorry, no available banners at this time.',
             );
