@@ -38,6 +38,9 @@ class Trading extends Command {
             );
         }
         await user.loadPlayerInfo();
+        if (!this.getOpenTrade()) {
+            return await this.openTrade();
+        }
 
         const action = this.getAction();
 
@@ -50,8 +53,6 @@ class Trading extends Command {
                 return await this.addCharacterToTrade();
             case optionActionChoiceRemove:
                 return await this.removeCharacterFromTrade();
-            case optionActionChoiceOpen:
-                return await this.openTrade();
             default:
                 throw new Error('Invalid or missing action');
         }
@@ -69,7 +70,6 @@ class Trading extends Command {
             );
         }
 
-        console.log(userToTradewith);
         if (userToTradewith.bot || userToTradewith.getUserId() === user.getUserId()) {
             return new InteractionResponse(
                 'Invalid user to trade with!',
@@ -94,7 +94,7 @@ class Trading extends Command {
 
         // open trade, return model
         const trade = new Trade([user, userToTradewith]);
-        tradeMappings[trade.id] = trade;
+        tradeMappings.push(trade);
 
         await trade.addCharacterToTrade(user.getUserId(), this.getCharacterId());
 
@@ -182,7 +182,10 @@ class Trading extends Command {
         const tradeId = trade.id;
 
         trade.active = false;
-        delete tradeMappings[trade.id];
+        tradeMappings.splice(
+            tradeMappings.findIndex(t => t.id === tradeId),
+            1,
+        );
 
         // say user has declined the trade etc...
         return new InteractionResponse(
@@ -241,38 +244,14 @@ class Trading extends Command {
         );
     }
 
-    async getOpenTrade() {
-        const tradeId = this.getTradeIdFromOptionOrButton();
-        if (!tradeId) {
-            return new InteractionResponse(
-                'No trade id provided!',
-                null,
-                null,
-                true,
-            );
-        }
+    getOpenTrade() {
+        const userTradingWith = this.getUserFromOption();
+        const trade = tradeMappings.find(
+            t => t.findUser(userTradingWith.getUserId()) &&
+                t.findUser(this.getUser().getUserId()),
+        );
 
-        const trade = tradeMappings[tradeId];
-        if (!trade || !(trade instanceof Trade)) {
-            return new InteractionResponse(
-                'Could not find this trade, create a new one with the \'Open\' action',
-                null,
-                null,
-                true,
-            );
-        }
-
-        const user = this.getUser();
-        if (!trade.findUser(user.getUserId())) {
-            return new InteractionResponse(
-                'You are not a participant in this trade!',
-                null,
-                null,
-                true,
-            );
-        }
-
-        return trade;
+        return trade || null;
     }
 
     async getTradingCharacter() {
@@ -388,20 +367,13 @@ class Trading extends Command {
                     'Remove character from trade',
                     optionActionChoiceRemove,
                 )
-                .addChoice(
-                    'Open a new trade',
-                    optionActionChoiceOpen,
-                )
                 .setRequired(true))
             .addStringOption(option => option.setName(optionCharacterId)
                 .setDescription('The character used for this action')
                 .setRequired(true))
             .addUserOption(option => option.setName(optionUser)
-                .setDescription('The player you wish to trade with (Open trade action only)')
-                .setRequired(false))
-            .addStringOption(option => option.setName(optionTradeId)
-                .setDescription('An ID from a trade (Add/Remove only)')
-                .setRequired(false))
+                .setDescription('The player you wish to trade with')
+                .setRequired(true))
             .toJSON();
     }
 }
