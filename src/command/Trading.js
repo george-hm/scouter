@@ -433,7 +433,7 @@ class Trading extends Command {
                 )
                 .setRequired(true))
             .addStringOption(option => option.setName(optionCharacterId)
-                .setDescription('The character used for this action')
+                .setDescription('The character you wish to trade')
                 .setRequired(true))
             .addUserOption(option => option.setName(optionUser)
                 .setDescription('The player you wish to trade with')
