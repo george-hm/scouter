@@ -184,11 +184,11 @@ class Trading extends Command {
 
         const userTradingWith = trade.tradeUsers.find(tuser => tuser.user.getUserId() !== user.getUserId());
         await this.interaction.channel.send(
-            `${userTradingWith.getMention()} your trade with ${this.getUser().getMention()} has been accepted!`,
+            `${userTradingWith.user.getMention()} your trade with ${this.getUser().getMention()} has been accepted!`,
         );
 
         return new InteractionResponse(
-            `You have accepted trade with user ${userTradingWith.getMention()}!`,
+            `You have accepted trade with user ${userTradingWith.user.getMention()}!`,
             null,
             null,
             true,
