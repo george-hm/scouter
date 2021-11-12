@@ -29,7 +29,7 @@ class Trading extends Command {
             this.interaction = interaction;
         }
         const user = this.getUser();
-        if (user.getUserId() !== '129416238916042752') {
+        if (user.getUserId() !== '129416238916042752' && user.getUserId() !== '84005689822810112') {
             return new InteractionResponse(
                 'Please try again later',
                 null,
@@ -38,11 +38,11 @@ class Trading extends Command {
             );
         }
         await user.loadPlayerInfo();
-        if (!this.getOpenTrade()) {
-            return await this.openTrade();
-        }
 
         const action = this.getAction();
+        if (!this.getOpenTrade() && action === optionActionChoiceAdd) {
+            return await this.openTrade();
+        }
 
         switch (action) {
             case customIdAccept:
@@ -109,7 +109,7 @@ class Trading extends Command {
 
         // TODO interaction responses are getting a bit large... maybe we should use offical discord responses?
         return new InteractionResponse(
-            `Successfully opened tade \`${trade.id}\``,
+            `Successfully opened tade with ${userToTradewith.getMention()}`,
             null,
             null,
             true,
@@ -123,9 +123,13 @@ class Trading extends Command {
         const user = this.getUser();
 
         const trade = await this.getOpenTrade();
-        // invalid trade, just the error response
-        if (trade instanceof InteractionResponse) {
-            return trade;
+        if (!trade) {
+            return new InteractionResponse(
+                'This trade is no longer active',
+                null,
+                null,
+                true,
+            );
         }
 
         if (trade.tradeCommitted || !trade.active) {
@@ -164,8 +168,28 @@ class Trading extends Command {
         }
 
         await trade.commitTrade();
+
+        await trade.tradeMessage.edit(
+            this.createTradeResponse(
+                trade,
+                null,
+                true,
+            ).toObject(),
+        );
+
+        trade.active = false;
+        tradeMappings.splice(
+            tradeMappings.findIndex(t => t.id === trade.id),
+            1,
+        );
+
+        const userTradingWith = trade.tradeUsers.find(tuser => tuser.user.getUserId() !== user.getUserId());
+        await this.interaction.channel.send(
+            `${userTradingWith.getMention()} your trade with ${this.getUser().getMention()} has been accepted!`,
+        );
+
         return new InteractionResponse(
-            `You have accepted trade \`${trade.id}\`!`,
+            `You have accepted trade with user ${userTradingWith.getMention()}!`,
             null,
             null,
             true,
@@ -174,22 +198,38 @@ class Trading extends Command {
 
     async declineAction() {
         const trade = await this.getOpenTrade();
-        // invalid trade so return the error response
-        if (trade instanceof InteractionResponse) {
-            return trade;
+        if (!trade) {
+            return new InteractionResponse(
+                'No trade open',
+                null,
+                null,
+                true,
+            );
         }
 
         const tradeId = trade.id;
 
+        // set active trade to false and set them to declined
         trade.active = false;
+        trade.findUser(this.getUser().getUserId()).accepted = false;
         tradeMappings.splice(
             tradeMappings.findIndex(t => t.id === tradeId),
             1,
         );
 
+        await trade.tradeMessage.edit(
+            this.createTradeResponse(
+                trade,
+                false,
+                false,
+                true,
+            ).toObject(),
+        );
+
+        const userTradingWith = trade.tradeUsers.find(tuser => tuser.user.getUserId() !== this.getUser().getUserId());
         // say user has declined the trade etc...
         return new InteractionResponse(
-            `You have declined trade \`${tradeId}\`!`,
+            `You have declined the trade with ${userTradingWith.user.getMention()}!`,
             null,
             null,
             true,
@@ -212,8 +252,9 @@ class Trading extends Command {
             this.createTradeResponse(trade).toObject(),
         );
 
+        const userTradingWith = trade.tradeUsers.find(tuser => tuser.user.getUserId() !== this.getUser().getUserId());
         return new InteractionResponse(
-            `Added character \`${this.getCharacterId()}\` to trade \`${trade.id}\``,
+            `Added character \`${this.getCharacterId()}\` to trade ${userTradingWith.getMention()}`,
             null,
             null,
             true,
@@ -236,20 +277,30 @@ class Trading extends Command {
             this.createTradeResponse(trade).toObject(),
         );
 
+        const userTradingWith = trade.tradeUsers.find(tuser => tuser.user.getUserId() !== this.getUser().getUserId());
         return new InteractionResponse(
-            `Removed character \`${this.getCharacterId()}\` from trade \`${trade.id}\``,
+            `Removed character \`${this.getCharacterId()}\` from trade with ${userTradingWith.getMention()}`,
             null,
             null,
             true,
         );
     }
 
+    /**
+     * @returns {Trade}
+     */
     getOpenTrade() {
         const userTradingWith = this.getUserFromOption();
-        const trade = tradeMappings.find(
-            t => t.findUser(userTradingWith.getUserId()) &&
-                t.findUser(this.getUser().getUserId()),
-        );
+        let trade = null;
+        if (userTradingWith) {
+            trade = tradeMappings.find(
+                t => t.findUser(userTradingWith.getUserId()) &&
+                    t.findUser(this.getUser().getUserId()),
+            );
+        } else {
+            const tradeId = this.getTradeIdFromButton(optionTradeId);
+            trade = tradeMappings.find(t => t.id === tradeId);
+        }
 
         return trade || null;
     }
@@ -270,7 +321,7 @@ class Trading extends Command {
         return character;
     }
 
-    createTradeResponse(trade, update) {
+    createTradeResponse(trade, update, accepted, declined) {
         if (!(trade instanceof Trade)) {
             throw new Error('Missing or invalid trade');
         }
@@ -297,8 +348,9 @@ class Trading extends Command {
 
         return new InteractionResponse(
             null,
-            [trade.toEmbed()],
-            container,
+            [trade.toEmbed(accepted, declined)],
+            // dont add any components if a trade has been accepted/declined
+            (accepted || declined) ? null : container,
             null,
             !!update,
             true,
@@ -314,8 +366,8 @@ class Trading extends Command {
         return action;
     }
 
-    getTradeIdFromOptionOrButton() {
-        const id = this._customId?.split('.')[2] || this._options?.getString(optionTradeId);
+    getTradeIdFromButton() {
+        const id = this._customId?.split('.')[2];
 
         return id || null;
     }
