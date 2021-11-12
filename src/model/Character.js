@@ -109,7 +109,7 @@ class Character {
                 playerId,
             })
             .where({
-                [keyInventoryId]: this.getInventoryId(),
+                id: this.getInventoryId(),
             });
     }
 
