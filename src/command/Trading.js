@@ -108,7 +108,7 @@ class Trading extends Command {
 
         // TODO interaction responses are getting a bit large... maybe we should use offical discord responses?
         return new InteractionResponse(
-            `Successfully opened tade with ${userToTradewith.getMention()}`,
+            `Successfully opened trade with ${userToTradewith.getMention()}`,
             null,
             null,
             true,
@@ -241,10 +241,23 @@ class Trading extends Command {
             return trade;
         }
 
-        await trade.addCharacterToTrade(
-            this.getUser().getUserId(),
-            this.getCharacterId(),
-        );
+        try {
+            await trade.addCharacterToTrade(
+                this.getUser().getUserId(),
+                this.getCharacterId(),
+            );
+        } catch (err) {
+            if (err.toString().includes('has no characters')) {
+                return new InteractionResponse(
+                    'You do not own any characters with this id!',
+                    null,
+                    null,
+                    true,
+                );
+            }
+
+            throw err;
+        }
 
         const { tradeMessage } = trade;
         await tradeMessage.edit(
@@ -253,10 +266,10 @@ class Trading extends Command {
 
         const userTradingWith = trade.tradeUsers.find(tuser => tuser.user.getUserId() !== this.getUser().getUserId());
         return new InteractionResponse(
-            `Added character \`${this.getCharacterId()}\` to trade ${userTradingWith.getMention()}`,
+            `Added character ${(await this.getTradingCharacter()).stringSummary} to trade with ${userTradingWith.user.getMention()}`,
             null,
             null,
-            true,
+            false,
         );
     }
 
@@ -278,7 +291,7 @@ class Trading extends Command {
 
         const userTradingWith = trade.tradeUsers.find(tuser => tuser.user.getUserId() !== this.getUser().getUserId());
         return new InteractionResponse(
-            `Removed character \`${this.getCharacterId()}\` from trade with ${userTradingWith.getMention()}`,
+            `Removed character \`${this.getCharacterId()}\` from trade with ${userTradingWith.trade.getMention()}`,
             null,
             null,
             true,
