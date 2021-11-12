@@ -98,7 +98,9 @@ class Trading extends Command {
 
         await trade.addCharacterToTrade(user.getUserId(), this.getCharacterId());
 
-        const tradeMessageSent = this.interaction.reply(this.createTradeResponse(trade));
+        const tradeMessageSent = await this.interaction.reply(
+            this.createTradeResponse(trade).toObject(),
+        );
         if (!(tradeMessageSent instanceof Message)) {
             throw new Error('Failed to send trade message');
         }
@@ -149,7 +151,9 @@ class Trading extends Command {
 
         if (!trade.allUsersAccepted()) {
             const { tradeMessage } = trade;
-            await tradeMessage.edit(this.createTradeResponse(trade));
+            await tradeMessage.edit(
+                this.createTradeResponse(trade).toObject(),
+            );
 
             return new InteractionResponse(
                 'Waiting for other users to accept trade',
@@ -195,16 +199,20 @@ class Trading extends Command {
             return trade;
         }
 
-        trade.addCharacterToTrade(
+        await trade.addCharacterToTrade(
             this.getUser().getUserId(),
             this.getCharacterId(),
         );
 
         const { tradeMessage } = trade;
-        await tradeMessage.edit(this.createTradeResponse(trade));
+        await tradeMessage.edit(
+            this.createTradeResponse(trade).toObject(),
+        );
 
-        return this.createTradeResponse(
-            trade,
+        return new InteractionResponse(
+            `Added character \`${this.getCharacterId()}\` to trade \`${trade.id}\``,
+            null,
+            null,
             true,
         );
     }
@@ -221,7 +229,9 @@ class Trading extends Command {
         );
 
         const { tradeMessage } = trade;
-        await tradeMessage.edit(this.createTradeResponse(trade));
+        await tradeMessage.edit(
+            this.createTradeResponse(trade).toObject(),
+        );
 
         return new InteractionResponse(
             `Removed character \`${this.getCharacterId()}\` from trade \`${trade.id}\``,
@@ -305,14 +315,14 @@ class Trading extends Command {
                 this.createCustomId(tradeId, customIdDecline),
             ),
         ]);
-        console.log('update');
-        console.log(!!update);
+
         return new InteractionResponse(
             null,
             [trade.toEmbed()],
             container,
             null,
             !!update,
+            true,
         );
     }
 
@@ -327,11 +337,8 @@ class Trading extends Command {
 
     getTradeIdFromOptionOrButton() {
         const id = this._customId?.split('.')[2] || this._options?.getString(optionTradeId);
-        if (!id) {
-            throw new Error('Missing trade id');
-        }
 
-        return id;
+        return id || null;
     }
 
     createCustomId(tradeId, action) {
