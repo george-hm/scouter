@@ -88,8 +88,15 @@ class Trade {
         return acceptedUsers.length === this.tradeUsers.length;
     }
 
-    toEmbed() {
-        const title = `Trade between ${this.tradeUsers.map(tuser => tuser.user.getName()).join(' and ')}`;
+    toEmbed(accepted, declined) {
+        let title = `Trade between ${this.tradeUsers.map(tuser => tuser.user.getName()).join(' and ')}`;
+        if (accepted) {
+            title = 'ACCEPTED TRADE';
+        }
+
+        if (declined) {
+            title = 'DECLINED TRADE';
+        }
         let description = '';
         for (const tradeUser of this.tradeUsers) {
             description += `\n**${tradeUser.user.getName()}** offers:\n`;
@@ -102,8 +109,6 @@ class Trade {
         for (const tradeUser of this.tradeUsers) {
             description += `${tradeUser.user.getMention()}: ${tradeUser.accepted ? '☑️' : '🇽'}\n`;
         }
-
-        description += `\n\nTrade ID: ${this.id}`;
 
         return new Embed(
             title,
