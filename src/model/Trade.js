@@ -77,11 +77,21 @@ class Trade {
             }
         }
 
-        for (const tradeUser of this.tradeUsers) {
-            tradeUser.user.unloadCharacters();
-        }
-
         await Promise.all(promises);
+
+        for (const tradeUser of this.tradeUsers) {
+            try {
+                tradeUser.user.unloadCharacters();
+                const userId = tradeUser.user.getUserId();
+                const cachedUser = User.create({
+                    id: userId,
+                });
+                cachedUser.unloadCharacters();
+            } catch (err) {
+                // ignore the error, we just want to check if this user is cached
+                // then we unload the characters to avoid cache issues
+            }
+        }
     }
 
     allUsersAccepted() {
