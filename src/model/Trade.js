@@ -75,8 +75,9 @@ class Trade {
             for (const character of tradeUser.offers) {
                 promises.push(character.moveCharacter(userIdToMoveTo.user.getUserId()));
             }
+        }
 
-            // unload inventory for safety/avoid messing around with loaded inventories
+        for (const tradeUser of this.tradeUsers) {
             tradeUser.user.unloadCharacters();
         }
 
