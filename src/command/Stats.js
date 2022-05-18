@@ -10,10 +10,12 @@ class Stats extends Command {
         await user.loadPlayerInfo();
         await user.loadCharacterInventory();
 
-        const { currency } = user;
-        const { hourlyStreak } = user;
-        const { dailyStreak } = user;
-        const { totalSummons } = user;
+        const {
+            currency,
+            hourlyStreak,
+            dailyStreak,
+            totalSummons,
+        } = user;
         const totalCharacters = Object.values(user.getUniqueCharacterCounts()).reduce((a, b) => a + b);
         const toReturn = [
             `${Character.getZOrbEmoji()} Z-Orbs: ${currency}`,
