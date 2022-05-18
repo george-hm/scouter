@@ -4,7 +4,9 @@ A discord bot about collecting characters
 
 ## file strcuture
 src/command - every slash command available on the bot
+
 src/model - various models for interacting with discord/database structures
+
 src/* - misc files/libs (too few for new dir)
 
 
